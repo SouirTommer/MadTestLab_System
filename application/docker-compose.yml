@@ -26,7 +26,7 @@ services:
         #image: percona/percona-server:8.0.35 # x86
         environment:
             MYSQL_ROOT_PASSWORD: root_password
-            MYSQL_DATABASE: lab
+            MYSQL_DATABASE: MadTestLab
             MYSQL_USER: admin
             MYSQL_PASSWORD: admin
         volumes:
@@ -35,7 +35,7 @@ services:
         image: arm64v8/phpmyadmin #ARM64
         #image: phpmyadmin/phpmyadmin #x86
         environment:
-            PMA_HOST: db
+            PMA_HOST: mysql
             PMA_USER: admin
             PMA_PASSWORD: admin
         ports:
