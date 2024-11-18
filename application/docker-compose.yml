@@ -7,7 +7,7 @@ services:
             - .:/app
         working_dir: /app
         command: ["composer", "install"]
-    slim:
+    web:
         image: php:8-alpine
         working_dir: /var/www
         command: php -S 0.0.0.0:8080 -t public
@@ -24,13 +24,20 @@ services:
     db:
         image: percona/percona-server:8.0.35-aarch64  #  ARM64
         #image: percona/percona-server:8.0.35 # x86
+        command: 
+            --default-authentication-plugin=caching_sha2_password 
+            --early-plugin-load=keyring_file.so 
+            --keyring_file_data=/var/lib/mysql-keyring/keyring
+            --default-table-encryption=ON
         environment:
             MYSQL_ROOT_PASSWORD: root_password
             MYSQL_DATABASE: MadTestLab
             MYSQL_USER: admin
             MYSQL_PASSWORD: admin
+            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
         volumes:
-            - db_data:/var/lib/mysql
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./keyring:/var/lib/mysql-keyring
     phpmyadmin:
         image: arm64v8/phpmyadmin #ARM64
         #image: phpmyadmin/phpmyadmin #x86
@@ -43,6 +50,4 @@ services:
 
 volumes:
     logs:
-        driver: local
-    db_data:
         driver: local
