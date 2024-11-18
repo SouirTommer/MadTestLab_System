@@ -35,9 +35,7 @@ services:
         image: arm64v8/phpmyadmin #ARM64
         #image: phpmyadmin/phpmyadmin #x86
         environment:
-            PMA_HOST: mysql
-            PMA_USER: admin
-            PMA_PASSWORD: admin
+            PMA_HOST: db
         ports:
             - "8081:80"
         depends_on:
