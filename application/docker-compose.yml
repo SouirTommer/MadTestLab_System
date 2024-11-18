@@ -1,6 +1,12 @@
 version: '3.7'
 
 services:
+    composer:
+        image: composer:latest
+        volumes:
+            - .:/app
+        working_dir: /app
+        command: ["composer", "install"]
     slim:
         image: php:8-alpine
         working_dir: /var/www
@@ -13,6 +19,7 @@ services:
             - .:/var/www
             - logs:/var/www/logs
         depends_on:
+            - composer
             - db
     db:
         image: percona/percona-server:8.0.35-aarch64  #  ARM64
@@ -35,12 +42,6 @@ services:
             - "8081:80"
         depends_on:
             - db
-    composer:
-        image: composer:latest
-        volumes:
-            - .:/app
-        working_dir: /app
-        command: ["composer", "install"]
 
 volumes:
     logs:
