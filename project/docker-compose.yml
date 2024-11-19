@@ -20,32 +20,35 @@ services:
       - .:/var/www/html
     depends_on:
       - composer
-      - db
+      - mysql
   
-  db:
-    platform: "linux/amd64"
+  mysql:
     image: percona/percona-server:8.0.35-aarch64  #  ARM64
     #image: percona/percona-server:8.0.35 # x86
     env_file:
       - .env
+    command: 
+        --default-authentication-plugin=caching_sha2_password 
+        --early-plugin-load=keyring_file.so 
+        --keyring_file_data=/var/lib/mysql-keyring/keyring
+        --default-table-encryption=ON
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
     ports:
       - "3306:3306"
     volumes:
-      - dbdata:/var/lib/mysql
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+        - ./keyring:/var/lib/mysql-keyring
   phpmyadmin:
       image: arm64v8/phpmyadmin #ARM64
       #image: phpmyadmin/phpmyadmin #x86
       environment:
-          PMA_HOST: db
+          PMA_HOST: mysql
       ports:
           - "8081:80"
       depends_on:
-          - db
-
-volumes:
-  dbdata:
+          - mysql
