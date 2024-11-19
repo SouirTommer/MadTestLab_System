@@ -19,11 +19,11 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'accountID' => 'required|string',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $account = DB::table('Accounts')->where('AccountID', $request->accountID)->first();
+        $account = DB::table('Accounts')->where('Username', $request->username)->first();
 
         if ($account && Hash::check($request->password, $account->Password)) {
             

@@ -8,11 +8,11 @@ class Account extends Authenticatable
 {
     protected $table = 'Accounts';
     protected $primaryKey = 'AccountID';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
-        'AccountID', 'Password', 'Role', 'AccountStatus', 'Credentials', 'IV'
+        'Username', 'Password', 'Role', 'AccountStatus', 'Credentials', 'IV'
     ];
 
     protected $hidden = [

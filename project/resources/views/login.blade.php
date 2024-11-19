@@ -14,9 +14,9 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-4">
-                    <label for="accountID" class="block text-sm font-medium text-gray-700">Account ID</label>
-                    <input id="accountID" type="text" name="accountID" value="{{ old('accountID') }}" required autofocus class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                    @error('accountID')
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    @error('username')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
                 </div>

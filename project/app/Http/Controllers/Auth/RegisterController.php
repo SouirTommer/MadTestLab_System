@@ -17,7 +17,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'accountID' => 'required|string|max:255|unique:Accounts',
+            'username' => 'required|string|max:50|unique:Accounts,Username',
             'password' => 'required|string|min:8|confirmed',
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
@@ -28,8 +28,8 @@ class RegisterController extends Controller
         ]);
 
         DB::transaction(function () use ($request) {
-            DB::table('Accounts')->insert([
-                'AccountID' => $request->accountID,
+            $accountID = DB::table('Accounts')->insertGetId([
+                'Username' => $request->username,
                 'Password' => Hash::make($request->password),
                 'Role' => 'Patient',
                 'AccountStatus' => 'Active',
@@ -38,7 +38,7 @@ class RegisterController extends Controller
             ]);
 
             DB::table('Patients')->insert([
-                'AccountID' => $request->accountID,
+                'AccountID' => $accountID,
                 'FirstName' => $request->firstName,
                 'LastName' => $request->lastName,
                 'DateOfBirth' => $request->dateOfBirth,
