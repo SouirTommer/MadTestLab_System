@@ -7,17 +7,30 @@ ENCRYPTION='Y';
 ALTER INSTANCE ROTATE INNODB MASTER KEY;
 
 CREATE TABLE Accounts (
-    AccountID VARCHAR(50) PRIMARY KEY,  
-    Password VARCHAR(50) NOT NULL,
+    AccountID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Password VARBINARY(256) NOT NULL,
     Role VARCHAR(20) NOT NULL,
     AccountStatus VARCHAR(20) NOT NULL,
     Credentials VARCHAR(100) NOT NULL,
     IV VARBINARY(16) NOT NULL
 ) ENCRYPTION='Y';
 
+CREATE TABLE Patients (
+    PatientID INT AUTO_INCREMENT PRIMARY KEY,
+    AccountID INT NOT NULL,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    DateOfBirth DATE NOT NULL,
+    Gender ENUM('Male', 'Female', 'Other') NOT NULL,
+    Phone VARCHAR(8) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+) ENCRYPTION='Y';
+
 CREATE TABLE Secretaries (
     SecretaryID INT AUTO_INCREMENT PRIMARY KEY,
-    AccountID VARCHAR(50) NOT NULL,
+    AccountID INT NOT NULL,
     FirstName VARCHAR(100) NOT NULL,
     LastName VARCHAR(100) NOT NULL,
     DateOfBirth DATE NOT NULL,
@@ -29,19 +42,7 @@ CREATE TABLE Secretaries (
 
 CREATE TABLE LabStaffs (
     LabStaffID INT AUTO_INCREMENT PRIMARY KEY,
-    AccountID VARCHAR(50) NOT NULL,
-    FirstName VARCHAR(100) NOT NULL,
-    LastName VARCHAR(100) NOT NULL,
-    DateOfBirth DATE NOT NULL,
-    Gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    Phone VARCHAR(8) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
-) ENCRYPTION='Y';
-
-CREATE TABLE Patients (
-    PatientID INT AUTO_INCREMENT PRIMARY KEY,
-    AccountID VARCHAR(50) NOT NULL,
+    AccountID INT NOT NULL,
     FirstName VARCHAR(100) NOT NULL,
     LastName VARCHAR(100) NOT NULL,
     DateOfBirth DATE NOT NULL,
