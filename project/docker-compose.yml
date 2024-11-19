@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  composer:
+      image: composer:latest
+      volumes:
+          - .:/app
+      working_dir: /app
+      command: ["composer", "install"]
   web:
     image: app-name:latest
     build:
@@ -13,6 +19,7 @@ services:
     volumes:
       - .:/var/www/html
     depends_on:
+      - composer
       - mysql
   
   mysql:
