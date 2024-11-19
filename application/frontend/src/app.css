@@ -59,3 +59,8 @@ button:focus-visible{
 .specialBtn:hover{
     border-color: blue;
 }
+
+.navTabBtn{
+    background: transparent;
+    
+}

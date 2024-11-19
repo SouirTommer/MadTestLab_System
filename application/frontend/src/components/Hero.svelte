@@ -14,7 +14,7 @@
         >
             <span class="text-indigo-400">MedTest </span>
             <span class="text-slate-600">Lab </span>
-            <i class="fa-solid fa-vial"></i>
+            <i class="text-slate-600 fa-solid fa-vial"></i>
             <br />
             <br />
             All your medical tests

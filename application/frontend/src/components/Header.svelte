@@ -6,12 +6,12 @@
         class="max-w-[1400px] mx-auto w-full flex items-center justify-between py-6 p-4">
         <a href="/">
             <h1 class="font-semibold text-2xl">
-                <span class="text-indigo-400"> MedTest </span> <span class="text-slate-600">Lab </span> <i class="fa-solid fa-vial"></i>
+                <span class="text-indigo-400"> MedTest </span> <span class="text-slate-600">Lab </span> <i class=" text-slate-600 fa-solid fa-vial"></i>
             </h1>
         </a>
-        <button class="md:hidden grid place-items-center">
+        <!-- <button class="md:hidden grid place-items-center">
             <i class="fa-solid fa-bars"></i>
-        </button>
+        </button> -->
 
         <!-- <nav class="hidden md:flex items-center gap-4 lg:gap-6">
             <a href="#/aboutus" class="duration-200 hover:text-indigo-400 cursor-pointer">About us</a>
