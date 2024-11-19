@@ -27,7 +27,6 @@ span{
 button,
 .button{
     border-radius: 8px;
-    border: 1px solid transparent;
     padding: 0.6em 1.2em;
     font-size: 1em ;
     font-weight: 500;
@@ -44,10 +43,11 @@ button:hover{
 
 button:focus,
 button:focus-visible{
-    outline: 4px auto -webkit-focus-ring-color;
+    /* outline: 4px auto -webkit-focus-ring-color; */
 }
 
 .specialBtn{
+    border: 2px solid ;
     border-color: #646cff;
 }
 
@@ -63,4 +63,19 @@ button:focus-visible{
 .navTabBtn{
     background: transparent;
     
+}
+
+.navTabBtn:hover{
+    background:  rgb(198, 205, 233);
+    border: none;
+    
+}
+
+.navItem.selected {
+    background-color:  rgb(198, 205, 233); /* Change this to your desired color *//* Optional: change text color for better contrast */
+}
+
+.userCard:hover
+{
+    background-color:  rgb(198, 205, 233);
 }

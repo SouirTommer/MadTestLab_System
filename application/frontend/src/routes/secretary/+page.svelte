@@ -2,21 +2,6 @@
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
     let currentTab = "dashboard"; // Tracks the active tab
-
-    function getGreetingWithIcon() {
-        const now = new Date();
-        const hour = now.getHours();
-
-        if (hour >= 5 && hour < 12) {
-            return { greeting: "Good Morning", icon: "fa-sun" };
-        } else if (hour >= 12 && hour < 18) {
-            return { greeting: "Good Afternoon", icon: "fa-sun" };
-        } else {
-            return { greeting: "Good Evening", icon: "fa-moon" };
-        }
-    }
-
-    const { greeting, icon } = getGreetingWithIcon();
 </script>
 
 <div class="flex h-screen">
@@ -30,39 +15,56 @@
                 <span class="text-slate-600">Lab </span>
                 <i class=" text-slate-600 fa-solid fa-vial"></i>
             </h1>
-            <p class="text-lg font-semibold text-slate-600">Patient Portal</p>
+            <p class="text-lg font-semibold text-slate-600">Secretary Portal</p>
         </div>
         <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
             <button
-                class="navItem {currentTab === 'test_order' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'test_order'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "dashboard"}
                 on:click={() => (currentTab = "dashboard")}
             >
                 <i class="fa-solid fa-chart-line"></i>
                 Dashboard
             </button>
-            <p class="text-slate-500 text-m font-medium px-2">My Test</p>
+            <p class="text-slate-500 text-m font-medium px-2">Administration</p>
             <button
-                class="navItem {currentTab === 'test_order' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "test_order"}
-                on:click={() => (currentTab = "test_order")}
+                class="navItem {currentTab === 'appointments'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "appointments"}
+                on:click={() => (currentTab = "appointments")}
             >
-                <i class="fa-solid fa-list-check"></i>
-
-                Test Orders
+                <i class="fa-regular fa-calendar-check"></i>
+                Appointments
             </button>
             <button
-                class="navItem {currentTab === 'test_results' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "test_results"}
-                on:click={() => (currentTab = "test_results")}
+                class="navItem {currentTab === 'patient_records'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "patient_records"}
+                on:click={() => (currentTab = "patient_records")}
             >
-                <i class="fa-solid fa-vials"></i>
-                Test Results
+                <i class="fa-solid fa-book-medical"></i>
+                Patient Records
+            </button>
+            <button
+                class="navItem {currentTab === 'billing'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "billing"}
+                on:click={() => (currentTab = "billing")}
+            >
+                <i class="fa-solid fa-wallet"></i>
+                Billing
             </button>
             <p class="text-slate-500 text-m font-medium px-2">Setting</p>
 
             <button
-                class="navItem {currentTab === 'profile' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'profile'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "profile"}
                 on:click={() => (currentTab = "profile")}
             >
@@ -70,20 +72,15 @@
                 Profile
             </button>
 
-            <button
-                class="navItem {currentTab === 'billing' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "billing"}
-                on:click={() => (currentTab = "billing")}
-            >
-                <i class="fa-solid fa-wallet"></i>
-                Billing
-            </button>
             <!-- push the div to bottom -->
             <div class="flex-1"></div>
+            <p class="text-slate-400 font-medium text-xl px-4 py-1">
+                Secretary Staff
+            </p>
             <div
-                class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl  border-solid border-2 border-slate-300 trasition"
+                class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
-                <p class="text-xl">Tommer </p>
+                <p class="text-xl">Tommer</p>
                 <p class="text-slate-400">souirtommer@gmail.com</p>
             </div>
         </nav>
@@ -92,8 +89,9 @@
     <SectionWrapper>
         <main class="flex-1 p-6">
             <div class="flex items-center gap-2 mb-6 py-4">
-                <i class={`fa-solid ${icon} text-yellow-500 text-4xl`}></i>
-                <h1 class="text-4xl font-bold pl-2">{greeting} , Tommer !</h1>
+                <h1 class="text-4xl font-bold pl-2">
+                    <i class="fa-solid fa-wrench text-indigo-800"></i> Admin Panel
+                </h1>
             </div>
 
             {#if currentTab === "dashboard"}
@@ -103,8 +101,8 @@
                     recent activity.
                 </p>
             {/if}
-            {#if currentTab === "test_order"}
-                <h2 class="text-3xl font-bold mb-4">Test Order</h2>
+            {#if currentTab === "patient_records"}
+                <h2 class="text-3xl font-bold mb-4">Patient Records</h2>
                 <p>Order new tests or view your pending test orders.</p>
             {/if}
             {#if currentTab === "test_results"}
