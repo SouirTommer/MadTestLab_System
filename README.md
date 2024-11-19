@@ -7,24 +7,11 @@ This project aims at designing and securing a database for a medical laboratory 
 To start the Docker containers for this project, run the following command in project folder:
 
 ```bash
+docker compose build
+```
+```bash
 docker compose up
 ```
-
-### Optional Parameters
-
-You can use the following optional parameters:
-
-- **Force Rebuild**: Add `--build` to rebuild the Docker images.
-  
-  ```bash
-  docker compose up --build
-  ```
-
-- **Run in Background**: Add `-d` to run the containers in detached mode (in the background).
-  
-  ```bash
-  docker compose up -d
-  ```
 
 ### Server Ports
 
