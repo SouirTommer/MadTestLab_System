@@ -1,23 +1,13 @@
-# Use a Node.js base image
-FROM node:16
+FROM node:18-alpine AS builder
 
-# Set the working directory inside the container
+RUN mkdir /app
+
+COPY . /app
+
+RUN cd /app && yarn install && yarn build
+
 WORKDIR /app
 
-# Copy package.json and yarn.lock first to leverage Docker cache
-COPY package.json yarn.lock ./
+EXPOSE 3000
 
-# Install dependencies
-RUN yarn install
-
-# Copy the rest of the application
-COPY . .
-
-# Build the SvelteKit app
-RUN yarn run build
-
-# Expose the port the app will run on
-EXPOSE 5000
-
-# Start the application
-CMD ["yarn", "dev"]
+CMD ["node", "build/index.js"]

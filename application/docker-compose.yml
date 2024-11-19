@@ -1,12 +1,18 @@
 version: '3.7'
 
 services:
+    frontend:
+        build: 
+            context: ./frontend # Path to your frontend folder
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
     composer:
         image: composer:latest
         volumes:
             - .:/app
         working_dir: /app
-        command: ["composer", "install"]
+        command: [ "composer", "install" ]
     web:
         image: php:8-alpine
         working_dir: /var/www
@@ -22,13 +28,9 @@ services:
             - composer
             - db
     db:
-        image: percona/percona-server:8.0.35-aarch64  #  ARM64
+        image: percona/percona-server:8.0.35-aarch64 #  ARM64
         #image: percona/percona-server:8.0.35 # x86
-        command: 
-            --default-authentication-plugin=caching_sha2_password 
-            --early-plugin-load=keyring_file.so 
-            --keyring_file_data=/var/lib/mysql-keyring/keyring
-            --default-table-encryption=ON
+        command: --default-authentication-plugin=caching_sha2_password --early-plugin-load=keyring_file.so --keyring_file_data=/var/lib/mysql-keyring/keyring --default-table-encryption=ON
         environment:
             MYSQL_ROOT_PASSWORD: root_password
             MYSQL_DATABASE: MadTestLab
