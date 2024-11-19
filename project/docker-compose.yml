@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  composer:
+      image: composer:latest
+      volumes:
+          - .:/app
+      working_dir: /app
+      command: ["composer", "install"]
   web:
     image: app-name:latest
     build:
@@ -9,15 +15,17 @@ services:
     env_file:
       - .env
     ports:
-      - "8000:80"
+      - "8080:80"
     volumes:
       - .:/var/www/html
     depends_on:
+      - composer
       - db
   
   db:
     platform: "linux/amd64"
-    image: mysql:5.7
+    image: percona/percona-server:8.0.35-aarch64  #  ARM64
+    #image: percona/percona-server:8.0.35 # x86
     env_file:
       - .env
     environment:
@@ -29,6 +37,15 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
+  phpmyadmin:
+      image: arm64v8/phpmyadmin #ARM64
+      #image: phpmyadmin/phpmyadmin #x86
+      environment:
+          PMA_HOST: db
+      ports:
+          - "8081:80"
+      depends_on:
+          - db
 
 volumes:
   dbdata:
