@@ -73,6 +73,12 @@ $conn->close();
         function showCreateAppointmentForm() {
             document.getElementById('createAppointmentForm').style.display = 'block';
         }
+        function showUpdateAppointmentForm(appointmentID, dateTime, status) {
+            document.getElementById('updateAppointmentForm').style.display = 'block';
+            document.getElementById('updateAppointmentID').value = appointmentID;
+            document.getElementById('updateDateTime').value = dateTime;
+            document.getElementById('updateStatus').value = status;
+        }
     </script>
 </head>
 <body>
@@ -95,8 +101,25 @@ $conn->close();
             <label for="datetime">Date and Time:</label>
             <input type="datetime-local" id="datetime" name="datetime" required>
             <br><br>
-            <input type="hidden" name="secretaryID" value="<?php echo $_SESSION['accountId']; ?>">
             <input type="submit" value="Create Appointment">
+        </form>
+    </div>
+
+    <div id="updateAppointmentForm" style="display: none; margin-top: 20px;">
+        <h3>Update Appointment</h3>
+        <form action="secretary_update_appointment_action.php" method="post">
+            <input type="hidden" id="updateAppointmentID" name="appointmentID">
+            <label for="updateDateTime">Date and Time:</label>
+            <input type="datetime-local" id="updateDateTime" name="datetime" required>
+            <br><br>
+            <label for="updateStatus">Status:</label>
+            <select id="updateStatus" name="status" required>
+                <option value="Scheduled">Scheduled</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Update Appointment">
         </form>
     </div>
 
@@ -111,6 +134,7 @@ $conn->close();
                     <th>Secretary Last Name</th>
                     <th>AppointmentDateTime</th>
                     <th>AppointmentsStatus</th>
+                    <th>Actions</th>
                 </tr>";
         foreach ($appointments as $row) {
             echo "<tr>
@@ -121,6 +145,9 @@ $conn->close();
                     <td>{$row['SecretaryLastName']}</td>
                     <td>{$row['AppointmentDateTime']}</td>
                     <td>{$row['AppointmentsStatus']}</td>
+                    <td>
+                        <button onclick=\"showUpdateAppointmentForm('{$row['AppointmentID']}', '{$row['AppointmentDateTime']}', '{$row['AppointmentsStatus']}')\">Update</button>
+                    </td>
                   </tr>";
         }
         echo "</table>";
