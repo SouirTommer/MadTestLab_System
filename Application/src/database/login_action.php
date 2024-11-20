@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($accountId, $decryptedPassword);
+        $stmt->bind_result($accountId, $decryptedPassword, $role);
         $stmt->fetch();
 
         if (password_verify($password, $decryptedPassword)) {
@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $role;
             if ($role === 'Patient') {
                 header("Location: ../welcome.php");
-            } elseif ($role === 'Secretarie') {
-                header("Location: ../welcome.php");
+            } elseif ($role === 'Secretary') {
+                header("Location: ../Secretary.php");
             } elseif ($role === 'LabStaff') {
                 header("Location: ../welcome.php");
             } else {
