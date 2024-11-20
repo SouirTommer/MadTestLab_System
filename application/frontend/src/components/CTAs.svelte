@@ -15,7 +15,7 @@
     <button class="specialBtn w-32" on:click={navigateToLogin}>
         <p class="text-base sm:text-lg md:text-xl">Login</p>
     </button>
-    <button class="specialBtnDark w-32 mt-6" on:click={navigateToRegister}>
+    <button class="specialBtnDark w-32 mt-2" on:click={navigateToRegister}>
         <p class="text-base sm:text-lg md:text-xl">Register</p>
     </button>
 </div>

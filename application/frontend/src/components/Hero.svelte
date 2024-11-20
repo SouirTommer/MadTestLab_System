@@ -10,18 +10,19 @@
         class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14"
     >
         <h2
-            class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl max-w-[1200px] mx-auto w-full text-center font-semibold"
+            class=" text-5xl sm:text-6xl md:text-7xl lg:text-8xl max-w-[1200px] mx-auto w-full text-center font-semibold"
         >
             <span class="text-indigo-400">MedTest </span>
             <span class="text-slate-600">Lab </span>
             <i class="text-slate-600 fa-solid fa-vial"></i>
             <br />
-            <br />
+            <p class="text-6xl mt-6">
             All your medical tests
             <br />
             in <span class="text-indigo-400"> one place</span>
             <br />
-            <br />
+        </p>
+
         </h2>
         <p
             class="text-xl smLtext-2xl md:text-3xl text-center max-w-[1000px] mx-auto w-full"
