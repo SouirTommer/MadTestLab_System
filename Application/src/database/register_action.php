@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
     $role = 'Patient';
     $accountStatus = 'active';
-    $credentials = 'default';
     $firstName = trim($_POST['firstName']);
     $lastName = trim($_POST['lastName']);
     $dateOfBirth = trim($_POST['dateOfBirth']);
@@ -28,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $iv = random_bytes(16);
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-        $stmt = $conn->prepare("INSERT INTO Accounts (Username, Password, Role, AccountStatus, Credentials, IV) VALUES (?, AES_ENCRYPT(?, ?, ?, 'hkdf'), ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $username, $hashedPassword, $aesKey, $iv, $role, $accountStatus, $credentials, $iv);
+        $stmt = $conn->prepare("INSERT INTO Accounts (Username, Password, Role, AccountStatus, IV) VALUES (?, AES_ENCRYPT(?, ?, ?, 'hkdf'), ?, ?, ?)");
+        $stmt->bind_param("ssssssss", $username, $hashedPassword, $aesKey, $iv, $role, $accountStatus, $iv);
         $stmt->execute();
         $accountId = $stmt->insert_id;
 

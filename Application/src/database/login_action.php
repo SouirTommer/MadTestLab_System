@@ -25,14 +25,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $aesKey = $aesKeys[$role];
 
-        $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword, Role FROM Accounts WHERE Username = ?");
+        $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword, Role, AccountStatue FROM Accounts WHERE Username = ?");
         $stmt->bind_param("ss", $aesKey, $username);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($accountId, $decryptedPassword, $role);
+            $stmt->bind_result($accountId, $decryptedPassword, $role, $accountStatus);
             $stmt->fetch();
+
+            if ($accountStatus === 'Block') {
+                echo "<script type='text/javascript'> 
+                        alert('Your account is blocked!');
+                        document.location = '../login.php'; 
+                      </script>";
+                exit();
+            }
 
             if (password_verify($password, $decryptedPassword)) {
                 $_SESSION['username'] = $username;

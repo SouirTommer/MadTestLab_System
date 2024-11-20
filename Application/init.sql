@@ -14,7 +14,6 @@ CREATE TABLE Accounts (
     Password VARBINARY(256) NOT NULL,
     Role VARCHAR(20) NOT NULL,
     AccountStatus VARCHAR(20) NOT NULL,
-    Credentials VARCHAR(100) NOT NULL,
     IV VARBINARY(16) NOT NULL
 ) ENCRYPTION='Y';
 
