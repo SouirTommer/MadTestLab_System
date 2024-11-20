@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// 查詢所有預約記錄並進行聯結
+// Fetch all appointment records
 $query = "
     SELECT 
         Appointments.AppointmentID,
@@ -32,6 +32,18 @@ if ($result->num_rows > 0) {
     }
 }
 
+// Fetch all patients
+$patientsQuery = "SELECT PatientID, FirstName, LastName FROM Patients";
+$patientsResult = $conn->query($patientsQuery);
+
+$patients = [];
+
+if ($patientsResult->num_rows > 0) {
+    while ($row = $patientsResult->fetch_assoc()) {
+        $patients[] = $row; // Add each row to the patients array
+    }
+}
+
 $conn->close();
 ?>
 
@@ -41,9 +53,53 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment Records</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        function showCreateAppointmentForm() {
+            document.getElementById('createAppointmentForm').style.display = 'block';
+        }
+    </script>
 </head>
 <body>
     <h2>Appointment Records</h2>
+
+    <button onclick="showCreateAppointmentForm()" style="padding: 10px; background-color: #007bff; color: white; text-align: center; text-decoration: none; border-radius: 5px; border: none; cursor: pointer;">Create Appointment</button>
+
+    <div id="createAppointmentForm" style="display: none; margin-top: 20px;">
+        <h3>Create Appointment</h3>
+        <form action="secretary_create_appointment_action.php" method="post">
+            <label for="patient">Patient:</label>
+            <select name="patient" id="patient" required>
+                <?php foreach ($patients as $patient): ?>
+                    <option value="<?php echo $patient['PatientID']; ?>">
+                        <?php echo $patient['FirstName'] . ' ' . $patient['LastName']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <br><br>
+            <label for="datetime">Date and Time:</label>
+            <input type="datetime-local" id="datetime" name="datetime" required>
+            <br><br>
+            <input type="hidden" name="secretaryID" value="<?php echo $_SESSION['accountId']; ?>">
+            <input type="submit" value="Create Appointment">
+        </form>
+    </div>
+
     <?php
     if (count($appointments) > 0) {
         echo "<table border='1'>
@@ -72,7 +128,5 @@ $conn->close();
         echo "No appointment records found.";
     }
     ?>
-    <h2>Appointment Records JSON</h2>
-    <pre><?php echo json_encode($appointments, JSON_PRETTY_PRINT); ?></pre>
 </body>
 </html>
