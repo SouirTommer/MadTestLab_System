@@ -18,16 +18,27 @@ CREATE TABLE Accounts (
     IV VARBINARY(16) NOT NULL
 ) ENCRYPTION='Y';
 
+
+CREATE TABLE Insurances (
+    InsuranceID INT AUTO_INCREMENT PRIMARY KEY,
+    InsuranceName VARCHAR(100) NOT NULL,
+    InsuranceAmount DECIMAL(10, 2) NOT NULL,
+    InsuranceDetails TEXT,
+    InsuranceStatus VARCHAR(20) NOT NULL
+) ENCRYPTION='Y';
+
 CREATE TABLE Patients (
     PatientID INT AUTO_INCREMENT PRIMARY KEY,
     AccountID INT NOT NULL,
+    InsuranceID INT NULL,
     FirstName VARCHAR(100) NOT NULL,
     LastName VARCHAR(100) NOT NULL,
     DateOfBirth DATE NOT NULL,
     Gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    Phone VARCHAR(8) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
+    Phone VARBINARY(256) NOT NULL,
+    Email VARBINARY(256) NOT NULL,
+    FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID),
+    FOREIGN KEY (InsuranceID) REFERENCES Insurances(InsuranceID)
 ) ENCRYPTION='Y';
 
 CREATE TABLE Secretaries (
@@ -37,8 +48,8 @@ CREATE TABLE Secretaries (
     LastName VARCHAR(100) NOT NULL,
     DateOfBirth DATE NOT NULL,
     Gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    Phone VARCHAR(8) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
+    Phone VARBINARY(256) NOT NULL,
+    Email VARBINARY(256) NOT NULL,
     FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
 ) ENCRYPTION='Y';
 
@@ -49,21 +60,10 @@ CREATE TABLE LabStaffs (
     LastName VARCHAR(100) NOT NULL,
     DateOfBirth DATE NOT NULL,
     Gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    Phone VARCHAR(8) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
+    Phone VARBINARY(256) NOT NULL,
+    Email VARBINARY(256) NOT NULL,
     FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
 ) ENCRYPTION='Y';
-
-CREATE TABLE Insurances (
-    InsuranceID INT AUTO_INCREMENT PRIMARY KEY,
-    PatientID INT NOT NULL,
-    InsuranceName VARCHAR(100) NOT NULL,
-    InsuranceAmount DECIMAL(10, 2) NOT NULL,
-    InsuranceDetails TEXT,
-    InsuranceStatus VARCHAR(20) NOT NULL,
-    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
-) ENCRYPTION='Y';
-
 
 CREATE TABLE TestsCatalog (
     TestCode INT AUTO_INCREMENT PRIMARY KEY,

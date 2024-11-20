@@ -4,6 +4,7 @@ require_once '../connection/mysqli_conn.php';
 
 $aesKeys = [
     'Patient' => getenv('AES_KEY_PATIENT'),
+    'PatientPrivate' => getenv('AES_KEY_PATIENT_PRIVATE'),
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -23,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         $aesKey = $aesKeys['Patient'];
+        $aesKeyPrivate = $aesKeys['PatientPrivate'];
         $iv = random_bytes(16);
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
@@ -31,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         $accountId = $stmt->insert_id;
 
-        $stmt = $conn->prepare("INSERT INTO Patients (AccountID, FirstName, LastName, DateOfBirth, Gender, Phone, Email) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issssss", $accountId, $firstName, $lastName, $dateOfBirth, $gender, $phone, $email);
+        $stmt = $conn->prepare("INSERT INTO Patients (AccountID, FirstName, LastName, DateOfBirth, Gender, Phone, Email) VALUES (?, ?, ?, ?, ?, AES_ENCRYPT(?, ?, ?, 'hkdf'), AES_ENCRYPT(?, ?, ?, 'hkdf'))");
+        $stmt->bind_param("issssssssss", $accountId, $firstName, $lastName, $dateOfBirth, $gender, $phone, $aesKeyPrivate, $iv, $email, $aesKeyPrivate, $iv);
         $stmt->execute();
 
         $conn->commit();

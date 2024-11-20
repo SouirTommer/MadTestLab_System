@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     $aesKey = $aesKeys['Patient'];
-    $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword FROM Accounts WHERE Username = ?");
+    $stmt = $conn->prepare("SELECT AccountID, Role, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword FROM Accounts WHERE Username = ?");
     $stmt->bind_param("ss", $aesKey, $username);
     $stmt->execute();
     $stmt->store_result();
@@ -25,7 +25,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $decryptedPassword)) {
             $_SESSION['username'] = $username;
             $_SESSION['accountId'] = $accountId;
-            header("Location: ../welcome.php");
+            $_SESSION['role'] = $role;
+            if ($role === 'Patient') {
+                header("Location: ../welcome.php");
+            } elseif ($role === 'Secretarie') {
+                header("Location: ../welcome.php");
+            } elseif ($role === 'LabStaff') {
+                header("Location: ../welcome.php");
+            } else {
+                echo "Invalid role";
+            }
             exit();
         } else {
             echo "Invalid password";
