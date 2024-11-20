@@ -9,6 +9,10 @@ services:
       - ./src:/var/www/html
     depends_on:
       - proxysql
+    environment:
+      - AES_KEY_PATIENT=by5xXrl33BkHTeqSou3MdBJb2FZEZf47
+      - AES_KEY_SECRETARY=ztxyY9INKmygoaq0ThbQYUMr3gf3dR2Z
+      - AES_KEY_LABSTAFF=p4xqYkmopKb1JfTZBO2nXp0YXd7uWaA6
 
   mysql:
     image: percona/percona-server:8.0.35-aarch64  #  ARM64

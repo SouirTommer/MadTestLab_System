@@ -7,6 +7,11 @@
 </head>
 <body>
     <h2>Login</h2>
+    <?php
+    if (isset($_GET['message'])) {
+        echo '<p style="color: green;">' . htmlspecialchars($_GET['message']) . '</p>';
+    }
+    ?>
     <form method="post" action="database/login_action.php">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br>
