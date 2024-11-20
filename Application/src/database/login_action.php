@@ -47,15 +47,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 exit();
             } else {
-                header("Location: ../login.php?message=Invalid%20password");
+                echo "<script type='text/javascript'> 
+                        alert('Invalid password!');
+                        document.location = '../login.php'; 
+                      </script>";
+                exit();
             }
         } else {
-            header("Location: ../login.php?message=Invalid%20password");
+            echo "<script type='text/javascript'> 
+                    alert('Invalid password!');
+                    document.location = '../login.php'; 
+                  </script>";
+            exit();
         }
 
         $stmt->close();
     } else {
-        header("Location: ../login.php?message=Invalid%20username");
+        echo "<script type='text/javascript'> 
+                alert('Invalid password!');
+                document.location = '../login.php'; 
+              </script>";
+        exit();
     }
 
     $conn->close();

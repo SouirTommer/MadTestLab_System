@@ -38,12 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
 
         $conn->commit();
-
-        header("Location: ../login.php?message=Register%20success!");
+        echo "<script type='text/javascript'> 
+                alert('Register success!');
+                document.location = '../login.php'; 
+              </script>";
         exit();
     } catch (Exception $e) {
         $conn->rollback();
-        echo "register failed：" . $e->getMessage();
+        header("Location: ../register.php");
+        exit();
     }
 
     $stmt->close();
