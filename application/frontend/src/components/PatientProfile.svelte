@@ -1,24 +1,24 @@
 <script>
     import SectionWrapper from "./SectionWrapper.svelte";
-
     let selectedTab = "general";
+
 
     let staff = {
         id: "12345",
-        name: "Marco",
+        name: "Tommer",
         role: "Lab Secretary",
-        email: "stse2122@gmail.com",
-        phone: "98765432",
+        email: "souirTOmmer@gmail.com",
+        phone: "54329876",
         password: "password123", // Note: In a real application, never store passwords in plain text
     };
+
 </script>
 
 <div class="flex flex-row mt-8">
     <div class="flex flex-col items-start pb-10 md:pb-14 mr-20">
         <button
-            class="items-start text-start bg-transparent text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
+            class="items-start text-start bg-transparent text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-200 transition"
             class:bg-slate-200={selectedTab === "general"}
-
             on:click={() => (selectedTab = "general")}
         >
             General
@@ -26,7 +26,6 @@
         <button
             class="bg-transparent text-start text-slate-600 font-medium sm:text-md md:text-md py-3 w-full items-start rounded-2xl hover:bg-slate-100 transition"
             class:bg-slate-200={selectedTab === "authentication"}
-
             on:click={() => (selectedTab = "authentication")}
         >
             Authentication

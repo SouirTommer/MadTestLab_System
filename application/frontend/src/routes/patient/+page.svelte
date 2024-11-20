@@ -1,6 +1,8 @@
 <script>
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
+    import PatientProfile from "../../components/PatientProfile.svelte";
+    import Orders from "../../components/Orders.svelte";
     let currentTab = "dashboard"; // Tracks the active tab
 
     function getGreetingWithIcon() {
@@ -121,6 +123,7 @@
             {#if currentTab === "test_order"}
                 <h2 class="text-3xl font-bold mb-4">Test Order</h2>
                 <p>Order new tests or view your pending test orders.</p>
+                <Orders />
             {/if}
             {#if currentTab === "test_results"}
                 <h2 class="text-3xl font-bold mb-4">Test Results</h2>
@@ -133,6 +136,7 @@
             {#if currentTab === "profile"}
                 <h2 class="text-3xl font-bold mb-4">Profile</h2>
                 <p>Update your personal information and account settings.</p>
+                <PatientProfile />
             {/if}
         </main>
     </SectionWrapper>

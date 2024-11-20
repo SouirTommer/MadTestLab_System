@@ -2,33 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-html{
+html {
     scroll-behavior: smooth;
 }
 
-*{
+* {
     font-family: 'Open Sans', sans-serif;
 }
 
-h1, h2, h3, .poppins{
+h1,
+h2,
+h3,
+.poppins {
     font-family: 'Poppins', sans-serif;
 }
 
-span{
+span {
     font-family: inherit;
     font-weight: inherit;
 }
 
-.bgGrid{
+.bgGrid {
     background-size: 40px 40px;
     background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom, grey 1px, transparent 1px);
 }
 
 button,
-.button{
+.button {
     border-radius: 8px;
     padding: 0.6em 1.2em;
-    font-size: 1em ;
+    font-size: 1em;
     font-weight: 500;
     font-family: inherit;
     background-color: white;
@@ -37,45 +40,58 @@ button,
 
 }
 
-button:hover{
+button:hover {
     border-color: #646cff;
 }
 
 button:focus,
-button:focus-visible{
+button:focus-visible {
     /* outline: 4px auto -webkit-focus-ring-color; */
 }
 
-.specialBtn{
-    border: 2px solid ;
+.specialBtn {
+    border: 2px solid;
     border-color: #646cff;
 }
 
-.specialBtnDark{
+.specialBtnDark {
     background: #646cff;
     color: white;
 }
 
-.specialBtn:hover{
+.specialBtn:hover {
     border-color: blue;
 }
 
-.navTabBtn{
+.navTabBtn {
     background: transparent;
-    
+
 }
 
-.navTabBtn:hover{
-    background:  rgb(198, 205, 233);
+.navTabBtn:hover {
+    background: rgb(198, 205, 233);
     border: none;
-    
+
 }
 
 .navItem.selected {
-    background-color:  rgb(198, 205, 233); /* Change this to your desired color *//* Optional: change text color for better contrast */
+    background-color: rgb(198, 205, 233);
+    /* Change this to your desired color */
+    /* Optional: change text color for better contrast */
 }
 
-.userCard:hover
-{
-    background-color:  rgb(198, 205, 233);
+.userCard:hover {
+    background-color: rgb(198, 205, 233);
+}
+
+.status-tag {
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    /* Full rounded corners */
+    display: inline-block;
+    font-family: monospace;
+    font-size: small;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
 }

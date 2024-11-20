@@ -1,0 +1,53 @@
+<script>
+    import { onMount } from 'svelte';
+    import { orders } from '../../stores/ordersStore';
+
+    let ordersList = [];
+
+    onMount(() => {
+        orders.subscribe(value => {
+            ordersList = value;
+        });
+    });
+
+    function getStatusClass(status) {
+        switch (status) {
+            case 'Pending':
+                return 'bg-yellow-200 text-yellow-800';
+            case 'Completed':
+                return 'bg-green-200 text-green-800';
+            case 'Cancelled':
+                return 'bg-red-200 text-red-800';
+            default:
+                return 'bg-gray-200 text-gray-800';
+        }
+    }
+</script>
+<div class="flex flex-col mt-8">
+    <table class="min-w-full bg-white border border-slate-200">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">OrderID</th>
+                <th class="py-2 px-4 border-b">LabStaffID</th>
+                <th class="py-2 px-4 border-b">SecretaryID</th>
+                <th class="py-2 px-4 border-b">TestCode</th>
+                <th class="py-2 px-4 border-b">OrderDateTime</th>
+                <th class="py-2 px-4 border-b">OrderStatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#each orders as order}
+            <tr>
+                <td class="py-2 px-4 border-b">{order.OrderID}</td>
+                <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
+                <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
+                <td class="py-2 px-4 border-b">{order.TestCode}</td>
+                <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
+                <td class="py-2 px-4 border-b">
+                    <span class="status-tag  {getStatusClass(order.OrderStatus)}">{order.OrderStatus}</span>
+                </td>
+            </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>

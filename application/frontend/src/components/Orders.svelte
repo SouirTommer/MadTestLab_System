@@ -1,0 +1,74 @@
+<script>
+    let orders = [
+        {
+            OrderID: "ORD001",
+            PatientID: "PAT001",
+            LabStaffID: "LAB001",
+            SecretaryID: "SEC001",
+            TestCode: "TC001",
+            OrderDateTime: "2023-10-01 10:00",
+            OrderStatus: "Pending"
+        },
+        {
+            OrderID: "ORD002",
+            PatientID: "PAT002",
+            LabStaffID: "LAB002",
+            SecretaryID: "SEC002",
+            TestCode: "TC002",
+            OrderDateTime: "2023-10-02 11:00",
+            OrderStatus: "Completed"
+        },
+        {
+            OrderID: "ORD003",
+            PatientID: "PAT003",
+            LabStaffID: "LAB003",
+            SecretaryID: "SEC003",
+            TestCode: "TC003",
+            OrderDateTime: "2023-10-03 12:00",
+            OrderStatus: "In Progress"
+        }
+    ];
+
+    function getStatusClass(status) {
+        switch (status) {
+            case 'Pending':
+                return 'bg-yellow-200 text-yellow-800';
+            case 'Completed':
+                return 'bg-green-200 text-green-800';
+            case 'In Progress':
+                return 'bg-blue-200 text-blue-800';
+            default:
+                return 'bg-gray-200 text-gray-800';
+        }
+    }
+</script>
+
+
+<div class="flex flex-col mt-8">
+    <table class="min-w-full bg-white border border-slate-200">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 border-b">OrderID</th>
+                <th class="py-2 px-4 border-b">LabStaffID</th>
+                <th class="py-2 px-4 border-b">SecretaryID</th>
+                <th class="py-2 px-4 border-b">TestCode</th>
+                <th class="py-2 px-4 border-b">OrderDateTime</th>
+                <th class="py-2 px-4 border-b">OrderStatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#each orders as order}
+                <tr>
+                    <td class="py-2 px-4 border-b">{order.OrderID}</td>
+                    <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
+                    <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
+                    <td class="py-2 px-4 border-b">{order.TestCode}</td>
+                    <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
+                    <td class="py-2 px-4 border-b">
+                        <span class="status-tag  {getStatusClass(order.OrderStatus)}">{order.OrderStatus}</span>
+                    </td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>
