@@ -6,6 +6,8 @@ session_start();
 
 $aesKeys = [
     'Patient' => getenv('AES_KEY_PATIENT'),
+    'Secretary' => getenv('AES_KEY_SECRETARY'),
+    'LabStaff' => getenv('AES_KEY_LABSTAFF')
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -13,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     $aesKey = $aesKeys['Patient'];
-    $stmt = $conn->prepare("SELECT AccountID, Role, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword FROM Accounts WHERE Username = ?");
+    $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword, Role FROM Accounts WHERE Username = ?");
     $stmt->bind_param("ss", $aesKey, $username);
     $stmt->execute();
     $stmt->store_result();
@@ -28,19 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['role'] = $role;
             if ($role === 'Patient') {
                 header("Location: ../welcome.php");
-            } elseif ($role === 'Secretary') {
-                header("Location: ../Secretary.php");
+            } elseif ($role === 'secretary') {
+                header("Location: ../Żecretary.php");
             } elseif ($role === 'LabStaff') {
                 header("Location: ../welcome.php");
-            } else {
-                echo "Invalid role";
             }
             exit();
         } else {
-            echo "Invalid password";
+            header("Location: ../login.php?message=Invalid%20password");
         }
     } else {
-        echo "User not found";
+        header("Location: ../login.php?message=Invalid%20password");
     }
 
     $stmt->close();
