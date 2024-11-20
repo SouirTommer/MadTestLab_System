@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $aesKey = $aesKeys[$role];
 
-        $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword, Role, AccountStatue FROM Accounts WHERE Username = ?");
+        $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword, Role, AccountStatus FROM Accounts WHERE Username = ?");
         $stmt->bind_param("ss", $aesKey, $username);
         $stmt->execute();
         $stmt->store_result();
