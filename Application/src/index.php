@@ -1,7 +1,11 @@
 <?php
-require_once './connection/mysqli_conn.php';
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+session_start();
+
+// 檢查使用者是否已登入
+if (isset($_SESSION['username'])) {
+    header("Location: welcome.php");
+} else {
+    header("Location: login.php");
 }
-echo "Connected successfully to the database!!";
+exit();
 ?>
