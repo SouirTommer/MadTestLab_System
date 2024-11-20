@@ -1,7 +1,13 @@
 <script>
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
+    import StaffProfile from "../../components/StaffProfile.svelte";
     let currentTab = "dashboard"; // Tracks the active tab
+
+    let user = {
+        name: "Marco",
+        email: "stse2122@gmail.com",
+    };
 </script>
 
 <div class="flex h-screen">
@@ -74,14 +80,14 @@
 
             <!-- push the div to bottom -->
             <div class="flex-1"></div>
-            <p class="text-slate-400 font-medium text-xl px-4 py-1">
+            <p class="text-slate-500 font-medium text-xl px-4 py-1">
                 Secretary Staff
             </p>
             <div
                 class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
-                <p class="text-xl">Tommer</p>
-                <p class="text-slate-400">souirtommer@gmail.com</p>
+                <p class="text-xl">{user.name}</p>
+                <p class="text-slate-400">{user.email}</p>
             </div>
         </nav>
     </aside>
@@ -90,7 +96,7 @@
         <main class="flex-1 p-6">
             <div class="flex items-center gap-2 mb-6 py-4">
                 <h1 class="text-4xl font-bold pl-2">
-                    <i class="fa-solid fa-wrench text-indigo-800"></i> Admin Panel
+                    <i class="fa-solid fa-wrench text-slate-600"></i> Admin Panel
                 </h1>
             </div>
 
@@ -101,21 +107,27 @@
                     recent activity.
                 </p>
             {/if}
+            {#if currentTab === "appointments"}
+                <h2 class="text-3xl font-bold mb-4">Appointments</h2>
+                <p>View and manage appointments for patients.</p>
+            {/if}
             {#if currentTab === "patient_records"}
                 <h2 class="text-3xl font-bold mb-4">Patient Records</h2>
-                <p>Order new tests or view your pending test orders.</p>
-            {/if}
-            {#if currentTab === "test_results"}
-                <h2 class="text-3xl font-bold mb-4">Test Results</h2>
-                <p>View your test results and download reports.</p>
+                <p>View and manage patient records and history.</p>
             {/if}
             {#if currentTab === "billing"}
                 <h2 class="text-3xl font-bold mb-4">Billing</h2>
                 <p>Check your bills, make payments, or view payment history.</p>
             {/if}
+            {#if currentTab === "staff_records"}
+                <h2 class="text-3xl font-bold mb-4">Staff Records</h2>
+                <p>View and manage staff records and history.</p>
+            {/if}
             {#if currentTab === "profile"}
                 <h2 class="text-3xl font-bold mb-4">Profile</h2>
                 <p>Update your personal information and account settings.</p>
+                <StaffProfile />
+                
             {/if}
         </main>
     </SectionWrapper>

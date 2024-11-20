@@ -17,6 +17,11 @@
     }
 
     const { greeting, icon } = getGreetingWithIcon();
+
+    let user = {
+        name: "Tommer",
+        email: "souirtommer@gmail.com",
+    };
 </script>
 
 <div class="flex h-screen">
@@ -34,7 +39,9 @@
         </div>
         <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
             <button
-                class="navItem {currentTab === 'test_order' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'test_order'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "dashboard"}
                 on:click={() => (currentTab = "dashboard")}
             >
@@ -43,7 +50,9 @@
             </button>
             <p class="text-slate-500 text-m font-medium px-2">My Test</p>
             <button
-                class="navItem {currentTab === 'test_order' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'test_order'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "test_order"}
                 on:click={() => (currentTab = "test_order")}
             >
@@ -52,7 +61,9 @@
                 Test Orders
             </button>
             <button
-                class="navItem {currentTab === 'test_results' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'test_results'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "test_results"}
                 on:click={() => (currentTab = "test_results")}
             >
@@ -62,7 +73,9 @@
             <p class="text-slate-500 text-m font-medium px-2">Setting</p>
 
             <button
-                class="navItem {currentTab === 'profile' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'profile'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "profile"}
                 on:click={() => (currentTab = "profile")}
             >
@@ -71,7 +84,9 @@
             </button>
 
             <button
-                class="navItem {currentTab === 'billing' ? 'selected' : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class="navItem {currentTab === 'billing'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
                 class:selected={currentTab === "billing"}
                 on:click={() => (currentTab = "billing")}
             >
@@ -81,10 +96,10 @@
             <!-- push the div to bottom -->
             <div class="flex-1"></div>
             <div
-                class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl  border-solid border-2 border-slate-300 trasition"
+                class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
-                <p class="text-xl">Tommer </p>
-                <p class="text-slate-400">souirtommer@gmail.com</p>
+                <p class="text-xl">{user.name}</p>
+                <p class="text-slate-400">{user.email}</p>
             </div>
         </nav>
     </aside>
