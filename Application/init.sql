@@ -75,7 +75,6 @@ CREATE TABLE Appointments (
     LabStaffID INT NOT NULL,
     PatientID INT NOT NULL,
     SecretaryID INT NOT NULL,
-    LabStaffID INT NOT NULL,
     AppointmentDateTime DATETIME NOT NULL,
     AppointmentsStatus VARCHAR(20) NOT NULL, 
     FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
