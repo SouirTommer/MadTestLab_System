@@ -111,6 +111,36 @@ mysql_query_rules =
         apply=0
         flags=0
         log=1
+    },
+    {
+        rule_id=6
+        active=1
+        match_pattern="OR 1=1"
+        negate_match_pattern=0
+        error_msg="SQL Injection attempt detected"
+        apply=1
+        flags=0
+        log=1
+    },
+    {
+        rule_id=7
+        active=1
+        match_pattern=";--"
+        negate_match_pattern=0
+        error_msg="SQL Injection attempt detected"
+        apply=1
+        flags=0
+        log=1
+    },
+    {
+        rule_id=8
+        active=1
+        match_pattern="admin"
+        negate_match_pattern=0
+        error_msg="Unauthorized access attempt detected"
+        apply=1
+        flags=0
+        log=1
     }
 
 )
