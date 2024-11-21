@@ -159,6 +159,6 @@ INSERT INTO `Secretaries` (`SecretaryID`, `AccountID`, `FirstName`, `LastName`, 
 
 INSERT INTO `LabStaffs` (`LabStaffID`, `AccountID`, `LabStaffType`, `FirstName`, `LastName`, `DateOfBirth`, `Gender`, `Phone`, `Email`) VALUES
 (1, 4, 'Physician', 'Marco', 'Yue', '2024-11-20', 'Male', 0xf4642db6c30e0aaed6932b4e4be87bb1, 0x8c7e84af65ceba6ce84187f2c6c04f0a),
-(2, 5, 'Pathologist', 'Tai Man', 'Chan', '2024-11-11', 'Male', 0xf9377095ebee03417bc172f7c833d682, 0xaef4b7667ee741c9b0923540f9d88d78);
+(2, 5, 'Pathologist', 'Tai Man', 'Chan', '2024-11-11', 'Male', 0xf9377095ebee03417bc172f7c833d682, 0xaef4b7667ee741c9b0923540f9d88d78),
 (3, 6, 'Physician', 'Tim', 'kwan', '2024-11-19', 'Male', 0x181fff29282f2d3fe13430f511365ef4, 0x0919c213faaaf14555dc21490b9a6783),
 (4, 7, 'Pathologist', 'Vincent', 'Wong', '2024-11-20', 'Male', 0xa4b1e12e8ef8286cfe78a15c16d7b497, 0x4f40cdb18f7c6dd14683bf1a3c4c6b9fc5f3662097fdbe2178a9de7568f89cb3);
