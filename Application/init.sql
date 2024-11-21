@@ -72,12 +72,14 @@ CREATE TABLE Insurances (
 
 CREATE TABLE Appointments (
     AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
+    LabStaffID INT NOT NULL,
     PatientID INT NOT NULL,
     SecretaryID INT NOT NULL,
     AppointmentDateTime DATETIME NOT NULL,
     AppointmentsStatus VARCHAR(20) NOT NULL, 
     FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
-    FOREIGN KEY (SecretaryID) REFERENCES Secretaries(SecretaryID)
+    FOREIGN KEY (SecretaryID) REFERENCES Secretaries(SecretaryID),
+    FOREIGN KEY (LabStaffID) REFERENCES LabStaffs(LabStaffID)
 ) ENCRYPTION='Y';
 
 
