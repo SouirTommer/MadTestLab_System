@@ -146,7 +146,9 @@ INSERT INTO `Accounts` (`AccountID`, `Username`, `Password`, `Role`, `AccountSta
 (2, 'Nathan', 0x4a23ae527b2a28b52cd7d6492db473210c6f0ef643be662eb3dcee86646daeded1ec99068dbbeb47cbac2ee0484fb49d5f53411d40a6af3c310f29d74192990f, 'Secretary', 'active', 0x5e8da309506bebe335aefb19815ef1d3),
 (3, 'Secretary', 0xb5045caad05c37997a022353ae8a60db3ab01e55784d83cdbf4825befae2db3193045b3445f054f9f308338180c9e9f2fe03c3f332fdafbcccaa9b653e4c5170, 'Secretary', 'active', 0x6cd32ce171b9873a5373a31b33139ac8),
 (4, 'Physician', 0x0da5dcc13b1f9978bd9c9502c96b1d05b5f99e787197d2290fea408477c94afcddb13455c1b785a72568293aa609ac315665ffae85831d12bd635ee98dfd7bef, 'LabStaff', 'active', 0x49f831572c42a94980595f1530051368),
-(5, 'Pathologist', 0xc62e9c9fcf775401ceb6ac18cf1caa369c3d97f598572e1730ba2648fd2d0f560ba9b0323583eef6aae15278639505628694da03a3b2244d3543ab1dc3652a7e, 'LabStaff', 'active', 0x595fb044d62916f1cb7c88b13a977086);
+(5, 'Pathologist', 0xc62e9c9fcf775401ceb6ac18cf1caa369c3d97f598572e1730ba2648fd2d0f560ba9b0323583eef6aae15278639505628694da03a3b2244d3543ab1dc3652a7e, 'LabStaff', 'active', 0x595fb044d62916f1cb7c88b13a977086),
+(6, 'Tim', 0x91f58420bdf4d371be97f5654bb6aa0813b8cc3c2788881eba4864b1f3359e3bded18470a2a0d135e14365767e8238a45577169c6714b171a62249f73ea70d31, 'Patient', 'active', 0x25040ed1ac110eff1e5d4995e95607b8),
+(7, 'Vincent', 0x0f3161d07fff19e2a972bb8af7b026d884d60d2ce728ff67eb76225187e84ea1463fc6324ecc0f3775145e91a938426e92508a38f4e1aea5bf89a68f0e4d28ae, 'Patient', 'active', 0x3f164d4f0a8a50c6ce00c051fc280f61);
 
 INSERT INTO `Patients` (`PatientID`, `AccountID`, `FirstName`, `LastName`, `DateOfBirth`, `Gender`, `Phone`, `Email`) VALUES
 (1, 1, 'Tommer', 'Ching', '2024-11-20', 'Male', 0x1515c7fa6cd66a743eed95b21063f956, 0xc54db5f880e094bf1a08ff551438c5d35a3921ce2349af3ca2e949066ade6a44);
@@ -158,3 +160,5 @@ INSERT INTO `Secretaries` (`SecretaryID`, `AccountID`, `FirstName`, `LastName`, 
 INSERT INTO `LabStaffs` (`LabStaffID`, `AccountID`, `LabStaffType`, `FirstName`, `LastName`, `DateOfBirth`, `Gender`, `Phone`, `Email`) VALUES
 (1, 4, 'Physician', 'Marco', 'Yue', '2024-11-20', 'Male', 0xf4642db6c30e0aaed6932b4e4be87bb1, 0x8c7e84af65ceba6ce84187f2c6c04f0a),
 (2, 5, 'Pathologist', 'Tai Man', 'Chan', '2024-11-11', 'Male', 0xf9377095ebee03417bc172f7c833d682, 0xaef4b7667ee741c9b0923540f9d88d78);
+(3, 6, 'Physician', 'Tim', 'kwan', '2024-11-19', 'Male', 0x181fff29282f2d3fe13430f511365ef4, 0x0919c213faaaf14555dc21490b9a6783),
+(4, 7, 'Pathologist', 'Vincent', 'Wong', '2024-11-20', 'Male', 0xa4b1e12e8ef8286cfe78a15c16d7b497, 0x4f40cdb18f7c6dd14683bf1a3c4c6b9fc5f3662097fdbe2178a9de7568f89cb3);

@@ -26,7 +26,7 @@ services:
     ports:
       - "3306:3306"
     command:
-      - --default-authentication-plugin=caching_sha2_password 
+      - --default-authentication-plugin=caching_sha2_password
       - --early-plugin-load=keyring_file.so 
       - --keyring_file_data=/var/lib/mysql-keyring/keyring
       - --default-table-encryption=ON
