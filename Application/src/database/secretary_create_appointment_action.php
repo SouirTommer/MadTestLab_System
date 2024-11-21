@@ -11,8 +11,9 @@ if (!isset($_SESSION['username'])) {
 $response = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['patient']) && isset($_POST['datetime']) && isset($_SESSION['accountId'])) {
+    if (isset($_POST['patient']) && isset($_POST['physician']) && isset($_POST['datetime']) && isset($_SESSION['accountId'])) {
         $patientID = $_POST['patient'];
+        $physicianID = $_POST['physician'];
         $datetime = $_POST['datetime'];
         $accountId = $_SESSION['accountId']; // Use accountId from session
 
@@ -26,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->close();
 
         if ($secretaryID) {
-            $query = "INSERT INTO Appointments (PatientID, SecretaryID, AppointmentDateTime, AppointmentsStatus) VALUES (?, ?, ?, 'Scheduled')";
+            $query = "INSERT INTO Appointments (PatientID, SecretaryID, LabStaffID, AppointmentDateTime, AppointmentsStatus) VALUES (?, ?, ?, ?, 'Scheduled')";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param('iis', $patientID, $secretaryID, $datetime);
+            $stmt->bind_param('iiis', $patientID, $secretaryID, $physicianID, $datetime);
 
             if ($stmt->execute()) {
                 $response['status'] = 'success';
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $response['appointment'] = [
                     'PatientID' => $patientID,
                     'SecretaryID' => $secretaryID,
+                    'LabStaffID' => $physicianID,
                     'AppointmentDateTime' => $datetime,
                     'AppointmentsStatus' => 'Scheduled'
                 ];
@@ -57,9 +59,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Fetch patients and physicians for the form
+$patients = [];
+$physicians = [];
+
+$patientsQuery = "SELECT PatientID, FirstName, LastName FROM Patients";
+$patientsResult = $conn->query($patientsQuery);
+while ($patient = $patientsResult->fetch_assoc()) {
+    $patients[] = $patient;
+}
+
+$physiciansQuery = "SELECT LabStaffID, FirstName, LastName FROM LabStaffs WHERE LabStaffType = 'Physician'";
+$physiciansResult = $conn->query($physiciansQuery);
+
+// Debug: Check if the query returns any results
+if ($physiciansResult->num_rows > 0) {
+    while ($physician = $physiciansResult->fetch_assoc()) {
+        $physicians[] = $physician;
+    }
+} else {
+    // Debug: Print an error message if no physicians are found
+    echo "No physicians found.";
+}
+
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,6 +104,30 @@ $conn->close();
             <pre>Session data: <?php echo json_encode($response['session_data'], JSON_PRETTY_PRINT); ?></pre>
         <?php endif; ?>
     <?php endif; ?>
+    <form method="POST" action="secretary_create_appointment_action.php">
+        <label for="patient">Patient:</label>
+        <select name="patient" id="patient" required>
+            <?php foreach ($patients as $patient): ?>
+                <option value="<?php echo $patient['PatientID']; ?>">
+                    <?php echo $patient['FirstName'] . ' ' . $patient['LastName']; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <br><br>
+        <label for="physician">Physician:</label>
+        <select name="physician" id="physician" required>
+            <?php foreach ($physicians as $physician): ?>
+                <option value="<?php echo $physician['LabStaffID']; ?>">
+                    <?php echo $physician['FirstName'] . ' ' . $physician['LastName']; ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <br><br>
+        <label for="datetime">Appointment Date and Time:</label>
+        <input type="datetime-local" id="datetime" name="datetime" required>
+        <br><br>
+        <button type="submit">Create Appointment</button>
+    </form>
     <button onclick="window.location.href='secretary_read_appointment_action.php'">Go Back</button>
 </body>
 </html>
