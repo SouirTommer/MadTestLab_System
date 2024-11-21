@@ -5,6 +5,8 @@ require_once '../connection/mysqli_conn.php';
 $aesKeys = [
     'Patient' => getenv('AES_KEY_PATIENT'),
     'PatientPrivate' => getenv('AES_KEY_PATIENT_PRIVATE'),
+    'Secretary' => getenv('AES_KEY_SECRETARY'),
+    'LabStaff' => getenv('AES_KEY_LABSTAFF')
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
         $stmt = $conn->prepare("INSERT INTO Accounts (Username, Password, Role, AccountStatus, IV) VALUES (?, AES_ENCRYPT(?, ?, ?, 'hkdf'), ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $username, $hashedPassword, $aesKey, $iv, $role, $accountStatus, $iv);
+        $stmt->bind_param("sssssss", $username, $hashedPassword, $aesKey, $iv, $role, $accountStatus, $iv);
         $stmt->execute();
         $accountId = $stmt->insert_id;
 
