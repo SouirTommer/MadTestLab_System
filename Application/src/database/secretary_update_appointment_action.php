@@ -57,6 +57,6 @@ $conn->close();
     <?php else: ?>
         <h2><?php echo $response['message']; ?></h2>
     <?php endif; ?>
-    <button onclick="window.location.href='secretary_appointment_action.php'">Go Back</button>
+    <button onclick="window.location.href='secretary_read_appointment_action.php'">Go Back</button>
 </body>
 </html>

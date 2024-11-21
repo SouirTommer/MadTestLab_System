@@ -80,6 +80,6 @@ $conn->close();
             <pre>Session data: <?php echo json_encode($response['session_data'], JSON_PRETTY_PRINT); ?></pre>
         <?php endif; ?>
     <?php endif; ?>
-    <button onclick="window.location.href='secretary_appointment_action.php'">Go Back</button>
+    <button onclick="window.location.href='secretary_read_appointment_action.php'">Go Back</button>
 </body>
 </html>

@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['accountId'] = $accountId;
                 $_SESSION['role'] = $role;
                 if ($role === 'Patient') {
-                    header("Location: ../welcome.php");
+                    header("Location: ../patient.php");
                 } elseif ($role === 'Secretary') {
                     header("Location: ../secretary.php");
                 } elseif ($role === 'LabStaff') {
