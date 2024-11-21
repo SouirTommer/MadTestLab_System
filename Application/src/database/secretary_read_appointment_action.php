@@ -186,40 +186,53 @@ $conn->close();
                 <br><br>
                 <input type="submit" value="Update Appointment" class="button">
             </form>
-        </div>
+            </div>
 
-        <?php
-        if (count($appointments) > 0) {
-            echo "<table>
-                    <tr>
-                        <th>AppointmentID</th>
-                        <th>Patient First Name</th>
-                        <th>Patient Last Name</th>
-                        <th>Secretary First Name</th>
-                        <th>Secretary Last Name</th>
-                        <th>AppointmentDateTime</th>
-                        <th>AppointmentsStatus</th>
-                        <th>Actions</th>
-                    </tr>";
-            foreach ($appointments as $row) {
-                echo "<tr>
-                        <td>{$row['AppointmentID']}</td>
-                        <td>{$row['PatientFirstName']}</td>
-                        <td>{$row['PatientLastName']}</td>
-                        <td>{$row['SecretaryFirstName']}</td>
-                        <td>{$row['SecretaryLastName']}</td>
-                        <td>{$row['AppointmentDateTime']}</td>
-                        <td>{$row['AppointmentsStatus']}</td>
-                        <td>
-                            <button class='button' onclick=\"showUpdateAppointmentForm('{$row['AppointmentID']}', '{$row['AppointmentDateTime']}', '{$row['AppointmentsStatus']}')\">Update</button>
-                        </td>
-                      </tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "No appointment records found.";
-        }
-        ?>
-    </div>
+            <?php
+if (count($appointments) > 0) {
+    echo "<table>
+            <tr>
+                <th>AppointmentID</th>
+                <th>Patient First Name</th>
+                <th>Patient Last Name</th>
+                <th>Secretary First Name</th>
+                <th>Secretary Last Name</th>
+                <th>AppointmentDateTime</th>
+                <th>AppointmentsStatus</th>
+                <th>Actions</th>
+            </tr>";
+    foreach ($appointments as $row) {
+        echo "<tr>
+                <td>{$row['AppointmentID']}</td>
+                <td>{$row['PatientFirstName']}</td>
+                <td>{$row['PatientLastName']}</td>
+                <td>{$row['SecretaryFirstName']}</td>
+                <td>{$row['SecretaryLastName']}</td>
+                <td>{$row['AppointmentDateTime']}</td>
+                <td>{$row['AppointmentsStatus']}</td>
+                <td>
+                    <button class='button' onclick=\"showUpdateAppointmentForm('{$row['AppointmentID']}', '{$row['AppointmentDateTime']}', '{$row['AppointmentsStatus']}')\">Update</button>
+                </td>
+              </tr>";
+    }
+    echo "</table>";
+} else {
+    echo "No appointment records found.";
+}
+
+// Create an associative array for JSON output
+$data = array(
+    "status" => "success",
+    "message" => "Data processed successfully",
+    "appointments" => $appointments
+);
+
+// Convert the array to a JSON string
+$json_data = json_encode($data, JSON_PRETTY_PRINT);
+
+// Print the JSON string
+echo "<pre>" . $json_data . "</pre>";
+?>
+</div>
 </body>
 </html>
