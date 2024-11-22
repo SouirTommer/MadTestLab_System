@@ -16,7 +16,7 @@ if ($_SESSION['role'] !== 'LabStaff') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LabStaff Dashboard</title>
+    <title>Physician Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,13 +65,13 @@ if ($_SESSION['role'] !== 'LabStaff') {
     <header>
         <div class="container">
             <div id="branding">
-                <h1>LabStaff Dashboard</h1>
+                <h1>Physician Dashboard</h1>
             </div>
             <nav>
                 <ul>
-                <li><a href="database/labStaff_read_testCatalog_action.php">Test Catalog</a></li>
-                <li><a href="database/labStaff_read_order_action.php">Orders</a></li>
-                    <li><a href="database/labStaff_read_appointment_action.php">My Appointments</a></li>
+                <li><a href="database/physician_read_testCatalog_action.php">Test Catalog</a></li>
+                <li><a href="database/physician_read_order_action.php">Orders</a></li>
+                    <li><a href="database/physician_read_appointment_action.php">My Appointments</a></li>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>

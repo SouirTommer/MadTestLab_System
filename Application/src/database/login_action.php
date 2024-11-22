@@ -51,7 +51,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } elseif ($role === 'Secretary') {
                     header("Location: ../secretary.php");
                 } elseif ($role === 'LabStaff') {
-                    header("Location: ../labStaff.php");
+                    // Check LabStaffType
+                    $stmt = $conn->prepare("SELECT LabStaffType FROM LabStaffs WHERE AccountID = ?");
+                    $stmt->bind_param("i", $accountId);
+                    $stmt->execute();
+                    $stmt->bind_result($labStaffType);
+                    $stmt->fetch();
+                    if ($labStaffType === 'Physician') {
+                        $_SESSION['labStaffType'] = $labStaffType;
+                        header("Location: ../physician.php");
+                    } elseif ($labStaffType === 'Pathologist') {
+                        $_SESSION['labStaffType'] = $labStaffType;
+                        header("Location: ../pathologist.php");
+                    } else {
+                        echo "<script type='text/javascript'> 
+                                alert('Unauthorized LabStaff type!');
+                                document.location = '../login.php'; 
+                              </script>";
+                    }
+                    $stmt->close();
                 }
                 exit();
             } else {

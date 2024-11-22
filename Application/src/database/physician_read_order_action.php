@@ -60,5 +60,5 @@ if ($ordersResult->num_rows > 0) {
 
 $stmt->close();
 $conn->close();
-include '../labStaff_order.php';
+include '../physician_order.php';
 ?>

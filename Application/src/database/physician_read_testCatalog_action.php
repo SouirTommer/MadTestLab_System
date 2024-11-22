@@ -20,5 +20,5 @@ if ($testsResult->num_rows > 0) {
 }
 
 $conn->close();
-include '../labStaff_testCatalog.php';
+include '../physician_testCatalog.php';
 ?>

@@ -72,9 +72,9 @@
             </div>
             <nav>
                 <ul>
-                <li><a href="labStaff_read_testCatalog_action.php">Test Catalog</a></li>
-                    <li><a href="labStaff_read_appointment_action.php">Appointments</a></li>
-                    <li><a href="../labStaff.php">Dashboard</a></li>
+                <li><a href="physician_read_testCatalog_action.php">Test Catalog</a></li>
+                    <li><a href="physician_read_appointment_action.php">Appointments</a></li>
+                    <li><a href="../physician.php">Dashboard</a></li>
                     <li><a href="../logout.php">Logout</a></li>
                 </ul>
             </nav>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test List</title>
+    <title>Test Catalog</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,13 +68,13 @@
     <header>
         <div class="container">
             <div id="branding">
-                <h1>Test List</h1>
+                <h1>Test Catalog</h1>
             </div>
             <nav>
-                <ul>
-                    <li><a href="labStaff_read_appointment_action.php">Appointments</a></li>
-                    <li><a href="labStaff_read_order_action.php">Orders</a></li>
-                    <li><a href="../labStaff.php">Dashboard</a></li>
+            <ul>
+            <li><a href="physician_read_order_action.php">Orders</a></li>
+                    <li><a href="physician_read_appointment_action.php">Appointments</a></li>
+                    <li><a href="../physician.php">Dashboard</a></li>
                     <li><a href="../logout.php">Logout</a></li>
                 </ul>
             </nav>

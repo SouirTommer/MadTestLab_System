@@ -70,5 +70,5 @@ $stmt->close();
 $conn->close();
 
 // Include the front-end file
-include '../labStaff_appointment.php';
+include '../physician_appointment.php';
 ?>
