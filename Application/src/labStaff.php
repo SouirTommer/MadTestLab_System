@@ -4,8 +4,8 @@ session_start();
 require 'auth.php';
 check_login();
 
-// Ensure the user is a secretary
-if ($_SESSION['role'] !== 'Secretary') {
+// Ensure the user is a patient
+if ($_SESSION['role'] !== 'LabStaff') {
     header("Location: login.php");
     exit();
 }
@@ -16,7 +16,7 @@ if ($_SESSION['role'] !== 'Secretary') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secretary Dashboard</title>
+    <title>LabStaff Dashboard</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,30 +58,20 @@ if ($_SESSION['role'] !== 'Secretary') {
             float: right;
             margin-top: 10px;
         }
-        .button {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
+
     </style>
 </head>
 <body>
     <header>
         <div class="container">
             <div id="branding">
-                <h1>Secretary Dashboard</h1>
+                <h1>LabStaff Dashboard</h1>
             </div>
             <nav>
                 <ul>
-                <li><a href="database/secretary_read_insurance_action.php">Insurances</a></li>
-                <li><a href="database/secretary_read_bill_action.php">Bills</a></li>
-                    <li><a href="database/secretary_read_order_action.php">Orders</a></li>
-                    <li><a href="database/secretary_read_appointment_action.php">Appointments</a></li>
+                <li><a href="database/labStaff_read_testCatalog_action.php">Test Catalog</a></li>
+                <li><a href="database/labStaff_read_order_action.php">Orders</a></li>
+                    <li><a href="database/labStaff_read_appointment_action.php">My Appointments</a></li>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>
@@ -89,7 +79,7 @@ if ($_SESSION['role'] !== 'Secretary') {
     </header>
     <div class="container">
         <h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
-        <p>Use the navigation above to manage appointments.</p>
+        <p>Use the navigation above to manage your appointments.</p>
     </div>
 </body>
 </html>

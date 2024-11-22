@@ -101,7 +101,7 @@ CREATE TABLE Orders (
 CREATE TABLE Bills (
     BillID INT AUTO_INCREMENT PRIMARY KEY,
     OrderID INT NOT NULL,
-    InsuranceID INT NOT NULL,
+    InsuranceID INT NULL,
     Amount DECIMAL(10, 2) NOT NULL,
     PaymentStatus VARCHAR(20) NOT NULL,
     BillDateTime DATETIME NOT NULL,
@@ -147,8 +147,8 @@ INSERT INTO `Accounts` (`AccountID`, `Username`, `Password`, `Role`, `AccountSta
 (3, 'Secretary', 0xb5045caad05c37997a022353ae8a60db3ab01e55784d83cdbf4825befae2db3193045b3445f054f9f308338180c9e9f2fe03c3f332fdafbcccaa9b653e4c5170, 'Secretary', 'active', 0x6cd32ce171b9873a5373a31b33139ac8),
 (4, 'Physician', 0x0da5dcc13b1f9978bd9c9502c96b1d05b5f99e787197d2290fea408477c94afcddb13455c1b785a72568293aa609ac315665ffae85831d12bd635ee98dfd7bef, 'LabStaff', 'active', 0x49f831572c42a94980595f1530051368),
 (5, 'Pathologist', 0xc62e9c9fcf775401ceb6ac18cf1caa369c3d97f598572e1730ba2648fd2d0f560ba9b0323583eef6aae15278639505628694da03a3b2244d3543ab1dc3652a7e, 'LabStaff', 'active', 0x595fb044d62916f1cb7c88b13a977086),
-(6, 'Tim', 0x91f58420bdf4d371be97f5654bb6aa0813b8cc3c2788881eba4864b1f3359e3bded18470a2a0d135e14365767e8238a45577169c6714b171a62249f73ea70d31, 'Patient', 'active', 0x25040ed1ac110eff1e5d4995e95607b8),
-(7, 'Vincent', 0x0f3161d07fff19e2a972bb8af7b026d884d60d2ce728ff67eb76225187e84ea1463fc6324ecc0f3775145e91a938426e92508a38f4e1aea5bf89a68f0e4d28ae, 'Patient', 'active', 0x3f164d4f0a8a50c6ce00c051fc280f61);
+(6, 'Tim', 0x91f58420bdf4d371be97f5654bb6aa0813b8cc3c2788881eba4864b1f3359e3bded18470a2a0d135e14365767e8238a45577169c6714b171a62249f73ea70d31, 'LabStaff', 'active', 0x25040ed1ac110eff1e5d4995e95607b8),
+(7, 'Vincent', 0x0f3161d07fff19e2a972bb8af7b026d884d60d2ce728ff67eb76225187e84ea1463fc6324ecc0f3775145e91a938426e92508a38f4e1aea5bf89a68f0e4d28ae, 'LabStaff', 'active', 0x3f164d4f0a8a50c6ce00c051fc280f61);
 
 INSERT INTO `Patients` (`PatientID`, `AccountID`, `FirstName`, `LastName`, `DateOfBirth`, `Gender`, `Phone`, `Email`) VALUES
 (1, 1, 'Tommer', 'Ching', '2024-11-20', 'Male', 0x1515c7fa6cd66a743eed95b21063f956, 0xc54db5f880e094bf1a08ff551438c5d35a3921ce2349af3ca2e949066ade6a44);

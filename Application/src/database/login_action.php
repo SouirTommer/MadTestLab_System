@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 } elseif ($role === 'Secretary') {
                     header("Location: ../secretary.php");
                 } elseif ($role === 'LabStaff') {
-                    header("Location: ../welcome.php");
+                    header("Location: ../labStaff.php");
                 }
                 exit();
             } else {

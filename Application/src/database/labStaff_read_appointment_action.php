@@ -2,9 +2,32 @@
 session_start();
 require_once '../connection/mysqli_conn.php';
 
-// Fetch patients and physicians for the form
+// Ensure the user is a physician
+if ($_SESSION['role'] !== 'LabStaff') {
+    header("Location: ../login.php");
+    exit();
+}
+
+// Function to get the LabStaffID from the AccountID
+function getLabStaffID($conn, $accountId) {
+    $query = "SELECT LabStaffID FROM LabStaffs WHERE AccountID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $accountId);
+    $stmt->execute();
+    $stmt->bind_result($labStaffID);
+    $stmt->fetch();
+    $stmt->close();
+    return $labStaffID;
+}
+
+// Get the AccountID from the session
+$accountId = $_SESSION['accountId'];
+
+// Get the LabStaffID using the AccountID
+$labStaffID = getLabStaffID($conn, $accountId);
+
+// Fetch patients for the form
 $patients = [];
-$physicians = [];
 
 $patientsQuery = "SELECT PatientID, FirstName, LastName FROM Patients";
 $patientsResult = $conn->query($patientsQuery);
@@ -12,13 +35,7 @@ while ($patient = $patientsResult->fetch_assoc()) {
     $patients[] = $patient;
 }
 
-$physiciansQuery = "SELECT LabStaffID, FirstName, LastName FROM LabStaffs WHERE LabStaffType = 'Physician'";
-$physiciansResult = $conn->query($physiciansQuery);
-while ($physician = $physiciansResult->fetch_assoc()) {
-    $physicians[] = $physician;
-}
-
-// Fetch all appointments including secretary's name
+// Fetch all appointments for the logged-in physician including secretary's name
 $appointmentsQuery = "
     SELECT 
         Appointments.AppointmentID,
@@ -35,8 +52,12 @@ $appointmentsQuery = "
     JOIN Patients ON Appointments.PatientID = Patients.PatientID
     JOIN LabStaffs ON Appointments.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Appointments.SecretaryID = Secretaries.SecretaryID
+    WHERE Appointments.LabStaffID = ?
 ";
-$appointmentsResult = $conn->query($appointmentsQuery);
+$stmt = $conn->prepare($appointmentsQuery);
+$stmt->bind_param('i', $labStaffID);
+$stmt->execute();
+$appointmentsResult = $stmt->get_result();
 
 $appointments = [];
 if ($appointmentsResult->num_rows > 0) {
@@ -45,8 +66,9 @@ if ($appointmentsResult->num_rows > 0) {
     }
 }
 
+$stmt->close();
 $conn->close();
 
 // Include the front-end file
-include '../secretary_appointment.php';
+include '../labStaff_appointment.php';
 ?>

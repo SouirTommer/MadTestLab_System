@@ -8,9 +8,10 @@ if ($_SESSION['role'] !== 'Secretary') {
     exit();
 }
 
-// Fetch all orders
-$ordersQuery = "
+// Fetch all bills
+$billsQuery = "
     SELECT 
+        Bills.BillID,
         Orders.OrderID,
         Patients.FirstName AS PatientFirstName,
         Patients.LastName AS PatientLastName,
@@ -18,37 +19,28 @@ $ordersQuery = "
         LabStaffs.LastName AS LabStaffLastName,
         Secretaries.FirstName AS SecretaryFirstName,
         Secretaries.LastName AS SecretaryLastName,
-        Orders.OrderDateTime,
-        Orders.OrderStatus,
         TestsCatalog.TestName,
-        TestsCatalog.Price AS TestPrice
-    FROM Orders
+        Bills.Amount,
+        Bills.PaymentStatus,
+        Bills.BillDateTime,
+        Insurances.InsuranceName
+    FROM Bills
+    JOIN Orders ON Bills.OrderID = Orders.OrderID
     JOIN Patients ON Orders.PatientID = Patients.PatientID
     JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Orders.SecretaryID = Secretaries.SecretaryID
     JOIN TestsCatalog ON Orders.TestCode = TestsCatalog.TestCode
+    LEFT JOIN Insurances ON Bills.InsuranceID = Insurances.InsuranceID
 ";
-$ordersResult = $conn->query($ordersQuery);
+$billsResult = $conn->query($billsQuery);
 
-$orders = [];
-if ($ordersResult->num_rows > 0) {
-    while ($row = $ordersResult->fetch_assoc()) {
-        $orders[] = $row;
-    }
-}
-
-// Fetch the first 6 insurances
-$insurancesQuery = "SELECT InsuranceID, InsuranceName, InsuranceAmount FROM Insurances LIMIT 6";
-$insurancesResult = $conn->query($insurancesQuery);
-
-$insurances = [];
-if ($insurancesResult->num_rows > 0) {
-    while ($row = $insurancesResult->fetch_assoc()) {
-        $insurances[] = $row;
+$bills = [];
+if ($billsResult->num_rows > 0) {
+    while ($row = $billsResult->fetch_assoc()) {
+        $bills[] = $row;
     }
 }
 
 $conn->close();
-
-include '../secretary_order.php';
+include '../secretary_bill.php';
 ?>

@@ -104,30 +104,6 @@ $conn->close();
             <pre>Session data: <?php echo json_encode($response['session_data'], JSON_PRETTY_PRINT); ?></pre>
         <?php endif; ?>
     <?php endif; ?>
-    <form method="POST" action="secretary_create_appointment_action.php">
-        <label for="patient">Patient:</label>
-        <select name="patient" id="patient" required>
-            <?php foreach ($patients as $patient): ?>
-                <option value="<?php echo $patient['PatientID']; ?>">
-                    <?php echo $patient['FirstName'] . ' ' . $patient['LastName']; ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <br><br>
-        <label for="physician">Physician:</label>
-        <select name="physician" id="physician" required>
-            <?php foreach ($physicians as $physician): ?>
-                <option value="<?php echo $physician['LabStaffID']; ?>">
-                    <?php echo $physician['FirstName'] . ' ' . $physician['LastName']; ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-        <br><br>
-        <label for="datetime">Appointment Date and Time:</label>
-        <input type="datetime-local" id="datetime" name="datetime" required>
-        <br><br>
-        <button type="submit">Create Appointment</button>
-    </form>
     <button onclick="window.location.href='secretary_read_appointment_action.php'">Go Back</button>
 </body>
 </html>
