@@ -71,7 +71,8 @@ if ($_SESSION['role'] !== 'LabStaff') {
                 <ul>
                 <li><a href="database/pathologist_read_result_action.php">Results</a></li>
                 <li><a href="database/pathologist_read_order_action.php">Orders</a></li>
-                    <li><a href="logout.php">Logout</a></li>
+                <li><a href="pathologist.php">Dashboard</a></li>    
+                <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>

@@ -113,9 +113,10 @@
                 <h1>Physician Appointments</h1>
             </div>
             <nav>
-                <ul>
+            <ul>
                 <li><a href="physician_read_testCatalog_action.php">Test Catalog</a></li>
-                    <li><a href="physician_read_order_action.php">Orders</a></li>
+                <li><a href="physician_read_order_action.php">Orders</a></li>
+                    <li><a href="physician_read_appointment_action.php">My Appointments</a></li>
                     <li><a href="../physician.php">Dashboard</a></li>
                     <li><a href="../logout.php">Logout</a></li>
                 </ul>
@@ -165,7 +166,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h3>Create Order</h3>
-        <form id="createOrderForm" action="labStaff_create_order_action.php" method="post">
+        <form id="createOrderForm" action="physician_create_order_action.php" method="post">
             <input type="hidden" id="appointmentID" name="appointmentID">
             <label for="patient">Patient:</label>
             <input type="text" id="patient" name="patient" readonly>

@@ -71,9 +71,10 @@
                 <h1>Physician Orders</h1>
             </div>
             <nav>
-                <ul>
+            <ul>
                 <li><a href="physician_read_testCatalog_action.php">Test Catalog</a></li>
-                    <li><a href="physician_read_appointment_action.php">Appointments</a></li>
+                <li><a href="physician_read_order_action.php">Orders</a></li>
+                    <li><a href="physician_read_appointment_action.php">My Appointments</a></li>
                     <li><a href="../physician.php">Dashboard</a></li>
                     <li><a href="../logout.php">Logout</a></li>
                 </ul>

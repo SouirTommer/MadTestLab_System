@@ -71,10 +71,11 @@
                 <h1>Pathologist Results</h1>
             </div>
             <nav>
-                <ul>
+            <ul>
+                <li><a href="pathologist_read_result_action.php">Results</a></li>
                 <li><a href="pathologist_read_order_action.php">Orders</a></li>
-                    <li><a href="../pathologist.php">Dashboard</a></li>
-                    <li><a href="../logout.php">Logout</a></li>
+                <li><a href="../pathologist.php">Dashboard</a></li>        
+                <li><a href="../logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
