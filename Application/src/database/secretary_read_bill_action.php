@@ -41,6 +41,9 @@ if ($billsResult->num_rows > 0) {
     }
 }
 
+//json object
+$billsJson = json_encode($bills);
+
 $conn->close();
 include '../secretary_bill.php';
 ?>

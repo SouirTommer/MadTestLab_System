@@ -69,6 +69,9 @@ if ($appointmentsResult->num_rows > 0) {
 $stmt->close();
 $conn->close();
 
+//json object
+$appointmentsJson = json_encode($appointments);
+
 // Include the front-end file
 include '../physician_appointment.php';
 ?>

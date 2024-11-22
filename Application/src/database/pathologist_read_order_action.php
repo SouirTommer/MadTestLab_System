@@ -38,5 +38,9 @@ if ($ordersResult->num_rows > 0) {
 }
 
 $conn->close();
+
+//json object
+$ordersJson = json_encode($orders);
+
 include '../pathologist_order.php';
 ?>

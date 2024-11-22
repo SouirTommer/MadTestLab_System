@@ -65,5 +65,9 @@ if ($ordersResult->num_rows > 0) {
 
 $stmt->close();
 $conn->close();
+
+//json object
+$ordersJson = json_encode($orders);
+
 include '../patient_order.php';
 ?>

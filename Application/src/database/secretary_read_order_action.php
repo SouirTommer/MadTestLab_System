@@ -48,6 +48,10 @@ if ($insurancesResult->num_rows > 0) {
     }
 }
 
+// Convert the PHP arrays to JSON objects
+$ordersJson = json_encode($orders);
+$insurancesJson = json_encode($insurances);
+
 $conn->close();
 
 include '../secretary_order.php';

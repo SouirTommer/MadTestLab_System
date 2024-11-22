@@ -54,5 +54,8 @@ if ($billsResult->num_rows > 0) {
 $stmt->close();
 $conn->close();
 
+//json object
+$billsJson = json_encode($bills);
+
 include '../patient_bill.php';
 ?>
