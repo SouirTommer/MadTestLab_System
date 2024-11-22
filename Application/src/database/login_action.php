@@ -3,36 +3,99 @@
 require_once '../connection/mysqli_conn.php';
 session_start();
 
-// 檢查表單是否提交
+$aesKeys = [
+    'Patient' => getenv('AES_KEY_PATIENT'),
+    'Secretary' => getenv('AES_KEY_SECRETARY'),
+    'LabStaff' => getenv('AES_KEY_LABSTAFF')
+];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 從表單獲取資料並進行基本的輸入驗證
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    // 準備查詢語句
-    $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, 'encryption_key') AS DecryptedPassword FROM Accounts WHERE Username = ?");
+    $stmt = $conn->prepare("SELECT Role FROM Accounts WHERE Username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        $stmt->bind_result($accountId, $decryptedPassword);
+        $stmt->bind_result($role);
         $stmt->fetch();
+        $stmt->close();
 
-        // 驗證密碼
-        if ($password === $decryptedPassword) {
-            $_SESSION['username'] = $username;
-            $_SESSION['accountId'] = $accountId;
-            header("Location: ../welcome.php");
-            exit();
+        $aesKey = $aesKeys[$role];
+
+        $stmt = $conn->prepare("SELECT AccountID, AES_DECRYPT(Password, ?, IV, 'hkdf') AS DecryptedPassword, Role, AccountStatus FROM Accounts WHERE Username = ?");
+        $stmt->bind_param("ss", $aesKey, $username);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($accountId, $decryptedPassword, $role, $accountStatus);
+            $stmt->fetch();
+
+            if ($accountStatus === 'Block') {
+                echo "<script type='text/javascript'> 
+                        alert('Your account is blocked!');
+                        document.location = '../login.php'; 
+                      </script>";
+                exit();
+            }
+
+            if (password_verify($password, $decryptedPassword)) {
+                $_SESSION['username'] = $username;
+                $_SESSION['accountId'] = $accountId;
+                $_SESSION['role'] = $role;
+                if ($role === 'Patient') {
+                    header("Location: ../patient.php");
+                } elseif ($role === 'Secretary') {
+                    header("Location: ../secretary.php");
+                } elseif ($role === 'LabStaff') {
+                    // Check LabStaffType
+                    $stmt = $conn->prepare("SELECT LabStaffType FROM LabStaffs WHERE AccountID = ?");
+                    $stmt->bind_param("i", $accountId);
+                    $stmt->execute();
+                    $stmt->bind_result($labStaffType);
+                    $stmt->fetch();
+                    if ($labStaffType === 'Physician') {
+                        $_SESSION['labStaffType'] = $labStaffType;
+                        header("Location: ../physician.php");
+                    } elseif ($labStaffType === 'Pathologist') {
+                        $_SESSION['labStaffType'] = $labStaffType;
+                        header("Location: ../pathologist.php");
+                    } else {
+                        echo "<script type='text/javascript'> 
+                                alert('Unauthorized LabStaff type!');
+                                document.location = '../login.php'; 
+                              </script>";
+                    }
+                    $stmt->close();
+                }
+                exit();
+            } else {
+                echo "<script type='text/javascript'> 
+                        alert('Invalid password!');
+                        document.location = '../login.php'; 
+                      </script>";
+                exit();
+            }
         } else {
-            echo "密碼錯誤！";
+            echo "<script type='text/javascript'> 
+                    alert('Invalid password!');
+                    document.location = '../login.php'; 
+                  </script>";
+            exit();
         }
+
+        $stmt->close();
     } else {
-        echo "使用者名稱不存在！";
+        echo "<script type='text/javascript'> 
+                alert('Invalid password!');
+                document.location = '../login.php'; 
+              </script>";
+        exit();
     }
 
-    $stmt->close();
     $conn->close();
 }
 ?>

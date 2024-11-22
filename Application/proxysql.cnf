@@ -31,6 +31,8 @@ mysql_variables=
     commands_stats=true
     sessions_sort=true
     connect_retries_on_failure=10
+    eventslog_format=2
+    eventslog_filename="/var/lib/proxysql/log/queries.log"
 }
 
 mysql_servers =
@@ -86,17 +88,6 @@ mysql_query_rules =
     {
         rule_id=3
         active=1
-        match_pattern="^DELETE"
-        match_pattern_regexp=1
-        negate_match_pattern=0
-        error_msg="DELETE operations are not allowed"
-        apply=1
-        flags=0
-        log=1
-    },
-    {
-        rule_id=4
-        active=1
         match_pattern="UNION SELECT"
         negate_match_pattern=0
         destination_hostgroup=0
@@ -104,13 +95,61 @@ mysql_query_rules =
         log=1
     },
     {
-        rule_id=5
+        rule_id=4
         active=1
         match_pattern="--"
         negate_match_pattern=0
         destination_hostgroup=0
         apply=1
         log=1
+    },
+    {
+        rule_id=5
+        active=0
+        match_pattern="^DELETE"
+        match_pattern_regexp=1
+        negate_match_pattern=0
+        error_msg="DELETE operations are not allowed"
+        apply=0
+        flags=0
+        log=1
+    },
+    {
+        rule_id=6
+        active=1
+        match_pattern="OR 1=1"
+        negate_match_pattern=0
+        error_msg="SQL Injection attempt detected"
+        apply=1
+        flags=0
+        log=1
+    },
+    {
+        rule_id=7
+        active=1
+        match_pattern=";--"
+        negate_match_pattern=0
+        error_msg="SQL Injection attempt detected"
+        apply=1
+        flags=0
+        log=1
+    },
+    {
+        rule_id=8
+        active=1
+        match_pattern="admin"
+        negate_match_pattern=0
+        error_msg="Unauthorized access attempt detected"
+        apply=1
+        flags=0
+        log=1
+    },
+    {
+        rule_id=9
+        active=1
+        match_pattern="."
+        log=1
+        apply=0
     }
 
 )

@@ -1,11 +1,8 @@
 <?php
 session_start();
 
-// 檢查使用者是否已登入
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
+require 'auth.php';
+check_login();
 ?>
 
 <!DOCTYPE html>
