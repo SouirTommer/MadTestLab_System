@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Appointments</title>
+    <title>My Bills</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,12 +68,13 @@
     <header>
         <div class="container">
             <div id="branding">
-                <h1>My Appointments</h1>
+                <h1>My Bills</h1>
             </div>
             <nav>
                 <ul>
-                <ul><li><a href="patient_read_bill_action.php">Bills</a></li>
+                    
                 <li><a href="patient_read_order_action.php">ORDERS</a></li>
+                <li><a href="patient_read_appointment_action.php">APPOINTMENTS</a></li>
                     <li><a href="../patient.php">Dashboard</a></li>
                     <li><a href="../logout.php">Logout</a></li>
                 </ul>
@@ -81,36 +82,30 @@
         </div>
     </header>
     <div class="container">
-        <h3>All Appointments</h3>
-        <?php if (count($appointments) > 0): ?>
+        <h3>All Bills</h3>
+        <?php if (count($bills) > 0): ?>
             <table>
                 <tr>
-                    <th>AppointmentID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Physician First Name</th>
-                    <th>Physician Last Name</th>
-                    <th>Secretary First Name</th>
-                    <th>Secretary Last Name</th>
-                    <th>Date and Time</th>
-                    <th>Status</th>
+                    <th>BillID</th>
+                    <th>OrderID</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                    <th>Bill Date and Time</th>
+                    <th>Insurance Name</th>
                 </tr>
-                <?php foreach ($appointments as $appointment): ?>
+                <?php foreach ($bills as $bill): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($appointment['AppointmentID']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PhysicianFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PhysicianLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['SecretaryFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['SecretaryLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['AppointmentDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['AppointmentsStatus']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['BillID']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['OrderID']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['Amount']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['PaymentStatus']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['BillDateTime']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['InsuranceName']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         <?php else: ?>
-            <p>No appointments found.</p>
+            <p>No bills found.</p>
         <?php endif; ?>
     </div>
 </body>
