@@ -53,8 +53,19 @@ services:
       - "6033:6033"
     volumes:
       - ./proxysql.cnf:/etc/proxysql.cnf
+      - ./log/:/var/lib/proxysql/log
     depends_on:
       - mysql
+  monitor:
+    image: python:3.9-slim
+    volumes:
+      - ./monitor.py:/app/monitor.py
+      - ./log/:/app/log
+      - ./alert:/app/alert/
+    working_dir: /app
+    command: ["python", "monitor.py"]
+    depends_on:
+      - proxysql
 
 # volumes:
 #   db_data:

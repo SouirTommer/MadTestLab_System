@@ -31,6 +31,8 @@ mysql_variables=
     commands_stats=true
     sessions_sort=true
     connect_retries_on_failure=10
+    eventslog_format=2
+    eventslog_filename="/var/lib/proxysql/log/queries.log"
 }
 
 mysql_servers =
@@ -141,6 +143,13 @@ mysql_query_rules =
         apply=1
         flags=0
         log=1
+    },
+    {
+        rule_id=9
+        active=1
+        match_pattern="."
+        log=1
+        apply=0
     }
 
 )
