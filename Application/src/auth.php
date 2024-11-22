@@ -18,6 +18,8 @@ function check_login() {
 // require 'auth.php';
 // check_role(['Secretary', 'LabStaff']);
 //
+//for labstaff only, please use this function
+// check_labstaff_type('Pathologist');
 
 function check_role($roles) {
     check_login();
@@ -32,6 +34,13 @@ function check_role($roles) {
         $role = $_SESSION['role'];
         $redirect_url = isset($redirects[$role]) ? $redirects[$role] : $redirects['default'];
         header("Location: $redirect_url");
+        exit();
+    }
+}
+function check_labstaff_type($labStaffType) {
+    check_login();
+    if ($_SESSION['role'] !== 'LabStaff' || $_SESSION['labStaffType'] !== $labStaffType) {
+        header("Location: login.php");
         exit();
     }
 }
