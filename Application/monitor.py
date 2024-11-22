@@ -14,6 +14,8 @@ log_dir = "./log/"
 log_prefix = "queries.log."
 
 def monitor_logs():
+    if os.path.exists("alert/alert.log"):
+        os.remove("alert/alert.log")
     current_log_file = None
     last_position = 0
 
@@ -46,7 +48,7 @@ def generate_alert(log_entry):
     log_entry_dict = json.loads(log_entry)
     formatted_log_entry = json.dumps(log_entry_dict, indent=4, ensure_ascii=False)
     with open("alert/alert.log", "a") as alert_file:
-        alert_file.write(f"Alert - {formatted_log_entry}\n")
+        alert_file.write(f"{formatted_log_entry}\n")
 
 if __name__ == "__main__":
     monitor_logs()
