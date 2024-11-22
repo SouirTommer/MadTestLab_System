@@ -82,6 +82,7 @@ if ($_SESSION['role'] !== 'Secretary') {
                 <li><a href="database/secretary_read_bill_action.php">Bills</a></li>
                     <li><a href="database/secretary_read_order_action.php">Orders</a></li>
                     <li><a href="database/secretary_read_appointment_action.php">Appointments</a></li>
+                    <li><a href="secretary.php">Dashboard</a></li>
                     <li><a href="logout.php">Logout</a></li>
                 </ul>
             </nav>

@@ -80,6 +80,7 @@ if ($stmt->execute()) {
     echo json_encode(['status' => 'error', 'message' => 'Error creating order: ' . $stmt->error]);
 }
 
+
 $stmt->close();
 $conn->close();
 ?>

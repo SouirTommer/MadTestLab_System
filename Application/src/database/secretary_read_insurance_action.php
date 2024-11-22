@@ -19,6 +19,9 @@ if ($insurancesResult->num_rows > 0) {
     }
 }
 
+//json object
+$insurancesJson = json_encode($insurances);
+
 $conn->close();
 include '../secretary_insurance.php';
 ?>

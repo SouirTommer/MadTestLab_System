@@ -19,6 +19,9 @@ if ($testsResult->num_rows > 0) {
     }
 }
 
+//json object
+$testsJson = json_encode($tests);
+
 $conn->close();
 include '../physician_testCatalog.php';
 ?>

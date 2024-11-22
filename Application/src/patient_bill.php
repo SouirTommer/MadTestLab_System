@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Catalog</title>
+    <title>My Bills</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,42 +68,44 @@
     <header>
         <div class="container">
             <div id="branding">
-                <h1>Test Catalog</h1>
+                <h1>My Bills</h1>
             </div>
             <nav>
             <ul>
-                <li><a href="physician_read_testCatalog_action.php">Test Catalog</a></li>
-                <li><a href="physician_read_order_action.php">Orders</a></li>
-                    <li><a href="physician_read_appointment_action.php">My Appointments</a></li>
-                    <li><a href="../physician.php">Dashboard</a></li>
+                    <li><a href="patient_read_bill_action.php">Bills</a></li>
+                <li><a href="patient_read_order_action.php">ORDERS</a></li>
+                    <li><a href="patient_read_appointment_action.php">APPOINTMENTS</a></li>
+                    <li><a href="../patient.php">Dashboard</a></li>
                     <li><a href="../logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container">
-        <h3>All Tests</h3>
-        <?php if (count($tests) > 0): ?>
+        <h3>All Bills</h3>
+        <?php if (count($bills) > 0): ?>
             <table>
                 <tr>
-                    <th>Test Code</th>
-                    <th>Test Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Test Type</th>
+                    <th>BillID</th>
+                    <th>OrderID</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                    <th>Bill Date and Time</th>
+                    <th>Insurance Name</th>
                 </tr>
-                <?php foreach ($tests as $test): ?>
+                <?php foreach ($bills as $bill): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($test['TestCode']); ?></td>
-                        <td><?php echo htmlspecialchars($test['TestName']); ?></td>
-                        <td><?php echo htmlspecialchars($test['Description']); ?></td>
-                        <td><?php echo htmlspecialchars($test['Price']); ?></td>
-                        <td><?php echo htmlspecialchars($test['TestType']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['BillID']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['OrderID']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['Amount']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['PaymentStatus']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['BillDateTime']); ?></td>
+                        <td><?php echo htmlspecialchars($bill['InsuranceName']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         <?php else: ?>
-            <p>No tests found.</p>
+            <p>No bills found.</p>
         <?php endif; ?>
     </div>
 </body>

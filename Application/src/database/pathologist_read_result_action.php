@@ -36,5 +36,9 @@ if ($resultsResult->num_rows > 0) {
 }
 
 $conn->close();
+
+//json object
+$resultsJson = json_encode($results);
+
 include '../pathologist_result.php';
 ?>
