@@ -8,3 +8,4 @@ vendor/
 keyring/
 log/
 alert/
+Application/.DS_Store
