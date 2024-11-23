@@ -52,8 +52,7 @@ if ($billsResult->num_rows > 0) {
 $stmt->close();
 $conn->close();
 
-//json object
-$billsJson = json_encode($bills);
-
-include '../../Page/patient_bill.php';
+// Return JSON data
+header('Content-Type: application/json');
+echo json_encode($bills);
 ?>

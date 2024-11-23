@@ -8,7 +8,7 @@ check_role(['Secretary']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurance Information</title>
+    <title>Insurance Records</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -73,45 +73,54 @@ check_role(['Secretary']);
     <header>
         <div class="container">
             <div id="branding">
-                <h1>Insurance Information</h1>
+                <h1>Insurance Records</h1>
             </div>
             <nav>
-            <ul>
-                    
-                    <li><a href="../database/Secretary/secretary_read_insurance_action.php">Insurances</a></li>
-                        <li><a href="../database/Secretary/secretary_read_bill_action.php">Bills</a></li>
-                            <li><a href="../database/Secretary/secretary_read_order_action.php">Orders</a></li>
-                            <li><a href="../database/Secretary/secretary_read_appointment_action.php">Appointments</a></li>
-                            <li><a href="./secretary.php">Dashboard</a></li>
-                            <li><a href="./Account/logout.php">Logout</a></li>
-                        </ul>
+                <ul>
+                    <li><a href="secretary_insurance.php">Insurances</a></li>
+                    <li><a href="secretary_bill.php">Bills</a></li>
+                    <li><a href="secretary_order.php">Orders</a></li>
+                    <li><a href="secretary_appointment.php">Appointments</a></li>
+                    <li><a href="secretary.php">Dashboard</a></li>
+                    <li><a href="Account/logout.php">Logout</a></li>
+                </ul>
             </nav>
         </div>
     </header>
     <div class="container">
         <h3>All Insurances</h3>
-        <?php if (count($insurances) > 0): ?>
-            <table>
-                <tr>
-                    <th>InsuranceID</th>
-                    <th>Insurance Name</th>
-                    <th>Insurance Amount</th>
-                    <th>Insurance Details</th>
-                    <th>Insurance Status</th>
-                </tr>
-                <?php foreach ($insurances as $insurance): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($insurance['InsuranceID']); ?></td>
-                        <td><?php echo htmlspecialchars($insurance['InsuranceName']); ?></td>
-                        <td><?php echo htmlspecialchars($insurance['InsuranceAmount']); ?></td>
-                        <td><?php echo htmlspecialchars($insurance['InsuranceDetails']); ?></td>
-                        <td><?php echo htmlspecialchars($insurance['InsuranceStatus']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No insurances found.</p>
-        <?php endif; ?>
+        <div id="insurances-container">
+            <!-- Insurances will be loaded here -->
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../database/Secretary/secretary_read_insurance_action.php')
+                .then(response => response.json())
+                .then(data => {
+                    const insurances = data.insurances || [];
+                    const container = document.getElementById('insurances-container');
+                    if (insurances.length > 0) {
+                        let table = '<table><tr><th>InsuranceID</th><th>Insurance Name</th><th>Insurance Details</th></tr>';
+                        insurances.forEach(insurance => {
+                            table += `<tr>
+                                <td>${insurance.InsuranceID}</td>
+                                <td>${insurance.InsuranceName}</td>
+                                <td>${insurance.InsuranceDetails}</td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No insurances found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching insurances:', error);
+                    document.getElementById('insurances-container').innerHTML = '<p>Error loading insurances.</p>';
+                });
+        });
+    </script>
 </body>
 </html>

@@ -76,49 +76,69 @@ check_labstaff_type('Pathologist');
                 <h1>Pathologist Results</h1>
             </div>
             <nav>
-            <ul>
-                <li><a href="../database/Pathologist/pathologist_read_result_action.php">Results</a></li>
-                <li><a href="../database/Pathologist/pathologist_read_order_action.php">Orders</a></li>
-                <li><a href="./pathologist.php">Dashboard</a></li>        
+                <ul>
+                <li><a href="./pathologist_result.php">Results</a></li>
+                <li><a href="./pathologist_order.php">Orders</a></li>
+                <li><a href="./pathologist.php">Dashboard</a></li>    
                 <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
+
     <div class="container">
-        <h3>All Results</h3>
-        <?php if (count($results) > 0): ?>
-            <table>
+        <h2>All Results</h2>
+        <table id="resultsTable">
+            <thead>
                 <tr>
-                    <th>ResultID</th>
-                    <th>OrderID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Lab Staff First Name</th>
-                    <th>Lab Staff Last Name</th>
+                    <th>Result ID</th>
+                    <th>Order ID</th>
+                    <th>Patient</th>
+                    <th>Lab Staff</th>
                     <th>Report URL</th>
                     <th>Interpretation</th>
-                    <th>Result Date and Time</th>
+                    <th>Result Date</th>
                     <th>Result Status</th>
                 </tr>
-                <?php foreach ($results as $result): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($result['ResultID']); ?></td>
-                        <td><?php echo htmlspecialchars($result['OrderID']); ?></td>
-                        <td><?php echo htmlspecialchars($result['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($result['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($result['LabStaffFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($result['LabStaffLastName']); ?></td>
-                        <td><a href="<?php echo htmlspecialchars($result['ReportURL']); ?>" target="_blank">View Report</a></td>
-                        <td><?php echo htmlspecialchars($result['Interpretation']); ?></td>
-                        <td><?php echo htmlspecialchars($result['ResultDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($result['ResultStatus']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No results found.</p>
-        <?php endif; ?>
+            </thead>
+            <tbody>
+                <!-- Results will be dynamically populated here -->
+            </tbody>
+        </table>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchResults();
+        });
+
+        function fetchResults() {
+            fetch('../database/Pathologist/pathologist_read_result_action.php')
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data);
+                })
+                .catch(error => console.error('Error fetching results:', error));
+        }
+
+        function displayResults(results) {
+            const resultsTableBody = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+            resultsTableBody.innerHTML = '';
+
+            results.forEach(result => {
+                const row = resultsTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${result.ResultID}</td>
+                    <td>${result.OrderID}</td>
+                    <td>${result.PatientFirstName} ${result.PatientLastName}</td>
+                    <td>${result.LabStaffFirstName} ${result.LabStaffLastName}</td>
+                    <td><a href="${result.ReportURL}" target="_blank">View Report</a></td>
+                    <td>${result.Interpretation}</td>
+                    <td>${result.ResultDateTime}</td>
+                    <td>${result.ResultStatus}</td>
+                `;
+            });
+        }
+    </script>
 </body>
 </html>

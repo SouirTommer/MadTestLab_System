@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 function check_login() {
     if (!isset($_SESSION['username']) || !isset($_SESSION['accountId']) || !isset($_SESSION['role'])) {
-        header("Location: login.php");
+        header("Location: ./Page/Account/login.php");
         exit();
     }
 }

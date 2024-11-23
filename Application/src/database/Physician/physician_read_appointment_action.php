@@ -50,7 +50,7 @@ $appointmentsQuery = "
     JOIN Patients ON Appointments.PatientID = Patients.PatientID
     JOIN LabStaffs ON Appointments.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Appointments.SecretaryID = Secretaries.SecretaryID
-    WHERE Appointments.LabStaffID = ?
+    WHERE Appointments.LabStaffID = ? AND Appointments.AppointmentsStatus = 'Scheduled'
 ";
 $stmt = $conn->prepare($appointmentsQuery);
 $stmt->bind_param('i', $labStaffID);
@@ -68,8 +68,10 @@ $stmt->close();
 $conn->close();
 
 //json object
-$appointmentsJson = json_encode($appointments);
+header('Content-Type: application/json');
+echo json_encode([
+    'appointments' => $appointments,
+    'patients' => $patients
+]);
 
-// Include the front-end file
-include '../../Page/physician_appointment.php';
 ?>

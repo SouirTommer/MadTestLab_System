@@ -6,7 +6,19 @@ require_once '../../connection/mysqli_conn.php';
 require '../../Page/Account/auth.php';
 check_labstaff_type('Pathologist');
 
-// Fetch all results
+// Get the account ID from the session
+$accountId = $_SESSION['accountId'];
+
+// Fetch the LabStaffID based on the AccountID
+$query = "SELECT LabStaffID FROM LabStaffs WHERE AccountID = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('i', $accountId);
+$stmt->execute();
+$stmt->bind_result($labStaffID);
+$stmt->fetch();
+$stmt->close();
+
+// Fetch all results for the specific LabStaffID
 $resultsQuery = "
     SELECT 
         Results.ResultID,
@@ -23,8 +35,12 @@ $resultsQuery = "
     JOIN Orders ON Results.OrderID = Orders.OrderID
     JOIN Patients ON Orders.PatientID = Patients.PatientID
     JOIN LabStaffs ON Results.LabStaffID = LabStaffs.LabStaffID
+    WHERE Results.LabStaffID = ?
 ";
-$resultsResult = $conn->query($resultsQuery);
+$stmt = $conn->prepare($resultsQuery);
+$stmt->bind_param('i', $labStaffID);
+$stmt->execute();
+$resultsResult = $stmt->get_result();
 
 $results = [];
 if ($resultsResult->num_rows > 0) {
@@ -33,10 +49,10 @@ if ($resultsResult->num_rows > 0) {
     }
 }
 
+$stmt->close();
 $conn->close();
 
-//json object
-$resultsJson = json_encode($results);
-
-include '../../Page/pathologist_result.php';
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode($results);
 ?>

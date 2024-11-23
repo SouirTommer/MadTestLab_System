@@ -17,45 +17,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $query = "UPDATE Appointments SET AppointmentDateTime = ?, AppointmentsStatus = ?, LabStaffID = ? WHERE AppointmentID = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param('ssii', $datetime, $status, $physician, $appointmentID);
-
-        if ($stmt->execute()) {
-            $response['status'] = 'success';
-            $response['message'] = 'Appointment updated successfully';
-            $response['appointment'] = [
-                'AppointmentID' => $appointmentID,
-                'AppointmentDateTime' => $datetime,
-                'AppointmentsStatus' => $status,
-                'LabStaffID' => $physician
-            ];
-        } else {
+        if ($stmt === false) {
             $response['status'] = 'error';
-            $response['message'] = 'Error: ' . $stmt->error;
+            $response['message'] = 'Prepare failed: ' . $conn->error;
+        } else {
+            $stmt->bind_param('ssii', $datetime, $status, $physician, $appointmentID);
+            if ($stmt->execute()) {
+                $response['status'] = 'success';
+                $response['message'] = 'Appointment updated successfully';
+                $response['appointment'] = [
+                    'AppointmentID' => $appointmentID,
+                    'AppointmentDateTime' => $datetime,
+                    'AppointmentsStatus' => $status,
+                    'LabStaffID' => $physician
+                ];
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = 'Execute failed: ' . $stmt->error;
+            }
+            $stmt->close();
         }
-
-        $stmt->close();
     } else {
         $response['status'] = 'error';
         $response['message'] = 'Missing form data.';
     }
+} else {
+    $response['status'] = 'error';
+    $response['message'] = 'Invalid request method.';
 }
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Update Appointment</title>
-</head>
-<body>
-    <?php if (!empty($response)): ?>
-        <div>
-            <p><?php echo $response['message']; ?></p>
-            <pre><?php echo json_encode($response, JSON_PRETTY_PRINT); ?></pre>
-        </div>
-    <?php endif; ?>
-    <form action="secretary_read_appointment_action.php" method="get">
-        <button type="submit">Back</button>
-    </form>
-</body>
-</html>
+$conn->close();
+
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode($response);
+?>

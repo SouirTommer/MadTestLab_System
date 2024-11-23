@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 require './Account/auth.php';
@@ -121,53 +120,35 @@ check_labstaff_type('Pathologist');
                 <h1>Pathologist Orders</h1>
             </div>
             <nav>
-            <ul>
-                <li><a href="../database/Pathologist/pathologist_read_result_action.php">Results</a></li>
-                <li><a href="../database/Pathologist/pathologist_read_order_action.php">Orders</a></li>
-                <li><a href="pathologist.php">Dashboard</a></li>        
+                <ul>
+                <li><a href="./pathologist_result.php">Results</a></li>
+                <li><a href="./pathologist_order.php">Orders</a></li>
+                <li><a href="./pathologist.php">Dashboard</a></li>    
                 <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
+
     <div class="container">
         <h3>All Orders</h3>
-        <?php if (count($orders) > 0): ?>
-            <table>
+        <table id="ordersTable">
+            <thead>
                 <tr>
-                    <th>OrderID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Lab Staff First Name</th>
-                    <th>Lab Staff Last Name</th>
-                    <th>Secretary First Name</th>
-                    <th>Secretary Last Name</th>
-                    <th>Order Date and Time</th>
+                    <th>Order ID</th>
+                    <th>Patient</th>
+                    <th>Lab Staff</th>
+                    <th>Secretary</th>
+                    <th>Order Date</th>
                     <th>Order Status</th>
                     <th>Test Name</th>
                     <th>Action</th>
                 </tr>
-                <?php foreach ($orders as $order): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($order['OrderID']); ?></td>
-                        <td><?php echo htmlspecialchars($order['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['LabStaffFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['LabStaffLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['SecretaryFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['SecretaryLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['OrderDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($order['OrderStatus']); ?></td>
-                        <td><?php echo htmlspecialchars($order['TestName']); ?></td>
-                        <td>
-                            <button class="button" onclick="openModal(<?php echo htmlspecialchars(json_encode($order)); ?>)">Create Result</button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No orders found.</p>
-        <?php endif; ?>
+            </thead>
+            <tbody>
+                <!-- Orders will be dynamically populated here -->
+            </tbody>
+        </table>
     </div>
 
     <!-- The Modal -->
@@ -185,8 +166,8 @@ check_labstaff_type('Pathologist');
                 <br><br>
                 <label for="resultStatus">Result Status:</label>
                 <select id="resultStatus" name="resultStatus" required>
-                <option value="Completed">Completed</option>    
-                <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>    
+                    <option value="Pending">Pending</option>
                 </select>
                 <br><br>
                 <input type="submit" value="Create Result" class="button">
@@ -195,8 +176,40 @@ check_labstaff_type('Pathologist');
     </div>
 
     <script>
-        function openModal(order) {
-            document.getElementById('orderID').value = order.OrderID;
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchOrders();
+        });
+
+        function fetchOrders() {
+            fetch('../database/Pathologist/pathologist_read_order_action.php')
+                .then(response => response.json())
+                .then(data => {
+                    displayOrders(data);
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        function displayOrders(orders) {
+            const ordersTableBody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+            ordersTableBody.innerHTML = '';
+
+            orders.forEach(order => {
+                const row = ordersTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${order.OrderID}</td>
+                    <td>${order.PatientFirstName} ${order.PatientLastName}</td>
+                    <td>${order.LabStaffFirstName} ${order.LabStaffLastName}</td>
+                    <td>${order.SecretaryFirstName} ${order.SecretaryLastName}</td>
+                    <td>${order.OrderDateTime}</td>
+                    <td>${order.OrderStatus}</td>
+                    <td>${order.TestName}</td>
+                    <td><button class="button" onclick="openModal(${order.OrderID})">Create Result</button></td>
+                `;
+            });
+        }
+
+        function openModal(orderID) {
+            document.getElementById('orderID').value = orderID;
             document.getElementById('resultModal').style.display = 'block';
         }
 

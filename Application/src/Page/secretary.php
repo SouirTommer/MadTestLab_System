@@ -70,11 +70,11 @@ check_role(['Secretary']);
             </div>
             <nav>
                 <ul>
-                <li><a href="../database/Secretary/secretary_read_insurance_action.php">Insurances</a></li>
-                <li><a href="../database/Secretary/secretary_read_bill_action.php">Bills</a></li>
-                    <li><a href="../database/Secretary/secretary_read_order_action.php">Orders</a></li>
-                    <li><a href="../database/Secretary/secretary_read_appointment_action.php">Appointments</a></li>
-                    <li><a href="secretary.php">Dashboard</a></li>
+                    <li><a href="./secretary_insurance.php">Insurances</a></li>
+                    <li><a href="./secretary_bill.php">Bills</a></li>
+                    <li><a href="./secretary_order.php">Orders</a></li>
+                    <li><a href="./secretary_appointment.php">Appointments</a></li>
+                    <li><a href="./secretary.php">Dashboard</a></li>
                     <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
             </nav>

@@ -51,9 +51,11 @@ if ($appointmentsResult->num_rows > 0) {
 
 $conn->close();
 
-//json object
-$appointmentsJson = json_encode($appointments);
-
-// Include the front-end file
-include '../../Page/secretary_appointment.php';
+// Return JSON data
+header('Content-Type: application/json');
+echo json_encode([
+    'patients' => $patients,
+    'physicians' => $physicians,
+    'appointments' => $appointments
+]);
 ?>

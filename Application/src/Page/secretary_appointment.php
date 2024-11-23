@@ -118,38 +118,25 @@ check_role(['Secretary']);
                 <h1>Appointment Records</h1>
             </div>
             <nav>
-            <ul>
-                    
-                    <li><a href="../database/Secretary/secretary_read_insurance_action.php">Insurances</a></li>
-                        <li><a href="../database/Secretary/secretary_read_bill_action.php">Bills</a></li>
-                            <li><a href="../database/Secretary/secretary_read_order_action.php">Orders</a></li>
-                            <li><a href="../database/Secretary/secretary_read_appointment_action.php">Appointments</a></li>
-                            <li><a href="./secretary.php">Dashboard</a></li>
-                            <li><a href="./Account/logout.php">Logout</a></li>
-                        </ul>
+                <ul>
+                    <li><a href="secretary_insurance.php">Insurances</a></li>
+                    <li><a href="secretary_bill.php">Bills</a></li>
+                    <li><a href="secretary_order.php">Orders</a></li>
+                    <li><a href="secretary_appointment.php">Appointments</a></li>
+                    <li><a href="secretary.php">Dashboard</a></li>
+                    <li><a href="Account/logout.php">Logout</a></li>
+                </ul>
             </nav>
         </div>
     </header>
     <div class="container">
         <h3>Create Appointment</h3>
-        <form action="../database/Secretary/secretary_create_appointment_action.php" method="post">
+        <form id="createAppointmentForm" action="../database/Secretary/secretary_create_appointment_action.php" method="post">
             <label for="patient">Patient:</label>
-            <select name="patient" id="patient" required>
-                <?php foreach ($patients as $patient): ?>
-                    <option value="<?php echo $patient['PatientID']; ?>">
-                        <?php echo $patient['FirstName'] . ' ' . $patient['LastName']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <select name="patient" id="patient" required></select>
             <br><br>
             <label for="physician">Physician:</label>
-            <select name="physician" id="physician" required>
-                <?php foreach ($physicians as $physician): ?>
-                    <option value="<?php echo $physician['LabStaffID']; ?>">
-                        <?php echo $physician['FirstName'] . ' ' . $physician['LastName']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <select name="physician" id="physician" required></select>
             <br><br>
             <label for="datetime">Date and Time:</label>
             <input type="datetime-local" id="datetime" name="datetime" required>
@@ -158,40 +145,9 @@ check_role(['Secretary']);
         </form>
 
         <h3>All Appointments</h3>
-        <?php if (count($appointments) > 0): ?>
-            <table>
-                <tr>
-                    <th>AppointmentID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Physician First Name</th>
-                    <th>Physician Last Name</th>
-                    <th>Secretary First Name</th>
-                    <th>Secretary Last Name</th>
-                    <th>Date and Time</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                <?php foreach ($appointments as $appointment): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($appointment['AppointmentID']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PhysicianFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['PhysicianLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['SecretaryFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['SecretaryLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['AppointmentDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['AppointmentsStatus']); ?></td>
-                        <td>
-                            <button class="button" onclick="openModal(<?php echo htmlspecialchars(json_encode($appointment)); ?>)">Update</button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No appointments found.</p>
-        <?php endif; ?>
+        <div id="appointments-container">
+            <!-- Appointments will be loaded here -->
+        </div>
     </div>
 
     <!-- The Modal -->
@@ -199,16 +155,10 @@ check_role(['Secretary']);
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h3>Update Appointment</h3>
-            <form id="updateAppointmentForm" action="../database/Secretary/secretary_update_appointment_action.php" method="post">
+            <form id="updateAppointmentForm">
                 <input type="hidden" id="updateAppointmentID" name="appointmentID">
                 <label for="updatePhysician">Physician:</label>
-                <select name="physician" id="updatePhysician" required>
-                    <?php foreach ($physicians as $physician): ?>
-                        <option value="<?php echo $physician['LabStaffID']; ?>">
-                            <?php echo $physician['FirstName'] . ' ' . $physician['LastName']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <select name="physician" id="updatePhysician" required></select>
                 <br><br>
                 <label for="updateDateTime">Date and Time:</label>
                 <input type="datetime-local" id="updateDateTime" name="datetime" required>
@@ -226,6 +176,87 @@ check_role(['Secretary']);
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../database/Secretary/secretary_read_appointment_action.php')
+                .then(response => response.json())
+                .then(data => {
+                    const patients = data.patients;
+                    const physicians = data.physicians;
+                    const appointments = data.appointments;
+
+                    // Populate patients dropdown
+                    const patientSelect = document.getElementById('patient');
+                    patients.forEach(patient => {
+                        const option = document.createElement('option');
+                        option.value = patient.PatientID;
+                        option.textContent = `${patient.FirstName} ${patient.LastName}`;
+                        patientSelect.appendChild(option);
+                    });
+
+                    // Populate physicians dropdown
+                    const physicianSelect = document.getElementById('physician');
+                    const updatePhysicianSelect = document.getElementById('updatePhysician');
+                    physicians.forEach(physician => {
+                        const option = document.createElement('option');
+                        option.value = physician.LabStaffID;
+                        option.textContent = `${physician.FirstName} ${physician.LastName}`;
+                        physicianSelect.appendChild(option);
+                        updatePhysicianSelect.appendChild(option.cloneNode(true));
+                    });
+
+                    // Populate appointments table
+                    const container = document.getElementById('appointments-container');
+                    if (appointments.length > 0) {
+                        let table = '<table><tr><th>AppointmentID</th><th>Patient First Name</th><th>Patient Last Name</th><th>Physician First Name</th><th>Physician Last Name</th><th>Secretary First Name</th><th>Secretary Last Name</th><th>Date and Time</th><th>Status</th><th>Action</th></tr>';
+                        appointments.forEach(appointment => {
+                            table += `<tr>
+                                <td>${appointment.AppointmentID}</td>
+                                <td>${appointment.PatientFirstName}</td>
+                                <td>${appointment.PatientLastName}</td>
+                                <td>${appointment.PhysicianFirstName}</td>
+                                <td>${appointment.PhysicianLastName}</td>
+                                <td>${appointment.SecretaryFirstName}</td>
+                                <td>${appointment.SecretaryLastName}</td>
+                                <td>${appointment.AppointmentDateTime}</td>
+                                <td>${appointment.AppointmentsStatus}</td>
+                                <td><button class="button" onclick='openModal(${JSON.stringify(appointment)})'>Update</button></td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No appointments found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching appointments:', error);
+                    document.getElementById('appointments-container').innerHTML = '<p>Error loading appointments.</p>';
+                });
+
+                document.getElementById('updateAppointmentForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    fetch('../database/Secretary/secretary_update_appointment_action.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            // Optionally, refresh the appointments list or update the UI
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating appointment:', error);
+        alert('Error updating appointment.');
+    });
+});
+        });
+
         function openModal(appointment) {
             document.getElementById('updateAppointmentID').value = appointment.AppointmentID;
             document.getElementById('updatePhysician').value = appointment.LabStaffID;

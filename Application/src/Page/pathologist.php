@@ -61,9 +61,9 @@ check_labstaff_type('Pathologist');
             </div>
             <nav>
                 <ul>
-                <li><a href="../database/Pathologist/pathologist_read_result_action.php">Results</a></li>
-                <li><a href="../database/Pathologist/pathologist_read_order_action.php">Orders</a></li>
-                <li><a href="pathologist.php">Dashboard</a></li>    
+                <li><a href="./pathologist_result.php">Results</a></li>
+                <li><a href="./pathologist_order.php">Orders</a></li>
+                <li><a href="./pathologist.php">Dashboard</a></li>    
                 <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
             </nav>

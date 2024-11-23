@@ -1,7 +1,7 @@
 <?php
-session_start();
-require './Account/auth.php';
-check_role(['Patient']);
+// session_start();
+// require './Account/auth.php';
+// check_role(['Patient']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,11 +77,11 @@ check_role(['Patient']);
             </div>
             <nav>
             <ul>
-                    <li><a href="../database/Patient/patient_read_bill_action.php">Bills</a></li>
-                <li><a href="../database/Patient/patient_read_order_action.php">ORDERS</a></li>
-                    <li><a href="../database/Patient/patient_read_appointment_action.php">APPOINTMENTS</a></li>
-                    <li><a href="./patient.php">Dashboard</a></li>
-                    <li><a href="./Account/logout.php">Logout</a></li>
+                    <li><a href="patient_read_bill_action.php">Bills</a></li>
+                <li><a href="patient_read_order_action.php">ORDERS</a></li>
+                    <li><a href="patient_read_appointment_action.php">APPOINTMENTS</a></li>
+                    <li><a href="../../Page/patient.php">Dashboard</a></li>
+                    <li><a href="../../Page/Account/logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>

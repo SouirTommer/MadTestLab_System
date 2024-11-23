@@ -61,9 +61,9 @@ check_role(['Patient']);
             </div>
             <nav>
                 <ul>
-                    <li><a href="../database/Pathologist/patient_read_bill_action.php">Bills</a></li>
-                <li><a href="../database/Pathologist/patient_read_order_action.php">ORDERS</a></li>
-                    <li><a href="../database/Pathologist/patient_read_appointment_action.php">APPOINTMENTS</a></li>
+                    <li><a href="../database/Patient/patient_read_bill_action.php">Bills</a></li>
+                <li><a href="../database/Patient/patient_read_order_action.php">ORDERS</a></li>
+                    <li><a href="../database/Patient/patient_read_appointment_action.php">APPOINTMENTS</a></li>
                     <li><a href="./patient.php">Dashboard</a></li>
                     <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>

@@ -5,20 +5,21 @@ require_once '../../connection/mysqli_conn.php';
 
 require '../../Page/Account/auth.php';
 check_role(['Secretary']);
-// Fetch all insurances
-$insurancesQuery = "SELECT InsuranceID, InsuranceName, InsuranceAmount, InsuranceDetails, InsuranceStatus FROM Insurances";
-$insurancesResult = $conn->query($insurancesQuery);
 
+// Fetch all insurances
 $insurances = [];
-if ($insurancesResult->num_rows > 0) {
-    while ($row = $insurancesResult->fetch_assoc()) {
-        $insurances[] = $row;
-    }
+
+$insurancesQuery = "SELECT InsuranceID, InsuranceName, InsuranceDetails FROM Insurances";
+$insurancesResult = $conn->query($insurancesQuery);
+while ($insurance = $insurancesResult->fetch_assoc()) {
+    $insurances[] = $insurance;
 }
 
-//json object
-$insurancesJson = json_encode($insurances);
-
 $conn->close();
-include '../../Page/secretary_insurance.php';
+
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode([
+    'insurances' => $insurances
+]);
 ?>

@@ -35,10 +35,35 @@ if ($ordersResult->num_rows > 0) {
     }
 }
 
+// Fetch all insurances
+$insurancesQuery = "
+    SELECT 
+        InsuranceID,
+        InsuranceName,
+        InsuranceAmount,
+        InsuranceDetails,
+        InsuranceStatus
+    FROM Insurances
+";
+$insurancesResult = $conn->query($insurancesQuery);
+
+$insurances = [];
+if ($insurancesResult->num_rows > 0) {
+    while ($row = $insurancesResult->fetch_assoc()) {
+        $insurances[] = $row;
+    }
+}
+
 $conn->close();
 
-//json object
-$ordersJson = json_encode($orders);
+// Combine orders and insurances into one response
+$response = [
+    'orders' => $orders,
+    'insurances' => $insurances
+];
 
-include '../../Page/pathologist_order.php';
+//json object
+header('Content-Type: application/json');
+echo json_encode($response);
+
 ?>

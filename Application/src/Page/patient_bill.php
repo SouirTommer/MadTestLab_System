@@ -77,41 +77,50 @@ check_role(['Patient']);
             </div>
             <nav>
             <ul>
-                    <li><a href="../database/Patient/patient_read_bill_action.php">Bills</a></li>
-                <li><a href="../database/Patient/patient_read_order_action.php">ORDERS</a></li>
-                    <li><a href="../database/Patient/patient_read_appointment_action.php">APPOINTMENTS</a></li>
-                    <li><a href="./patient.php">Dashboard</a></li>
-                    <li><a href="./Account/logout.php">Logout</a></li>
+                    <li><a href="patient_read_bill_action.php">Bills</a></li>
+                <li><a href="patient_read_order_action.php">ORDERS</a></li>
+                    <li><a href="patient_read_appointment_action.php">APPOINTMENTS</a></li>
+                    <li><a href="../../Page/patient.php">Dashboard</a></li>
+                    <li><a href="../../Page/Account/logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container">
         <h3>All Bills</h3>
-        <?php if (count($bills) > 0): ?>
-            <table>
-                <tr>
-                    <th>BillID</th>
-                    <th>OrderID</th>
-                    <th>Amount</th>
-                    <th>Payment Status</th>
-                    <th>Bill Date and Time</th>
-                    <th>Insurance Name</th>
-                </tr>
-                <?php foreach ($bills as $bill): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($bill['BillID']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['OrderID']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['Amount']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['PaymentStatus']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['BillDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['InsuranceName']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No bills found.</p>
-        <?php endif; ?>
+        <div id="bills-container">
+            <!-- Bills will be loaded here -->
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('patient_read_bill_action.php')
+                .then(response => response.json())
+                .then(bills => {
+                    const container = document.getElementById('bills-container');
+                    if (bills.length > 0) {
+                        let table = '<table><tr><th>BillID</th><th>OrderID</th><th>Amount</th><th>Payment Status</th><th>Bill Date and Time</th><th>Insurance Name</th></tr>';
+                        bills.forEach(bill => {
+                            table += `<tr>
+                                <td>${bill.BillID}</td>
+                                <td>${bill.OrderID}</td>
+                                <td>${bill.Amount}</td>
+                                <td>${bill.PaymentStatus}</td>
+                                <td>${bill.BillDateTime}</td>
+                                <td>${bill.InsuranceName}</td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No bills found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching bills:', error);
+                    document.getElementById('bills-container').innerHTML = '<p>Error loading bills.</p>';
+                });
+        });
+    </script>
 </body>
 </html>

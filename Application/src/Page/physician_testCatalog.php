@@ -76,10 +76,10 @@ check_labstaff_type('Physician');
                 <h1>Test Catalog</h1>
             </div>
             <nav>
-            <ul>
-                <li><a href="../database/Physician/physician_read_testCatalog_action.php">Test Catalog</a></li>
-                <li><a href="../database/Physician/physician_read_order_action.php">Orders</a></li>
-                    <li><a href="../database/Physician/physician_read_appointment_action.php">My Appointments</a></li>
+                <ul>
+                    <li><a href="./physician_testCatalog.php">Test Catalog</a></li>
+                    <li><a href="./physician_order.php">Orders</a></li>
+                    <li><a href="./physician_appointment.php">MY Appointments</a></li>
                     <li><a href="./physician.php">Dashboard</a></li>
                     <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
@@ -88,28 +88,39 @@ check_labstaff_type('Physician');
     </header>
     <div class="container">
         <h3>All Tests</h3>
-        <?php if (count($tests) > 0): ?>
-            <table>
-                <tr>
-                    <th>Test Code</th>
-                    <th>Test Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Test Type</th>
-                </tr>
-                <?php foreach ($tests as $test): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($test['TestCode']); ?></td>
-                        <td><?php echo htmlspecialchars($test['TestName']); ?></td>
-                        <td><?php echo htmlspecialchars($test['Description']); ?></td>
-                        <td><?php echo htmlspecialchars($test['Price']); ?></td>
-                        <td><?php echo htmlspecialchars($test['TestType']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No tests found.</p>
-        <?php endif; ?>
+        <div id="tests-container">
+            <!-- Tests will be loaded here -->
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../database/Physician/physician_read_testCatalog_action.php')
+                .then(response => response.json())
+                .then(tests => {
+                    const container = document.getElementById('tests-container');
+                    if (tests.length > 0) {
+                        let table = '<table><tr><th>Test Code</th><th>Test Name</th><th>Description</th><th>Price</th><th>Test Type</th></tr>';
+                        tests.forEach(test => {
+                            table += `<tr>
+                                <td>${test.TestCode}</td>
+                                <td>${test.TestName}</td>
+                                <td>${test.Description}</td>
+                                <td>${test.Price}</td>
+                                <td>${test.TestType}</td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No tests found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching tests:', error);
+                    document.getElementById('tests-container').innerHTML = '<p>Error loading tests.</p>';
+                });
+        });
+    </script>
 </body>
 </html>

@@ -39,9 +39,9 @@ if ($billsResult->num_rows > 0) {
     }
 }
 
-//json object
-$billsJson = json_encode($bills);
-
 $conn->close();
-include '../../Page/secretary_bill.php';
+
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode($bills);
 ?>

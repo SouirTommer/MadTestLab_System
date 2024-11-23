@@ -61,9 +61,9 @@ check_labstaff_type('Physician');
             </div>
             <nav>
                 <ul>
-                <li><a href="../database/Physician/physician_read_testCatalog_action.php">Test Catalog</a></li>
-                <li><a href="../database/Physician/physician_read_order_action.php">Orders</a></li>
-                    <li><a href="../database/Physician/physician_read_appointment_action.php">My Appointments</a></li>
+                    <li><a href="./physician_testCatalog.php">Test Catalog</a></li>
+                    <li><a href="./physician_order.php">Orders</a></li>
+                    <li><a href="./physician_appointment.php">My Appointments</a></li>
                     <li><a href="./physician.php">Dashboard</a></li>
                     <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>

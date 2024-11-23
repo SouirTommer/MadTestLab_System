@@ -24,7 +24,7 @@ $accountId = $_SESSION['accountId'];
 // Get the LabStaffID using the AccountID
 $labStaffID = getLabStaffID($conn, $accountId);
 
-// Fetch all orders for the logged-in physician
+// Fetch all orders for the logged-in physician including patient, lab staff, secretary, and test details
 $ordersQuery = "
     SELECT 
         Orders.OrderID,
@@ -56,10 +56,10 @@ if ($ordersResult->num_rows > 0) {
     }
 }
 
-//json object
-$ordersJson = json_encode($orders);
-
 $stmt->close();
 $conn->close();
-include '../../Page/physician_order.php';
+
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode($orders);
 ?>

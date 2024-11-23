@@ -3,13 +3,14 @@ session_start();
 require './Account/auth.php';
 check_labstaff_type('Physician');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Physician Orders</title>
-    <style>
+        <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -76,10 +77,10 @@ check_labstaff_type('Physician');
                 <h1>Physician Orders</h1>
             </div>
             <nav>
-            <ul>
-                <li><a href="../database/Physician/physician_read_testCatalog_action.php">Test Catalog</a></li>
-                <li><a href="../database/Physician/physician_read_order_action.php">Orders</a></li>
-                    <li><a href="../database/Physician/physician_read_appointment_action.php">My Appointments</a></li>
+                <ul>
+                    <li><a href="./physician_testCatalog.php">Test Catalog</a></li>
+                    <li><a href="./physician_order.php">Orders</a></li>
+                    <li><a href="./physician_appointment.php">My Appointments</a></li>
                     <li><a href="./physician.php">Dashboard</a></li>
                     <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
@@ -88,38 +89,43 @@ check_labstaff_type('Physician');
     </header>
     <div class="container">
         <h3>All Orders</h3>
-        <?php if (count($orders) > 0): ?>
-            <table>
-                <tr>
-                    <th>OrderID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Lab Staff First Name</th>
-                    <th>Lab Staff Last Name</th>
-                    <th>Secretary First Name</th>
-                    <th>Secretary Last Name</th>
-                    <th>Test Name</th>
-                    <th>Date and Time</th>
-                    <th>Status</th>
-                </tr>
-                <?php foreach ($orders as $order): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($order['OrderID']); ?></td>
-                        <td><?php echo htmlspecialchars($order['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['LabStaffFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['LabStaffLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['SecretaryFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['SecretaryLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['TestName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['OrderDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($order['OrderStatus']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No orders found.</p>
-        <?php endif; ?>
+        <div id="orders-container">
+            <!-- Orders will be loaded here -->
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../database/Physician/physician_read_order_action.php')
+                .then(response => response.json())
+                .then(orders => {
+                    const container = document.getElementById('orders-container');
+                    if (orders.length > 0) {
+                        let table = '<table><tr><th>OrderID</th><th>Patient First Name</th><th>Patient Last Name</th><th>Lab Staff First Name</th><th>Lab Staff Last Name</th><th>Secretary First Name</th><th>Secretary Last Name</th><th>Test Name</th><th>Date and Time</th><th>Status</th></tr>';
+                        orders.forEach(order => {
+                            table += `<tr>
+                                <td>${order.OrderID}</td>
+                                <td>${order.PatientFirstName}</td>
+                                <td>${order.PatientLastName}</td>
+                                <td>${order.LabStaffFirstName}</td>
+                                <td>${order.LabStaffLastName}</td>
+                                <td>${order.SecretaryFirstName}</td>
+                                <td>${order.SecretaryLastName}</td>
+                                <td>${order.TestName}</td>
+                                <td>${order.OrderDateTime}</td>
+                                <td>${order.OrderStatus}</td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No orders found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                    document.getElementById('orders-container').innerHTML = '<p>Error loading orders.</p>';
+                });
+        });
+    </script>
 </body>
 </html>

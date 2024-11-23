@@ -16,10 +16,9 @@ $ordersQuery = "
         LabStaffs.LastName AS LabStaffLastName,
         Secretaries.FirstName AS SecretaryFirstName,
         Secretaries.LastName AS SecretaryLastName,
-        Orders.OrderDateTime,
-        Orders.OrderStatus,
         TestsCatalog.TestName,
-        TestsCatalog.Price AS TestPrice
+        Orders.OrderDateTime,
+        Orders.OrderStatus
     FROM Orders
     JOIN Patients ON Orders.PatientID = Patients.PatientID
     JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
@@ -46,11 +45,32 @@ if ($insurancesResult->num_rows > 0) {
     }
 }
 
-// Convert the PHP arrays to JSON objects
-$ordersJson = json_encode($orders);
-$insurancesJson = json_encode($insurances);
+// Fetch all tests catalog
+$testsCatalogQuery = "
+    SELECT 
+        TestCode,
+        TestName,
+        Description,
+        Price,
+        TestType
+    FROM TestsCatalog
+";
+$testsCatalogResult = $conn->query($testsCatalogQuery);
+
+$testsCatalog = [];
+if ($testsCatalogResult->num_rows > 0) {
+    while ($row = $testsCatalogResult->fetch_assoc()) {
+        $testsCatalog[] = $row;
+    }
+}
 
 $conn->close();
 
-include '../../Page/secretary_order.php';
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode([
+    'orders' => $orders,
+    'insurances' => $insurances,
+    'testsCatalog' => $testsCatalog
+]);
 ?>

@@ -17,9 +17,9 @@ if ($testsResult->num_rows > 0) {
     }
 }
 
-//json object
-$testsJson = json_encode($tests);
-
 $conn->close();
-include '../../Page/physician_testCatalog.php';
+
+// Return JSON response
+header('Content-Type: application/json');
+echo json_encode($tests);
 ?>

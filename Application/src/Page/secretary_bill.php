@@ -76,58 +76,60 @@ check_role(['Secretary']);
                 <h1>Bill Records</h1>
             </div>
             <nav>
-            <ul>
-                    
-                    <li><a href="../database/Secretary/secretary_read_insurance_action.php">Insurances</a></li>
-                        <li><a href="../database/Secretary/secretary_read_bill_action.php">Bills</a></li>
-                            <li><a href="../database/Secretary/secretary_read_order_action.php">Orders</a></li>
-                            <li><a href="../database/Secretary/secretary_read_appointment_action.php">Appointments</a></li>
-                            <li><a href="./secretary.php">Dashboard</a></li>
-                            <li><a href="./Account/logout.php">Logout</a></li>
-                        </ul>
+                <ul>
+                    <li><a href="secretary_insurance.php">Insurances</a></li>
+                    <li><a href="secretary_bill.php">Bills</a></li>
+                    <li><a href="secretary_order.php">Orders</a></li>
+                    <li><a href="secretary_appointment.php">Appointments</a></li>
+                    <li><a href="secretary.php">Dashboard</a></li>
+                    <li><a href="Account/logout.php">Logout</a></li>
+                </ul>
             </nav>
         </div>
     </header>
     <div class="container">
         <h3>All Bills</h3>
-        <?php if (count($bills) > 0): ?>
-            <table>
-                <tr>
-                    <th>BillID</th>
-                    <th>OrderID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Lab Staff First Name</th>
-                    <th>Lab Staff Last Name</th>
-                    <th>Secretary First Name</th>
-                    <th>Secretary Last Name</th>
-                    <th>Test Name</th>
-                    <th>Amount</th>
-                    <th>Payment Status</th>
-                    <th>Bill Date and Time</th>
-                    <th>Insurance Name</th>
-                </tr>
-                <?php foreach ($bills as $bill): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($bill['BillID']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['OrderID']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['LabStaffFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['LabStaffLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['SecretaryFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['SecretaryLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['TestName']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['Amount']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['PaymentStatus']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['BillDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($bill['InsuranceName'] ?? 'None'); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No bills found.</p>
-        <?php endif; ?>
+        <div id="bills-container">
+            <!-- Bills will be loaded here -->
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('../database/Secretary/secretary_read_bill_action.php')
+                .then(response => response.json())
+                .then(bills => {
+                    const container = document.getElementById('bills-container');
+                    if (bills.length > 0) {
+                        let table = '<table><tr><th>BillID</th><th>OrderID</th><th>Patient First Name</th><th>Patient Last Name</th><th>Lab Staff First Name</th><th>Lab Staff Last Name</th><th>Secretary First Name</th><th>Secretary Last Name</th><th>Test Name</th><th>Amount</th><th>Payment Status</th><th>Bill Date and Time</th><th>Insurance Name</th></tr>';
+                        bills.forEach(bill => {
+                            table += `<tr>
+                                <td>${bill.BillID}</td>
+                                <td>${bill.OrderID}</td>
+                                <td>${bill.PatientFirstName}</td>
+                                <td>${bill.PatientLastName}</td>
+                                <td>${bill.LabStaffFirstName}</td>
+                                <td>${bill.LabStaffLastName}</td>
+                                <td>${bill.SecretaryFirstName}</td>
+                                <td>${bill.SecretaryLastName}</td>
+                                <td>${bill.TestName}</td>
+                                <td>${bill.Amount}</td>
+                                <td>${bill.PaymentStatus}</td>
+                                <td>${bill.BillDateTime}</td>
+                                <td>${bill.InsuranceName ?? 'None'}</td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No bills found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching bills:', error);
+                    document.getElementById('bills-container').innerHTML = '<p>Error loading bills.</p>';
+                });
+        });
+    </script>
 </body>
 </html>
