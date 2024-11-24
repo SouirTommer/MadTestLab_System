@@ -24,6 +24,7 @@ $ordersQuery = "
     JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Orders.SecretaryID = Secretaries.SecretaryID
     JOIN TestsCatalog ON Orders.TestCode = TestsCatalog.TestCode
+    WHERE Orders.OrderStatus = 'Pending'
 ";
 $ordersResult = $conn->query($ordersQuery);
 

@@ -233,28 +233,27 @@ check_role(['Secretary']);
                     document.getElementById('appointments-container').innerHTML = '<p>Error loading appointments.</p>';
                 });
 
-                document.getElementById('updateAppointmentForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(this);
-    fetch('../database/Secretary/secretary_update_appointment_action.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert(data.message);
-            // Optionally, refresh the appointments list or update the UI
-            window.location.reload();
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error updating appointment:', error);
-        alert('Error updating appointment.');
-    });
-});
+            document.getElementById('updateAppointmentForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                fetch('../database/Secretary/secretary_update_appointment_action.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        window.location.reload(); // Refresh the page to see updated appointments
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating appointment:', error);
+                    alert('Error updating appointment.');
+                });
+            });
         });
 
         function openModal(appointment) {

@@ -137,131 +137,150 @@ check_role(['Secretary']);
     </div>
 
     <!-- Create Bill Modal -->
-    <div id="createBillModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeBillModal()">&times;</span>
-            <h3>Create Bill</h3>
-            <form id="createBillForm">
-                <input type="hidden" id="createBillOrderID" name="orderID">
-                <label for="insurance">Insurance:</label>
-                <select id="insurance" name="insuranceID" required>
-                    <!-- Insurance options will be populated here -->
-                </select>
-                <br><br>
-                <label for="insuranceAmount">Insurance Amount:</label>
-                <input type="number" id="insuranceAmount" name="insuranceAmount" readonly>
-                <br><br>
-                <label for="testName">Test Name:</label>
-                <input type="text" id="testName" name="testName" readonly>
-                <br><br>
-                <label for="testAmount">Test Amount:</label>
-                <input type="number" id="testAmount" name="testAmount" readonly>
-                <br><br>
-                <label for="billAmount">Bill Amount:</label>
-                <input type="number" id="billAmount" name="amount" readonly>
-                <br><br>
-                <input type="submit" value="Create Bill" class="button">
-            </form>
-        </div>
+<!-- Create Bill Modal -->
+<div id="createBillModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeBillModal()">&times;</span>
+        <h3>Create Bill</h3>
+        <form id="createBillForm" action="../database/Secretary/secretary_create_bill_action.php" method="post">
+            <input type="hidden" id="createBillOrderID" name="orderID">
+            <label for="insurance">Insurance:</label>
+            <select id="insurance" name="insuranceID" required>
+                <!-- Insurance options will be populated here -->
+            </select>
+            <br><br>
+            <label for="insuranceAmount">Insurance Amount:</label>
+            <input type="number" id="insuranceAmount" name="insuranceAmount" readonly>
+            <br><br>
+            <label for="testName">Test Name:</label>
+            <input type="text" id="testName" name="testName" readonly>
+            <br><br>
+            <label for="testAmount">Test Amount:</label>
+            <input type="number" id="testAmount" name="testAmount" readonly>
+            <br><br>
+            <label for="billAmount">Bill Amount:</label>
+            <input type="number" id="billAmount" name="amount" readonly>
+            <br><br>
+            <label for="paymentStatus">Payment Status:</label>
+            <select id="paymentStatus" name="status" required>
+                <option value="Paid">Paid</option>
+                <option value="Unpaid">Unpaid</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Create Bill" class="button">
+        </form>
     </div>
+</div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('../database/Secretary/secretary_read_order_action.php')
-                .then(response => response.json())
-                .then(data => {
-                    const orders = data.orders || [];
-                    const insurances = data.insurances || [];
-                    const testsCatalog = data.testsCatalog || [];
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('../database/Secretary/secretary_read_order_action.php')
+        .then(response => response.json())
+        .then(data => {
+            const orders = data.orders || [];
+            const insurances = data.insurances || [];
+            const testsCatalog = data.testsCatalog || [];
 
-                    // Populate orders table
-                    const ordersContainer = document.getElementById('orders-container');
-                    if (orders.length > 0) {
-                        let table = '<table><tr><th>OrderID</th><th>Patient Name</th><th>Lab Staff Name</th><th>Secretary Name</th><th>Test Name</th><th>Order Date and Time</th><th>Order Status</th><th>Action</th></tr>';
-                        orders.forEach(order => {
-                            table += `<tr>
-                                <td>${order.OrderID}</td>
-                                <td>${order.PatientFirstName} ${order.PatientLastName}</td>
-                                <td>${order.LabStaffFirstName} ${order.LabStaffLastName}</td>
-                                <td>${order.SecretaryFirstName} ${order.SecretaryLastName}</td>
-                                <td>${order.TestName}</td>
-                                <td>${order.OrderDateTime}</td>
-                                <td>${order.OrderStatus}</td>
-                                <td><button class="button" onclick='openBillModal(${JSON.stringify(order)}, ${JSON.stringify(insurances)}, ${JSON.stringify(testsCatalog)})'>Create Bill</button></td>
-                            </tr>`;
-                        });
-                        table += '</table>';
-                        ordersContainer.innerHTML = table;
-                    } else {
-                        ordersContainer.innerHTML = '<p>No orders found.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    document.getElementById('orders-container').innerHTML = '<p>Error loading orders.</p>';
+            // Populate orders table
+            const ordersContainer = document.getElementById('orders-container');
+            if (orders.length > 0) {
+                let table = '<table><tr><th>OrderID</th><th>Patient Name</th><th>Lab Staff Name</th><th>Secretary Name</th><th>Test Name</th><th>Order Date and Time</th><th>Order Status</th><th>Action</th></tr>';
+                orders.forEach(order => {
+                    table += `<tr>
+                        <td>${order.OrderID}</td>
+                        <td>${order.PatientFirstName} ${order.PatientLastName}</td>
+                        <td>${order.LabStaffFirstName} ${order.LabStaffLastName}</td>
+                        <td>${order.SecretaryFirstName} ${order.SecretaryLastName}</td>
+                        <td>${order.TestName}</td>
+                        <td>${order.OrderDateTime}</td>
+                        <td>${order.OrderStatus}</td>
+                        <td><button class="button" onclick='openBillModal(${JSON.stringify(order)}, ${JSON.stringify(insurances)}, ${JSON.stringify(testsCatalog)})'>Create Bill</button></td>
+                    </tr>`;
                 });
-
-            document.getElementById('createBillForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-                const formData = new FormData(this);
-                formData.append('paymentStatus', 'Paid');
-                formData.append('billDateTime', new Date().toISOString().slice(0, 19).replace('T', ' '));
-                fetch('../database/Secretary/secretary_create_bill_action.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        alert(data.message);
-                        closeBillModal();
-                    } else {
-                        alert('Error: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error creating bill:', error);
-                    alert('Error creating bill.');
-                });
-            });
+                table += '</table>';
+                ordersContainer.innerHTML = table;
+            } else {
+                ordersContainer.innerHTML = '<p>No orders found.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            document.getElementById('orders-container').innerHTML = '<p>Error loading orders.</p>';
         });
 
-        function openBillModal(order, insurances, testsCatalog) {
-            document.getElementById('createBillOrderID').value = order.OrderID;
-            document.getElementById('testName').value = order.TestName;
-            const test = testsCatalog.find(test => test.TestName === order.TestName);
-            document.getElementById('testAmount').value = test ? test.Price : 0;
+        document.getElementById('createBillForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
 
-            const insuranceSelect = document.getElementById('insurance');
-            insuranceSelect.innerHTML = '';
-            insurances.forEach(insurance => {
-                const option = document.createElement('option');
-                option.value = insurance.InsuranceID;
-                option.textContent = `${insurance.InsuranceName} - ${insurance.InsuranceAmount}`;
-                insuranceSelect.appendChild(option);
-            });
+    // Log form data for debugging
+    for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+    }
 
-            insuranceSelect.addEventListener('change', function() {
-                const selectedInsurance = insurances.find(insurance => insurance.InsuranceID == this.value);
-                const insuranceAmount = selectedInsurance ? selectedInsurance.InsuranceAmount : 0;
-                document.getElementById('insuranceAmount').value = insuranceAmount;
-                const testAmount = parseFloat(document.getElementById('testAmount').value);
-                const billAmount = Math.max(0, testAmount - testAmount);
-                document.getElementById('billAmount').value = billAmount;
-            });
-
-            document.getElementById('createBillModal').style.display = 'block';
-        }
-
-        function closeBillModal() {
-            document.getElementById('createBillModal').style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('createBillModal')) {
-                closeBillModal();
+    fetch('../database/Secretary/secretary_create_bill_action.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text()) // Change to text to inspect the raw response
+    .then(data => {
+        try {
+            const jsonData = JSON.parse(data);
+            if (jsonData.status === 'error') {
+                console.error('Error creating bill:', jsonData.message);
+                alert('Error creating bill: ' + jsonData.message);
+            } else {
+                alert('Bill created successfully!');
+                location.reload();
             }
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            console.error('Response data:', data);
+            alert('Error creating bill: Invalid JSON response');
         }
+    })
+    .catch(error => {
+        console.error('Error creating bill:', error);
+        alert('Error creating bill: ' + error);
+    });
+});
+});
+
+function openBillModal(order, insurances, testsCatalog) {
+    document.getElementById('createBillOrderID').value = order.OrderID;
+    document.getElementById('testName').value = order.TestName;
+    const test = testsCatalog.find(test => test.TestName === order.TestName);
+    document.getElementById('testAmount').value = test ? test.Price : 0;
+
+    const insuranceSelect = document.getElementById('insurance');
+    insuranceSelect.innerHTML = '';
+    insurances.forEach(insurance => {
+        const option = document.createElement('option');
+        option.value = insurance.InsuranceID;
+        option.textContent = `${insurance.InsuranceName} - ${insurance.InsuranceAmount}`;
+        insuranceSelect.appendChild(option);
+    });
+
+    insuranceSelect.addEventListener('change', function() {
+        const selectedInsurance = insurances.find(insurance => insurance.InsuranceID == this.value);
+        const insuranceAmount = selectedInsurance ? selectedInsurance.InsuranceAmount : 0;
+        document.getElementById('insuranceAmount').value = insuranceAmount;
+        const testAmount = parseFloat(document.getElementById('testAmount').value);
+        const billAmount = Math.max(0, testAmount - insuranceAmount);
+        document.getElementById('billAmount').value = billAmount;
+    });
+
+    document.getElementById('createBillModal').style.display = 'block';
+}
+
+function closeBillModal() {
+    document.getElementById('createBillModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('createBillModal')) {
+        closeBillModal();
+    }
+}
     </script>
 </body>
 </html>

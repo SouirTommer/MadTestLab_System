@@ -176,52 +176,59 @@ check_labstaff_type('Pathologist');
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchOrders();
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    fetchOrders();
+});
 
-        function fetchOrders() {
-            fetch('../database/Pathologist/pathologist_read_order_action.php')
-                .then(response => response.json())
-                .then(data => {
-                    displayOrders(data);
-                })
-                .catch(error => console.error('Error fetching orders:', error));
-        }
-
-        function displayOrders(orders) {
-            const ordersTableBody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
-            ordersTableBody.innerHTML = '';
-
-            orders.forEach(order => {
-                const row = ordersTableBody.insertRow();
-                row.innerHTML = `
-                    <td>${order.OrderID}</td>
-                    <td>${order.PatientFirstName} ${order.PatientLastName}</td>
-                    <td>${order.LabStaffFirstName} ${order.LabStaffLastName}</td>
-                    <td>${order.SecretaryFirstName} ${order.SecretaryLastName}</td>
-                    <td>${order.OrderDateTime}</td>
-                    <td>${order.OrderStatus}</td>
-                    <td>${order.TestName}</td>
-                    <td><button class="button" onclick="openModal(${order.OrderID})">Create Result</button></td>
-                `;
-            });
-        }
-
-        function openModal(orderID) {
-            document.getElementById('orderID').value = orderID;
-            document.getElementById('resultModal').style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('resultModal').style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('resultModal')) {
-                closeModal();
+function fetchOrders() {
+    fetch('../database/Pathologist/pathologist_read_order_action.php')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Fetched data:', data); // Debugging: Log fetched data
+            if (data.status === 'error') {
+                console.error('Error fetching orders:', data.message);
+                alert('Error fetching orders: ' + data.message);
+            } else {
+                displayOrders(data.orders);
             }
-        }
+        })
+        .catch(error => console.error('Error fetching orders:', error));
+}
+
+function displayOrders(orders) {
+    console.log('Orders to display:', orders); // Debugging: Log orders to display
+    const ordersTableBody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+    ordersTableBody.innerHTML = '';
+
+    orders.forEach(order => {
+        const row = ordersTableBody.insertRow();
+        row.innerHTML = `
+            <td>${order.OrderID}</td>
+            <td>${order.PatientFirstName} ${order.PatientLastName}</td>
+            <td>${order.LabStaffFirstName} ${order.LabStaffLastName}</td>
+            <td>${order.SecretaryFirstName} ${order.SecretaryLastName}</td>
+            <td>${order.OrderDateTime}</td>
+            <td>${order.OrderStatus}</td>
+            <td>${order.TestName}</td>
+            <td><button class="button" onclick="openModal(${order.OrderID})">Create Result</button></td>
+        `;
+    });
+}
+
+function openModal(orderID) {
+    document.getElementById('orderID').value = orderID;
+    document.getElementById('resultModal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('resultModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('resultModal')) {
+        closeModal();
+    }
+}
     </script>
 </body>
 </html>

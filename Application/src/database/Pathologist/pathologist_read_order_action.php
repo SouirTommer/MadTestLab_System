@@ -2,7 +2,6 @@
 session_start();
 
 require_once '../../connection/mysqli_conn.php';
-
 require '../../Page/Account/auth.php';
 check_labstaff_type('Pathologist');
 
@@ -24,15 +23,23 @@ $ordersQuery = "
     JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Orders.SecretaryID = Secretaries.SecretaryID
     JOIN TestsCatalog ON Orders.TestCode = TestsCatalog.TestCode
-    WHERE Orders.OrderStatus = 'Pending'
+    WHERE Orders.OrderStatus = 'Paid'
 ";
 $ordersResult = $conn->query($ordersQuery);
+
+if ($ordersResult === false) {
+    error_log('Error executing orders query: ' . $conn->error);
+    echo json_encode(['status' => 'error', 'message' => 'Error fetching orders']);
+    exit;
+}
 
 $orders = [];
 if ($ordersResult->num_rows > 0) {
     while ($row = $ordersResult->fetch_assoc()) {
         $orders[] = $row;
     }
+} else {
+    error_log('No orders found with status Paid');
 }
 
 // Fetch all insurances
@@ -47,11 +54,19 @@ $insurancesQuery = "
 ";
 $insurancesResult = $conn->query($insurancesQuery);
 
+if ($insurancesResult === false) {
+    error_log('Error executing insurances query: ' . $conn->error);
+    echo json_encode(['status' => 'error', 'message' => 'Error fetching insurances']);
+    exit;
+}
+
 $insurances = [];
 if ($insurancesResult->num_rows > 0) {
     while ($row = $insurancesResult->fetch_assoc()) {
         $insurances[] = $row;
     }
+} else {
+    error_log('No insurances found');
 }
 
 $conn->close();
@@ -65,5 +80,4 @@ $response = [
 //json object
 header('Content-Type: application/json');
 echo json_encode($response);
-
 ?>
