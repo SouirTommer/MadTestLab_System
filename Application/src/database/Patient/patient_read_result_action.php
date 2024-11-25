@@ -2,8 +2,6 @@
 session_start();
 
 require_once '../../connection/mysqli_conn.php';
-
-
 require '../../Page/Account/auth.php';
 check_role(['Patient']);
 
@@ -20,46 +18,45 @@ $stmt->fetch();
 $stmt->close();
 
 if (!$patientID) {
-    header("Location: ../login.php");
+    header("Location: ../../Page/Account/login.php");
     exit();
 }
 
-// Fetch all orders for the logged-in patient
-$ordersQuery = "
+// Fetch all results for the logged-in patient
+$resultsQuery = "
     SELECT 
-        Orders.OrderID,
+        Results.ResultID,
+        Results.OrderID,
+        Results.ReportURL,
+        Results.Interpretation,
+        Results.ResultDateTime,
+        Results.ResultStatus,
         Patients.FirstName AS PatientFirstName,
         Patients.LastName AS PatientLastName,
         LabStaffs.FirstName AS LabStaffFirstName,
-        LabStaffs.LastName AS LabStaffLastName,
-        Secretaries.FirstName AS SecretaryFirstName,
-        Secretaries.LastName AS SecretaryLastName,
-        Orders.OrderDateTime,
-        Orders.OrderStatus,
-        TestsCatalog.TestName
-    FROM Orders
+        LabStaffs.LastName AS LabStaffLastName
+    FROM Results
+    JOIN Orders ON Results.OrderID = Orders.OrderID
     JOIN Patients ON Orders.PatientID = Patients.PatientID
-    JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
-    JOIN Secretaries ON Orders.SecretaryID = Secretaries.SecretaryID
-    JOIN TestsCatalog ON Orders.TestCode = TestsCatalog.TestCode
+    JOIN LabStaffs ON Results.LabStaffID = LabStaffs.LabStaffID
     WHERE Orders.PatientID = ?
 ";
-$stmt = $conn->prepare($ordersQuery);
+$stmt = $conn->prepare($resultsQuery);
 $stmt->bind_param('i', $patientID);
 $stmt->execute();
-$ordersResult = $stmt->get_result();
+$resultsResult = $stmt->get_result();
 
-$orders = [];
-if ($ordersResult->num_rows > 0) {
-    while ($row = $ordersResult->fetch_assoc()) {
-        $orders[] = $row;
+$results = [];
+if ($resultsResult->num_rows > 0) {
+    while ($row = $resultsResult->fetch_assoc()) {
+        $results[] = $row;
     }
 }
 
 $stmt->close();
 $conn->close();
 
-//json object
+// Return JSON response
 header('Content-Type: application/json');
-echo json_encode($orders);
+echo json_encode($results);
 ?>

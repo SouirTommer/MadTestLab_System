@@ -8,7 +8,7 @@ check_role(['Patient']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bills</title>
+    <title>Patient Bills</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,21 +67,64 @@ check_role(['Patient']);
         th {
             background-color: #f2f2f2;
         }
+        .button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <header>
+<header>
         <div class="container">
-            <div id="branding">
-                <h1>My Bills</h1>
+        <div id="branding">
+                <h1>Patient Appointments</h1>
             </div>
             <nav>
-            <ul>
-                    <li><a href="patient_read_bill_action.php">Bills</a></li>
-                <li><a href="patient_read_order_action.php">ORDERS</a></li>
-                    <li><a href="patient_read_appointment_action.php">APPOINTMENTS</a></li>
-                    <li><a href="../../Page/patient.php">Dashboard</a></li>
-                    <li><a href="../../Page/Account/logout.php">Logout</a></li>
+                <ul>
+                    <li><a href="./patient_result.php">Results</a></li>
+                    <li><a href="./patient_bill.php">Bills</a></li>
+                    <li><a href="./patient_order.php">ORDERS</a></li>
+                    <li><a href="./patient_appointment.php">APPOINTMENTS</a></li>
+                    <li><a href="./patient.php">Dashboard</a></li>
+                    <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -94,9 +137,15 @@ check_role(['Patient']);
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('patient_read_bill_action.php')
-                .then(response => response.json())
+            fetch('../database/Patient/patient_read_bill_action.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(bills => {
+                    console.log('Fetched bills:', bills); // Debugging: Log fetched bills
                     const container = document.getElementById('bills-container');
                     if (bills.length > 0) {
                         let table = '<table><tr><th>BillID</th><th>OrderID</th><th>Amount</th><th>Payment Status</th><th>Bill Date and Time</th><th>Insurance Name</th></tr>';

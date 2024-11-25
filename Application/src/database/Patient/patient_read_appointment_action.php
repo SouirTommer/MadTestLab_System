@@ -75,8 +75,6 @@ $stmt->close();
 $conn->close();
 
 //json object
-$appointmentsJson = json_encode($appointments);
-
-// Include the front-end file
-include '../../Page/patient_appointment.php';
+header('Content-Type: application/json');
+echo json_encode($appointments);
 ?>

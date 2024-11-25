@@ -1,14 +1,14 @@
 <?php
-// session_start();
-// require './Account/auth.php';
-// check_role(['Patient']);
+session_start();
+require './Account/auth.php';
+check_role(['Patient']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Orders</title>
+    <title>Patient Orders</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,31 +67,74 @@
         th {
             background-color: #f2f2f2;
         }
+        .button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <header>
+<header>
         <div class="container">
-            <div id="branding">
-                <h1>My Orders</h1>
+        <div id="branding">
+                <h1>Patient Appointments</h1>
             </div>
             <nav>
-            <ul>
-                    <li><a href="patient_read_bill_action.php">Bills</a></li>
-                <li><a href="patient_read_order_action.php">ORDERS</a></li>
-                    <li><a href="patient_read_appointment_action.php">APPOINTMENTS</a></li>
-                    <li><a href="../../Page/patient.php">Dashboard</a></li>
-                    <li><a href="../../Page/Account/logout.php">Logout</a></li>
+                <ul>
+                    <li><a href="./patient_result.php">Results</a></li>
+                    <li><a href="./patient_bill.php">Bills</a></li>
+                    <li><a href="./patient_order.php">ORDERS</a></li>
+                    <li><a href="./patient_appointment.php">APPOINTMENTS</a></li>
+                    <li><a href="./patient.php">Dashboard</a></li>
+                    <li><a href="./Account/logout.php">Logout</a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container">
         <h3>All Orders</h3>
-        <?php if (count($orders) > 0): ?>
-            <table>
+        <table id="ordersTable">
+            <thead>
                 <tr>
-                    <th>OrderID</th>
+                    <th>Order ID</th>
                     <th>Patient First Name</th>
                     <th>Patient Last Name</th>
                     <th>Lab Staff First Name</th>
@@ -102,24 +145,48 @@
                     <th>Date and Time</th>
                     <th>Status</th>
                 </tr>
-                <?php foreach ($orders as $order): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($order['OrderID']); ?></td>
-                        <td><?php echo htmlspecialchars($order['PatientFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['PatientLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['LabStaffFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['LabStaffLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['SecretaryFirstName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['SecretaryLastName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['TestName']); ?></td>
-                        <td><?php echo htmlspecialchars($order['OrderDateTime']); ?></td>
-                        <td><?php echo htmlspecialchars($order['OrderStatus']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-        <?php else: ?>
-            <p>No orders found.</p>
-        <?php endif; ?>
+            </thead>
+            <tbody>
+                <!-- Orders will be dynamically populated here -->
+            </tbody>
+        </table>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchOrders();
+        });
+
+        function fetchOrders() {
+            fetch('../database/Patient/patient_read_order_action.php')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched data:', data); // Debugging: Log fetched data
+                    displayOrders(data);
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
+
+        function displayOrders(orders) {
+            const ordersTableBody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
+            ordersTableBody.innerHTML = '';
+
+            orders.forEach(order => {
+                const row = ordersTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${order.OrderID}</td>
+                    <td>${order.PatientFirstName}</td>
+                    <td>${order.PatientLastName}</td>
+                    <td>${order.LabStaffFirstName}</td>
+                    <td>${order.LabStaffLastName}</td>
+                    <td>${order.SecretaryFirstName}</td>
+                    <td>${order.SecretaryLastName}</td>
+                    <td>${order.TestName}</td>
+                    <td>${order.OrderDateTime}</td>
+                    <td>${order.OrderStatus}</td>
+                `;
+            });
+        }
+    </script>
 </body>
 </html>

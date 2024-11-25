@@ -8,7 +8,7 @@ check_role(['Patient']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Appointments</title>
+    <title>Patient Results</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,10 +112,10 @@ check_role(['Patient']);
     </style>
 </head>
 <body>
-    <header>
+<header>
         <div class="container">
         <div id="branding">
-                <h1>Patient Appointments</h1>
+                <h1>Patient Results</h1>
             </div>
             <nav>
                 <ul>
@@ -130,61 +130,47 @@ check_role(['Patient']);
         </div>
     </header>
     <div class="container">
-        <h3>All Appointments</h3>
-        <table id="appointmentsTable">
-            <thead>
-                <tr>
-                    <th>AppointmentID</th>
-                    <th>Patient First Name</th>
-                    <th>Patient Last Name</th>
-                    <th>Physician First Name</th>
-                    <th>Physician Last Name</th>
-                    <th>Secretary First Name</th>
-                    <th>Secretary Last Name</th>
-                    <th>Date and Time</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Appointments will be dynamically populated here -->
-            </tbody>
-        </table>
+        <h3>All Results</h3>
+        <div id="results-container">
+            <!-- Results will be loaded here -->
+        </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetchAppointments();
-        });
-
-        function fetchAppointments() {
-            fetch('../database/Patient/patient_read_appointment_action.php')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched data:', data); // Debugging: Log fetched data
-                    displayAppointments(data);
+            fetch('../database/Patient/patient_read_result_action.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
                 })
-                .catch(error => console.error('Error fetching appointments:', error));
-        }
-
-        function displayAppointments(appointments) {
-            const appointmentsTableBody = document.getElementById('appointmentsTable').getElementsByTagName('tbody')[0];
-            appointmentsTableBody.innerHTML = '';
-
-            appointments.forEach(appointment => {
-                const row = appointmentsTableBody.insertRow();
-                row.innerHTML = `
-                    <td>${appointment.AppointmentID}</td>
-                    <td>${appointment.PatientFirstName}</td>
-                    <td>${appointment.PatientLastName}</td>
-                    <td>${appointment.PhysicianFirstName}</td>
-                    <td>${appointment.PhysicianLastName}</td>
-                    <td>${appointment.SecretaryFirstName}</td>
-                    <td>${appointment.SecretaryLastName}</td>
-                    <td>${appointment.AppointmentDateTime}</td>
-                    <td>${appointment.AppointmentsStatus}</td>
-                `;
-            });
-        }
+                .then(results => {
+                    console.log('Fetched results:', results); // Debugging: Log fetched results
+                    const container = document.getElementById('results-container');
+                    if (results.length > 0) {
+                        let table = '<table><tr><th>ResultID</th><th>OrderID</th><th>Report URL</th><th>Interpretation</th><th>Result Date and Time</th><th>Result Status</th><th>Lab Staff</th></tr>';
+                        results.forEach(result => {
+                            table += `<tr>
+                                <td>${result.ResultID}</td>
+                                <td>${result.OrderID}</td>
+                                <td><a href="${result.ReportURL}" target="_blank">View Report</a></td>
+                                <td>${result.Interpretation}</td>
+                                <td>${result.ResultDateTime}</td>
+                                <td>${result.ResultStatus}</td>
+                                <td>${result.LabStaffFirstName} ${result.LabStaffLastName}</td>
+                            </tr>`;
+                        });
+                        table += '</table>';
+                        container.innerHTML = table;
+                    } else {
+                        container.innerHTML = '<p>No results found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching results:', error);
+                    document.getElementById('results-container').innerHTML = '<p>Error loading results.</p>';
+                });
+        });
     </script>
 </body>
 </html>
