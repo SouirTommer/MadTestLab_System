@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../connection/mysqli_conn.php';
+require_once '../connection/mysqli_conn_Secretary.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['accountId'])) {

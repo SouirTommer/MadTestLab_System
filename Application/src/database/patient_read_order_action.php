@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../connection/mysqli_conn.php';
+require_once '../connection/mysqli_conn_Patient.php';
 
 // Ensure the user is a patient
 if ($_SESSION['role'] !== 'Patient') {

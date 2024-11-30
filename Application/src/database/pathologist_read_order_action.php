@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../connection/mysqli_conn.php';
+require_once '../connection/mysqli_conn_Pathologist.php';
 
 // Ensure the user is a pathologist
 if ($_SESSION['role'] !== 'LabStaff' || $_SESSION['labStaffType'] !== 'Pathologist') {

@@ -1,5 +1,5 @@
 <?php
-require_once '../connection/mysqli_conn.php';
+require_once '../connection/mysqli_conn_Secretary.php';
 session_start();
 
 // 檢查使用者是否已登入

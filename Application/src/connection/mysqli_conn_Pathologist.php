@@ -1,7 +1,7 @@
 <?php
 $servername = "proxysql";
-$username = "patients";
-$password = "patients";
+$username = "pathologist";
+$password = "pathologist";
 $dbname = "MadTestLab";
 $port = 6033;
 

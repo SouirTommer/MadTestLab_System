@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../connection/mysqli_conn.php';
+require_once '../connection/mysqli_conn_Physician.php';
 
 // Ensure the user is a LabStaff
 if ($_SESSION['role'] !== 'LabStaff') {

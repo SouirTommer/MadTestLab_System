@@ -8,6 +8,9 @@ ALTER INSTANCE ROTATE INNODB MASTER KEY;
 
 SET block_encryption_mode = 'aes-256-cbc';
 
+
+
+
 CREATE TABLE Accounts (
     AccountID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
@@ -162,3 +165,58 @@ INSERT INTO `LabStaffs` (`LabStaffID`, `AccountID`, `LabStaffType`, `FirstName`,
 (2, 5, 'Pathologist', 'Tai Man', 'Chan', '2024-11-11', 'Male', 0xf9377095ebee03417bc172f7c833d682, 0xaef4b7667ee741c9b0923540f9d88d78),
 (3, 6, 'Physician', 'Tim', 'kwan', '2024-11-19', 'Male', 0x181fff29282f2d3fe13430f511365ef4, 0x0919c213faaaf14555dc21490b9a6783),
 (4, 7, 'Pathologist', 'Vincent', 'Wong', '2024-11-20', 'Male', 0xa4b1e12e8ef8286cfe78a15c16d7b497, 0x4f40cdb18f7c6dd14683bf1a3c4c6b9fc5f3662097fdbe2178a9de7568f89cb3);
+
+
+
+CREATE USER 'guest'@'%' IDENTIFIED BY 'guest';
+GRANT SELECT, INSERT ON MadTestLab.Accounts TO 'guest'@'%';
+GRANT INSERT ON MadTestLab.Patients TO 'guest'@'%';
+GRANT SELECT(LabStaffType,AccountID) ON MadTestLab.LabStaffs TO 'guest'@'%';
+
+
+CREATE USER 'patients'@'%' IDENTIFIED BY 'patients';
+GRANT SELECT(PatientID,AccountID,FirstName,LastName) ON MadTestLab.Patients TO 'patients'@'%';
+GRANT SELECT(LabStaffID,LabStaffType,FirstName,LastName) ON MadTestLab.LabStaffs TO 'patients'@'%';
+GRANT SELECT(SecretaryID,FirstName,LastName) ON MadTestLab.Secretaries TO 'patients'@'%'; 
+GRANT SELECT(InsuranceName,InsuranceID) ON MadTestLab.Insurances TO 'patients'@'%';
+GRANT SELECT(TestName,TestCode) ON MadTestLab.TestsCatalog TO 'patients'@'%';
+GRANT SELECT ON MadTestLab.Appointments TO 'patients'@'%';
+GRANT SELECT ON MadTestLab.Orders TO 'patients'@'%';
+GRANT SELECT ON MadTestLab.Bills TO 'patients'@'%';
+
+
+CREATE USER 'secretary'@'%' IDENTIFIED BY 'secretary';
+GRANT SELECT(SecretaryID,AccountID,FirstName,LastName) ON MadTestLab.Secretaries TO 'secretary'@'%';
+GRANT SELECT(PatientID, FirstName, LastName) ON MadTestLab.Patients TO 'secretary'@'%';
+GRANT SELECT(LabStaffID, FirstName, LastName, LabStaffType) ON MadTestLab.LabStaffs TO 'secretary'@'%';
+GRANT SELECT(TestName,Price,TestCode) ON MadTestLab.TestsCatalog TO 'secretary'@'%';
+GRANT SELECT,INSERT,UPDATE ON MadTestLab.Appointments TO 'secretary'@'%';
+GRANT SELECT ON MadTestLab.Orders TO 'secretary'@'%';
+GRANT SELECT ON MadTestLab.Insurances TO 'secretary'@'%';
+GRANT SELECT,INSERT ON MadTestLab.Bills TO 'secretary'@'%';
+
+
+CREATE USER 'physician'@'%' IDENTIFIED BY 'physician';
+GRANT SELECT(AccountID,LabStaffID, FirstName, LastName) ON MadTestLab.LabStaffs TO 'physician'@'%';
+GRANT SELECT(PatientID, FirstName, LastName) ON MadTestLab.Patients TO 'physician'@'%';
+GRANT SELECT(SecretaryID,FirstName,LastName) ON MadTestLab.Secretaries TO 'physician'@'%';
+GRANT INSERT,SELECT ON MadTestLab.Orders TO 'physician'@'%';
+GRANT UPDATE,SELECT ON MadTestLab.Appointments TO 'physician'@'%';
+GRANT SELECT ON MadTestLab.TestsCatalog TO 'physician'@'%';
+
+
+CREATE USER 'pathologist'@'%' IDENTIFIED BY 'pathologist';
+GRANT SELECT,INSERT ON MadTestLab.Results TO 'pathologist'@'%';
+GRANT SELECT(LabStaffID,AccountID,FirstName,LastName) ON MadTestLab.LabStaffs TO 'pathologist'@'%';
+GRANT SELECT(PatientID,FirstName,LastName) ON MadTestLab.Patients TO 'pathologist'@'%';
+GRANT UPDATE,SELECT ON MadTestLab.Orders TO 'pathologist'@'%';
+GRANT SELECT(TestName,TestCode) ON MadTestLab.TestsCatalog TO 'pathologist'@'%';
+GRANT SELECT(SecretaryID,FirstName,LastName) ON MadTestLab.Secretaries TO 'pathologist'@'%';
+
+FLUSH PRIVILEGES;
+
+
+
+
+
+
