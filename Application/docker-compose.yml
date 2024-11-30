@@ -16,8 +16,8 @@ services:
       - AES_KEY_PATIENT_PRIVATE=pgmRbqBQs6WlKE97rMYhfQaalaHGKAsL
 
   mysql:
-    image: percona/percona-server:8.0.35-aarch64  #  ARM64
-    #image: percona/percona-server:8.0.35 # x86
+    # image: percona/percona-server:8.0.35-aarch64  #  ARM64
+    image: percona/percona-server:8.0.35 # x86
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: MadTestLab
@@ -35,8 +35,8 @@ services:
       - ./keyring:/var/lib/mysql-keyring
 
   phpmyadmin:
-      image: arm64v8/phpmyadmin #ARM64
-      #image: phpmyadmin/phpmyadmin #x86
+      # image: arm64v8/phpmyadmin #ARM64
+      image: phpmyadmin/phpmyadmin #x86
       environment:
         PMA_HOST: proxysql
         PMA_PORT: 6033
