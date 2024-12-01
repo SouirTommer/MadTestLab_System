@@ -58,6 +58,36 @@ mysql_users =
         password="root"
         default_hostgroup=0
         active=1
+    },
+    { 
+        username="guest"
+        password="guest"
+        default_hostgroup=0
+        active=1
+    },
+    { 
+        username="patients"
+        password="patients"
+        default_hostgroup=0
+        active=1
+    },
+    { 
+        username="secretary"
+        password="secretary"
+        default_hostgroup=0
+        active=1
+    },
+    { 
+        username="physician"
+        password="physician"
+        default_hostgroup=0
+        active=1
+    },
+    { 
+        username="pathologist"
+        password="pathologist"
+        default_hostgroup=0
+        active=1
     }
 )
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../connection/mysqli_conn.php';
+require_once '../../connection/mysqli_conn_Guest.php';
 session_start();
 
 $aesKeys = [

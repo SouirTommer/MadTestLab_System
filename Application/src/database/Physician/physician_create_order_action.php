@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once '../../connection/mysqli_conn.php';
+require_once '../../connection/mysqli_conn_Physician.php';
 
 require '../../Page/Account/auth.php';
 check_labstaff_type('Physician');
