@@ -2,9 +2,12 @@
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
     import StaffProfile from "../../components/StaffProfile.svelte";
-    import {fade} from "svelte/transition";
+    import Appointment from "../../components/Appointment.svelte";
+    import PatientRecord from "../../components/PatientRecord.svelte";
+    import StaffDashBoard from "../../components/StaffDashBoard.svelte";
+    import StaffBilling from "../../components/StaffBilling.svelte";
+    import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
-
 
     let currentTab = "dashboard"; // Tracks the active tab
 
@@ -14,10 +17,10 @@
     };
 </script>
 
-<div class="flex h-screen">
+<div class="flex h-screen ">
     <!-- Sidebar -->
     <aside
-        class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15"
+    class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
     >
         <div class="p-6 pt-10">
             <h1 class="font-semibold text-3xl">
@@ -59,6 +62,18 @@
                 <i class="fa-solid fa-book-medical"></i>
                 Patient Records
             </button>
+
+            <button
+                class="navItem {currentTab === 'staff_records'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "staff_records"}
+                on:click={() => (currentTab = "staff_records")}
+            >
+                <i class="fa-solid fa-users"></i>
+                Staff Records
+            </button>
+
             <button
                 class="navItem {currentTab === 'billing'
                     ? 'selected'
@@ -69,6 +84,7 @@
                 <i class="fa-solid fa-wallet"></i>
                 Billing
             </button>
+
             <p class="text-slate-500 text-m font-medium px-2">Setting</p>
 
             <button
@@ -97,41 +113,85 @@
     </aside>
 
     <SectionWrapper>
-        <main class="flex-1 p-6">
+        <main class="flex-1 ml-72 p-6 overflow-y-auto w-full">
             <div class="flex items-center gap-2 mb-6 py-4">
                 <h1 class="text-4xl font-bold pl-2">
                     <i class="fa-solid fa-wrench text-slate-600"></i> Admin Panel
                 </h1>
             </div>
-
+            
             {#if currentTab === "dashboard"}
-                <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
-                <p>
-                    Welcome to your patient portal. Here’s an overview of your
-                    recent activity.
-                </p>
-            {/if}
-            {#if currentTab === "appointments"}
-                <h2 class="text-3xl font-bold mb-4">Appointments</h2>
-                <p>View and manage appointments for patients.</p>
-            {/if}
-            {#if currentTab === "patient_records"}
-                <h2 class="text-3xl font-bold mb-4">Patient Records</h2>
-                <p>View and manage patient records and history.</p>
-            {/if}
-            {#if currentTab === "billing"}
-                <h2 class="text-3xl font-bold mb-4">Billing</h2>
-                <p>Check your bills, make payments, or view payment history.</p>
-            {/if}
-            {#if currentTab === "staff_records"}
-                <h2 class="text-3xl font-bold mb-4">Staff Records</h2>
-                <p>View and manage staff records and history.</p>
-            {/if}
-            {#if currentTab === "profile"}
-                <h2 class="text-3xl font-bold mb-4">Profile</h2>
-                <p>Update your personal information and account settings.</p>
-                <StaffProfile />
-                
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
+                    <p>
+                        Welcome to your patient portal. Here’s an overview of
+                        your recent activity.
+                    </p>
+                    <StaffDashBoard />
+                </div>
+            {:else if currentTab === "appointments"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Appointments</h2>
+                    <p>View and manage appointments for patients.</p>
+                    <Appointment />
+                </div>
+            {:else if currentTab === "patient_records"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Patient Records</h2>
+                    <p>View and manage patient records and history.</p>
+                    <PatientRecord />
+                </div>
+            {:else if currentTab === "billing"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Billing</h2>
+                    <p>
+                        Check your bills, make payments, or view payment
+                        history.
+                    </p>
+                    <StaffBilling />
+                </div>
+            {:else if currentTab === "staff_records"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Staff Records</h2>
+                    <p>View and manage staff records and history.</p>
+                </div>
+            {:else if currentTab === "profile"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Profile</h2>
+                    <p>
+                        Update your personal information and account settings.
+                    </p>
+                    <StaffProfile />
+                </div>
+            {:else}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Opps !</h2>
+                    <p>
+                        Looks like you are lost. Please select a tab from the
+                        sidebar.
+                    </p>
+                </div>
             {/if}
         </main>
     </SectionWrapper>

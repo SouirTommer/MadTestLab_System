@@ -1,6 +1,6 @@
 <script>
     import { fade } from "svelte/transition";
-
+    import {cubicInOut} from "svelte/easing";
     import SectionWrapper from "./SectionWrapper.svelte";
 
     var selectedTab = "general";
@@ -18,25 +18,28 @@
 <div class="flex flex-row mt-8">
     <div class="flex flex-col gap-2 items-start pb-10 md:pb-14 mr-20">
         <button
-            class="items-start text-start bg-transparent text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
-            class:bg-slate-100={selectedTab === "general"}
+            class="items-start text-start  text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
+            class:bg-slate-200={selectedTab === "general"}
             on:click={() => (selectedTab = "general")}
         >
             General
         </button>
         <button
-            class="bg-transparent text-start text-slate-600 font-medium sm:text-md md:text-md py-3 w-full items-start rounded-2xl hover:bg-slate-100 transition"
-            class:bg-slate-100={selectedTab === "authentication"}
+            class=" text-start text-slate-600 font-medium sm:text-md md:text-md py-3 w-full items-start rounded-2xl hover:bg-slate-100 transition"
+            class:bg-slate-200={selectedTab === "authentication"}
             on:click={() => (selectedTab = "authentication")}
         >
             Authentication
         </button>
     </div>
 
-    <div class="flex flex-col flex-1 items-start pb-10">
+    <div class="flex flex-col flex-1 items-start pb-10 transition">
         {#if selectedTab === "general"}
             <div
-                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200"
+                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200 transition "
+                in:fade={{ delay: 150, duration: 150 }}
+                out:fade={{ duration: 150, easing: cubicInOut }}
+                
             >
                 <div>
                     <h1 class="text-xl font-semibold">My information</h1>
@@ -112,7 +115,9 @@
             </div>
         {:else if selectedTab === "authentication"}
             <div
-                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200"
+                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200 transition"
+                in:fade={{ delay: 150, duration: 150 }}
+                out:fade={{ duration: 150, easing: cubicInOut }}
             >
                 <div>
                     <h1 class="text-xl font-semibold">Authentication</h1>

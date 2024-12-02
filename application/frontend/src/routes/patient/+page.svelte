@@ -39,7 +39,7 @@
 >
     <!-- Sidebar -->
     <aside
-        class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15"
+        class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
     >
         <div class="p-6 pt-10">
             <h1 class="font-semibold text-3xl">
@@ -124,7 +124,7 @@
     </aside>
 
     <SectionWrapper>
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-6 ml-72 overflow-y-auto">
             <div class="flex items-center gap-2 mb-6 py-4">
                 <i class={`fa-solid ${icon} text-yellow-500 text-4xl`}></i>
                 <h1 class="text-4xl font-bold pl-2">{greeting} , Tommer !</h1>

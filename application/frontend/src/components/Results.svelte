@@ -1,5 +1,7 @@
 <script>
-  let orders = [
+    import { fade } from "svelte/transition";
+
+    let orders = [
         {
             OrderID: "ORD001",
             PatientID: "PAT001",
@@ -7,7 +9,7 @@
             SecretaryID: "SEC001",
             TestCode: "TC001",
             OrderDateTime: "2023-10-01 10:00",
-            OrderStatus: "Pending"
+            OrderStatus: "Pending",
         },
         {
             OrderID: "ORD002",
@@ -16,7 +18,7 @@
             SecretaryID: "SEC002",
             TestCode: "TC002",
             OrderDateTime: "2023-10-02 11:00",
-            OrderStatus: "Completed"
+            OrderStatus: "Completed",
         },
         {
             OrderID: "ORD003",
@@ -25,25 +27,64 @@
             SecretaryID: "SEC003",
             TestCode: "TC003",
             OrderDateTime: "2023-10-03 12:00",
-            OrderStatus: "In Progress"
-        }
+            OrderStatus: "In Progress",
+        },
     ];
 
-
+    var filter = "all";
     function getStatusClass(status) {
         switch (status) {
-            case 'Pending':
-                return 'bg-yellow-200 text-yellow-800';
-            case 'Completed':
-                return 'bg-green-200 text-green-800';
-            case 'In Progress':
-                return 'bg-blue-200 text-blue-800';
+            case "Pending":
+                return "bg-yellow-200 text-yellow-800";
+            case "Completed":
+                return "bg-green-200 text-green-800";
+            case "In Progress":
+                return "bg-blue-200 text-blue-800";
             default:
-                return 'bg-gray-200 text-gray-800';
+                return "bg-gray-200 text-gray-800";
         }
     }
 </script>
+
 <div class="flex flex-col mt-8">
+    <div class="flex gap-4 pb-4">
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'all'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => (filter = "all")}
+        >
+            All
+        </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'pending'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => (filter = "pending")}
+        >
+            Pending
+        </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'completed'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => (filter = "completed")}
+        >
+            Completed
+        </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'inprogress'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => (filter = "inprogress")}
+        >
+            In Progress
+        </button>
+    </div>
     <table class="min-w-full bg-white border border-slate-200">
         <thead>
             <tr>
@@ -58,21 +99,25 @@
         </thead>
         <tbody>
             {#each orders as order}
-            <tr>
-                <td class="py-2 px-4 border-b">{order.OrderID}</td>
-                <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
-                <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
-                <td class="py-2 px-4 border-b">{order.TestCode}</td>
-                <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
-                <td class="py-2 px-4 border-b">
-                    <span class="status-tag  {getStatusClass(order.OrderStatus)}">{order.OrderStatus}</span>
-                </td>
-                <td class="py-2 px-4 border-b">
-                    <a href="" class="text-indigo-400 hover:underline">
-                        <i class="fas fa-eye"></i> View
-                    </a>
-                </td>
-            </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">{order.OrderID}</td>
+                    <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
+                    <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
+                    <td class="py-2 px-4 border-b">{order.TestCode}</td>
+                    <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
+                    <td class="py-2 px-4 border-b">
+                        <span
+                            class="status-tag {getStatusClass(
+                                order.OrderStatus,
+                            )}">{order.OrderStatus}</span
+                        >
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        <a href="" class="text-indigo-400 hover:underline">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
             {/each}
         </tbody>
     </table>
