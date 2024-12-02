@@ -1,0 +1,11 @@
+.DS_Store
+.vscode/
+node_modules/
+.env
+*.tmp
+*.swp
+vendor/
+keyring/
+log/
+alert/
+Application/.DS_Store
