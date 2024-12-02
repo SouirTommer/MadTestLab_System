@@ -120,6 +120,7 @@ check_role(['Secretary']);
             <nav>
                 <ul>
                     <li><a href="secretary_insurance.php">Insurances</a></li>
+                    <li><a href="secretary_result.php">Results</a></li>
                     <li><a href="secretary_bill.php">Bills</a></li>
                     <li><a href="secretary_order.php">Orders</a></li>
                     <li><a href="secretary_appointment.php">Appointments</a></li>

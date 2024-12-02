@@ -182,6 +182,7 @@ GRANT SELECT(TestName,TestCode) ON MadTestLab.TestsCatalog TO 'patients'@'%';
 GRANT SELECT ON MadTestLab.Appointments TO 'patients'@'%';
 GRANT SELECT ON MadTestLab.Orders TO 'patients'@'%';
 GRANT SELECT ON MadTestLab.Bills TO 'patients'@'%';
+GRANT SELECT ON MadTestLab.Results TO 'patients'@'%';
 
 
 CREATE USER 'secretary'@'%' IDENTIFIED BY 'secretary';
@@ -190,10 +191,11 @@ GRANT SELECT(PatientID, FirstName, LastName) ON MadTestLab.Patients TO 'secretar
 GRANT SELECT(LabStaffID, FirstName, LastName, LabStaffType) ON MadTestLab.LabStaffs TO 'secretary'@'%';
 GRANT SELECT(TestName,Price,TestCode) ON MadTestLab.TestsCatalog TO 'secretary'@'%';
 GRANT SELECT,INSERT,UPDATE ON MadTestLab.Appointments TO 'secretary'@'%';
-GRANT SELECT ON MadTestLab.Orders TO 'secretary'@'%';
+GRANT SELECT,INSERT,UPDATE ON MadTestLab.Orders TO 'secretary'@'%';
 GRANT SELECT ON MadTestLab.Insurances TO 'secretary'@'%';
 GRANT SELECT,INSERT ON MadTestLab.Bills TO 'secretary'@'%';
-
+GRANT SELECT ON MadTestLab.TestsCatalog TO 'secretary'@'%';
+GRANT SELECT ON MadTestLab.Results TO 'secretary'@'%';
 
 CREATE USER 'physician'@'%' IDENTIFIED BY 'physician';
 GRANT SELECT(AccountID,LabStaffID, FirstName, LastName) ON MadTestLab.LabStaffs TO 'physician'@'%';
@@ -211,6 +213,7 @@ GRANT SELECT(PatientID,FirstName,LastName) ON MadTestLab.Patients TO 'pathologis
 GRANT UPDATE,SELECT ON MadTestLab.Orders TO 'pathologist'@'%';
 GRANT SELECT(TestName,TestCode) ON MadTestLab.TestsCatalog TO 'pathologist'@'%';
 GRANT SELECT(SecretaryID,FirstName,LastName) ON MadTestLab.Secretaries TO 'pathologist'@'%';
+GRANT SELECT ON MadTestLab.Insurances TO 'pathologist'@'%';
 
 FLUSH PRIVILEGES;
 
