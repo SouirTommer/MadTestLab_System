@@ -1,7 +1,7 @@
 <script>
     import SectionWrapper from "./SectionWrapper.svelte";
 
-    let selectedTab = "general";
+    var selectedTab = "general";
 
     let staff = {
         id: "12345",
@@ -14,10 +14,10 @@
 </script>
 
 <div class="flex flex-row mt-8">
-    <div class="flex flex-col items-start pb-10 md:pb-14 mr-20">
+    <div class="flex flex-col gap-2 items-start pb-10 md:pb-14 mr-20">
         <button
             class="items-start text-start bg-transparent text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
-            class:bg-slate-200={selectedTab === "general"}
+            class:bg-slate-100={selectedTab === "general"}
 
             on:click={() => (selectedTab = "general")}
         >
@@ -25,7 +25,7 @@
         </button>
         <button
             class="bg-transparent text-start text-slate-600 font-medium sm:text-md md:text-md py-3 w-full items-start rounded-2xl hover:bg-slate-100 transition"
-            class:bg-slate-200={selectedTab === "authentication"}
+            class:bg-slate-100={selectedTab === "authentication"}
 
             on:click={() => (selectedTab = "authentication")}
         >

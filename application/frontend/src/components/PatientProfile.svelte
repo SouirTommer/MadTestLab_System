@@ -1,6 +1,6 @@
 <script>
     import SectionWrapper from "./SectionWrapper.svelte";
-    let selectedTab = "general";
+    var selectedTab = "pgeneral";
 
 
     let staff = {
@@ -15,25 +15,25 @@
 </script>
 
 <div class="flex flex-row mt-8">
-    <div class="flex flex-col items-start pb-10 md:pb-14 mr-20">
+    <div class="flex flex-col gap-2 items-start pb-10 md:pb-14 mr-20">
         <button
             class="items-start text-start bg-transparent text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-200 transition"
-            class:bg-slate-200={selectedTab === "general"}
-            on:click={() => (selectedTab = "general")}
+            class:bg-slate-200={selectedTab === "pgeneral"}
+            on:click={() => (selectedTab = "pgeneral")}
         >
             General
         </button>
         <button
             class="bg-transparent text-start text-slate-600 font-medium sm:text-md md:text-md py-3 w-full items-start rounded-2xl hover:bg-slate-100 transition"
-            class:bg-slate-200={selectedTab === "authentication"}
-            on:click={() => (selectedTab = "authentication")}
+            class:bg-slate-200={selectedTab === "pauthentication"}
+            on:click={() => (selectedTab = "pauthentication")}
         >
             Authentication
         </button>
     </div>
 
     <div class="flex flex-col flex-1 items-start pb-10">
-        {#if selectedTab === "general"}
+        {#if selectedTab === "pgeneral"}
             <div
                 class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200"
             >
@@ -109,7 +109,7 @@
                     />
                 </div>
             </div>
-        {:else if selectedTab === "authentication"}
+        {:else if selectedTab === "pauthentication"}
         <div
         class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200"
     >
