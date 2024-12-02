@@ -1,40 +1,56 @@
 <script>
+    import { cubicInOut } from "svelte/easing";
+    import { fade } from "svelte/transition";
+    import { tick } from "svelte";
+
     let todayAppointments = [
         {
             id: 1,
             patient: "John Doe",
             time: "10:00 AM",
-            info: "Age: 30, Type of Test: Blood Test, Phone: 123-456-7890",
+            age: 30,
+            typeOfTest: "Blood Test",
+            phone: "123-456-7890",
         },
         {
             id: 2,
             patient: "Jane Smith",
             time: "11:00 AM",
-            info: "Age: 25, Type of Test: Urine Test, Phone: 234-567-8901",
+            age: 25,
+            typeOfTest: "Urine Test",
+            phone: "234-567-8901",
         },
         {
             id: 3,
             patient: "Michael Johnson",
             time: "12:00 PM",
-            info: "Age: 45, Type of Test: X-Ray, Phone: 345-678-9012",
+            age: 45,
+            typeOfTest: "X-Ray",
+            phone: "345-678-9012",
         },
         {
             id: 4,
             patient: "Emily Davis",
             time: "1:00 PM",
-            info: "Age: 35, Type of Test: MRI, Phone: 456-789-0123",
+            age: 35,
+            typeOfTest: "MRI",
+            phone: "456-789-0123",
         },
         {
             id: 5,
             patient: "David Wilson",
             time: "2:00 PM",
-            info: "Age: 50, Type of Test: CT Scan, Phone: 567-890-1234",
+            age: 50,
+            typeOfTest: "CT Scan",
+            phone: "567-890-1234",
         },
         {
             id: 6,
             patient: "Sarah Brown",
             time: "3:00 PM",
-            info: "Age: 28, Type of Test: Blood Test, Phone: 678-901-2345",
+            age: 28,
+            typeOfTest: "Blood Test",
+            phone: "678-901-2345",
         },
     ];
 
@@ -43,68 +59,63 @@
             id: 1,
             patient: "Alice Johnson",
             time: "9:00 AM",
-            info: "Age: 40, Condition: Diabetes, Phone: 123-456-7890",
+            age: 40,
+            condition: "Diabetes",
+            phone: "123-456-7890",
         },
         {
             id: 2,
             patient: "Bob Brown",
             time: "10:30 AM",
-            info: "Age: 50, Condition: Hypertension, Phone: 234-567-8901",
+            age: 50,
+            condition: "Hypertension",
+            phone: "234-567-8901",
         },
         {
             id: 3,
             patient: "Michael Johnson",
             time: "12:00 PM",
-            info: "Age: 45, Condition: Flu, Phone: 345-678-9012",
+            age: 45,
+            condition: "Flu",
+            phone: "345-678-9012",
         },
         {
             id: 4,
             patient: "Emily Davis",
             time: "1:00 PM",
-            info: "Age: 35, Condition: Checkup, Phone: 456-789-0123",
+            age: 35,
+            condition: "Checkup",
+            phone: "456-789-0123",
         },
         {
             id: 5,
             patient: "David Wilson",
             time: "2:00 PM",
-            info: "Age: 50, Condition: Diabetes, Phone: 567-890-1234",
+            age: 50,
+            condition: "Diabetes",
+            phone: "567-890-1234",
         },
         {
             id: 6,
             patient: "Sarah Brown",
             time: "3:00 PM",
-            info: "Age: 28, Condition: Hypertension, Phone: 678-901-2345",
-        },
-        {
-            id: 7,
-            patient: "James Taylor",
-            time: "4:00 PM",
-            info: "Age: 60, Condition: Flu, Phone: 789-012-3456",
-        },
-        {
-            id: 8,
-            patient: "Patricia Anderson",
-            time: "5:00 PM",
-            info: "Age: 55, Condition: Checkup, Phone: 890-123-4567",
-        },
-        {
-            id: 9,
-            patient: "Robert Thomas",
-            time: "6:00 PM",
-            info: "Age: 40, Condition: Diabetes, Phone: 901-234-5678",
-        },
-        {
-            id: 10,
-            patient: "Linda Jackson",
-            time: "7:00 PM",
-            info: "Age: 65, Condition: Hypertension, Phone: 012-345-6789",
+            age: 28,
+            condition: "Hypertension",
+            phone: "678-901-2345",
         },
     ];
 
-    let selectedPatientInfo = "";
+    let selectedPatientAppointment = "";
+    let showPatientInfo = false;
 
-    function viewPatientInfo(info) {
-        selectedPatientInfo = info;
+    function viewPatientInfo(appointment) {
+        if (appointment === selectedPatientAppointment) {
+            selectedPatientAppointment = "";
+            showPatientInfo = false;
+        } else {
+            selectedPatientAppointment = appointment;
+            showPatientInfo = true;
+        }
     }
 
     function newAppointment() {
@@ -112,11 +123,12 @@
     }
 
     function closePatientInfo() {
-        selectedPatientInfo = "";
+        selectedPatientAppointment = "";
+        showPatientInfo = false;
     }
 </script>
 
-<div class="flex flex-col gap-4 p-6 w-full">
+<div class="flex flex-col gap-4 p-6 w-full w-5xl">
     <div class="flex justify-start">
         <div
             class="flex flex-col gap-6 p-6 w-full max-w-[800px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200 cursor-pointer"
@@ -152,10 +164,12 @@
             {#each todayAppointments as appointment}
                 <div class="flex justify-between w-full items-center">
                     <span>{appointment.patient}</span>
+                    <span class="flex-1"></span>
+
                     <span>{appointment.time}</span>
                     <button
                         class="text-indigo-400"
-                        on:click={() => viewPatientInfo(appointment.info)}
+                        on:click={() => viewPatientInfo(appointment)}
                     >
                         <i class="fa-solid fa-eye"></i>
                     </button>
@@ -170,22 +184,24 @@
                 Tomorrow's Appointments
             </h2>
             {#each tomorrowAppointments as appointment}
-                <div class="flex justify-between w-full items-center text-end">
+                <div class="flex justify-between w-full items-center">
                     <span>{appointment.patient}</span>
-                    <span class=" text-end">{appointment.time}</span>
+                    <span class="flex-1"></span>
+                    <span>{appointment.time}</span>
                     <button
                         class="text-indigo-400"
-                        on:click={() => viewPatientInfo(appointment.info)}
+                        on:click={() => viewPatientInfo(appointment)}
                     >
                         <i class="fa-solid fa-eye"></i>
                     </button>
                 </div>
             {/each}
         </div>
-
-        {#if selectedPatientInfo}
+        {#if showPatientInfo}
             <div
-                class="flex flex-col gap-6 p-6 w-full  h-fit max-w-[400px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200 relative"
+                class="flex flex-col gap-6 p-6 w-full max-w-[400px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200 relative"
+                in:fade={{ duration: 200, easing: cubicInOut }}
+                out:fade={{ duration: 200, easing: cubicInOut }}
             >
                 <button
                     class="absolute top-2 right-2 text-slate-600"
@@ -193,10 +209,41 @@
                 >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
+
                 <h2 class="text-xl font-semibold text-slate-700">
                     Patient Info
                 </h2>
-                <p class="text-slate-600">{selectedPatientInfo}</p>
+                <p class="text-slate-600 flex items-center gap-1 text-lg">
+                    <i class="fa-solid fa-clock"></i>
+                    <span class="pl-2">Appointment Time:</span>
+                    <span class="flex-1"></span>
+                    <span class="ml-2">{selectedPatientAppointment.time}</span>
+                </p>
+                <hr class="border-slate-200" />
+                <p class="text-slate-600 flex items-center gap-1 text-lg">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="pl-2">Age:</span>
+                    <span class="flex-1"></span>
+                    <span class="ml-2">{selectedPatientAppointment.age}</span>
+                </p>
+                <hr class="border-slate-200" />
+                <p class="text-slate-600 flex items-center gap-1 text-lg">
+                    <i class="fa-solid fa-vial"></i>
+                    <span class="pl-2">Type of Test:</span>
+                    <span class="flex-1"></span>
+                    <span class="ml-2"
+                        >{selectedPatientAppointment.typeOfTest ||
+                            selectedPatientAppointment.condition}</span
+                    >
+                </p>
+                <hr class="border-slate-200" />
+                <p class="text-slate-600 flex items-center gap-1 text-lg">
+                    <i class="fa-solid fa-phone"></i>
+                    <span class="pl-2">Phone:</span>
+                    <span class="flex-1"></span>
+                    <span class="ml-2">{selectedPatientAppointment.phone}</span>
+                </p>
+                <hr class="border-slate-200" />
             </div>
         {/if}
     </div>

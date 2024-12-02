@@ -6,6 +6,7 @@
     import PatientRecord from "../../components/PatientRecord.svelte";
     import StaffDashBoard from "../../components/StaffDashBoard.svelte";
     import StaffBilling from "../../components/StaffBilling.svelte";
+    import StaffRecord from "../../components/StaffRecords.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
 
@@ -17,10 +18,10 @@
     };
 </script>
 
-<div class="flex h-screen ">
+<div class="flex h-screen">
     <!-- Sidebar -->
     <aside
-    class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
+        class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
     >
         <div class="p-6 pt-10">
             <h1 class="font-semibold text-3xl">
@@ -99,7 +100,15 @@
             </button>
 
             <!-- push the div to bottom -->
+             
             <div class="flex-1"></div>
+            <button
+                class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                on:click={() => (window.location.href = "/")}
+            >
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </button>
             <p class="text-slate-500 font-medium text-xl px-4 py-1">
                 Secretary Staff
             </p>
@@ -113,13 +122,13 @@
     </aside>
 
     <SectionWrapper>
-        <main class="flex-1 ml-72 p-6 overflow-y-auto w-full">
-            <div class="flex items-center gap-2 mb-6 py-4">
+        <main class="flex-1 ml-72 p-6 overflow-y-auto min-w-[1400px]">
+            <div class="flexs items-center gap-2 mb-6 py-4">
                 <h1 class="text-4xl font-bold pl-2">
                     <i class="fa-solid fa-wrench text-slate-600"></i> Admin Panel
                 </h1>
             </div>
-            
+
             {#if currentTab === "dashboard"}
                 <div
                     in:fade={{ delay: 201, duration: 200 }}
@@ -169,6 +178,7 @@
                 >
                     <h2 class="text-3xl font-bold mb-4">Staff Records</h2>
                     <p>View and manage staff records and history.</p>
+                    <StaffRecord />
                 </div>
             {:else if currentTab === "profile"}
                 <div

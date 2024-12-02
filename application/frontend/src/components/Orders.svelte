@@ -85,40 +85,43 @@
             In Progress
         </button>
     </div>
-    <table class="min-w-full bg-white border border-slate-200">
-        <thead>
-            <tr>
-                <th class="py-2 px-4 border-b">OrderID</th>
-                <th class="py-2 px-4 border-b">LabStaffID</th>
-                <th class="py-2 px-4 border-b">SecretaryID</th>
-                <th class="py-2 px-4 border-b">TestCode</th>
-                <th class="py-2 px-4 border-b">OrderDateTime</th>
-                <th class="py-2 px-4 border-b">OrderStatus</th>
-                <th class="py-2 px-4 border-b">Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each orders as order}
+    <div>
+        <table class="min-w-full bg-white border border-slate-200">
+            <thead>
                 <tr>
-                    <td class="py-2 px-4 border-b">{order.OrderID}</td>
-                    <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
-                    <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
-                    <td class="py-2 px-4 border-b">{order.TestCode}</td>
-                    <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
-                    <td class="py-2 px-4 border-b">
-                        <span
-                            class="status-tag {getStatusClass(
-                                order.OrderStatus,
-                            )}">{order.OrderStatus}</span
-                        >
-                    </td>
-                    <td class="py-2 px-4 border-b">
-                        <a href="" class="text-indigo-400 hover:underline">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                    </td>
+                    <th class="py-2 px-4 border-b">OrderID</th>
+                    <th class="py-2 px-4 border-b">LabStaffID</th>
+                    <th class="py-2 px-4 border-b">SecretaryID</th>
+                    <th class="py-2 px-4 border-b">TestCode</th>
+                    <th class="py-2 px-4 border-b">OrderDateTime</th>
+                    <th class="py-2 px-4 border-b">OrderStatus</th>
+                    <th class="py-2 px-4 border-b">Details</th>
                 </tr>
-            {/each}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {#each orders as order}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{order.OrderID}</td>
+                        <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
+                        <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
+                        <td class="py-2 px-4 border-b">{order.TestCode}</td>
+                        <td class="py-2 px-4 border-b">{order.OrderDateTime}</td
+                        >
+                        <td class="py-2 px-4 border-b">
+                            <span
+                                class="status-tag {getStatusClass(
+                                    order.OrderStatus,
+                                )}">{order.OrderStatus}</span
+                            >
+                        </td>
+                        <td class="py-2 px-4 border-b">
+                            <a href="" class="text-indigo-400 hover:underline">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
 </div>
