@@ -1,4 +1,5 @@
 <script>
+    
     import { goto } from '$app/navigation';
 
     // Functions to handle navigation

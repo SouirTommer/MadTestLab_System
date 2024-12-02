@@ -1,4 +1,5 @@
 <script>
+    import {fade} from "svelte/transition";
     import CtAs from "./CTAs.svelte";
     import Header from "./Header.svelte";
     import SectionWrapper from "./SectionWrapper.svelte";

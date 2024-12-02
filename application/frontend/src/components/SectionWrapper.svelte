@@ -1,5 +1,6 @@
 <script>
     export let id;
+    import { fade } from "svelte/transition";
 </script>
 
 <section {id} class = {"min-h-screen flex flex-col px-4"}>

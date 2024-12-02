@@ -3,6 +3,10 @@
     import Header from "../../components/Header.svelte";
     import PatientProfile from "../../components/PatientProfile.svelte";
     import Orders from "../../components/Orders.svelte";
+    import Results from "../../components/Results.svelte";
+    import { fade } from "svelte/transition";
+    import { cubicInOut } from "svelte/easing";
+
     let currentTab = "dashboard"; // Tracks the active tab
 
     function getGreetingWithIcon() {
@@ -97,6 +101,13 @@
             </button>
             <!-- push the div to bottom -->
             <div class="flex-1"></div>
+            <button
+                class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                on:click={() => (window.location.href = "/")}
+            >
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </button>
             <div
                 class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
@@ -114,29 +125,64 @@
             </div>
 
             {#if currentTab === "dashboard"}
-                <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
-                <p>
-                    Welcome to your patient portal. Here’s an overview of your
-                    recent activity.
-                </p>
-            {/if}
-            {#if currentTab === "test_order"}
-                <h2 class="text-3xl font-bold mb-4">Test Order</h2>
-                <p>Order new tests or view your pending test orders.</p>
-                <Orders />
-            {/if}
-            {#if currentTab === "test_results"}
-                <h2 class="text-3xl font-bold mb-4">Test Results</h2>
-                <p>View your test results and download reports.</p>
-            {/if}
-            {#if currentTab === "billing"}
-                <h2 class="text-3xl font-bold mb-4">Billing</h2>
-                <p>Check your bills, make payments, or view payment history.</p>
-            {/if}
-            {#if currentTab === "profile"}
-                <h2 class="text-3xl font-bold mb-4">Profile</h2>
-                <p>Update your personal information and account settings.</p>
-                <PatientProfile />
+                <div
+                    in:fade={{ delay: 200, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
+                    <p>
+                        Welcome to your patient portal. Here’s an overview of
+                        your recent activity.
+                    </p>
+                </div>
+            {:else if currentTab === "test_order"}
+                <div
+                    in:fade={{ delay: 200, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Test Order</h2>
+                    <p>Order new tests or view your pending test orders.</p>
+                    <Orders />
+                </div>
+            {:else if currentTab === "test_results"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Test Results</h2>
+                    <p>View your test results and download reports.</p>
+                    <Results />
+                </div>
+            {:else if currentTab === "billing"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Billing</h2>
+                    <p>
+                        Check your bills, make payments, or view payment
+                        history.
+                    </p>
+                </div>
+            {:else if currentTab === "profile"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Profile</h2>
+                    <p>
+                        Update your personal information and account settings.
+                    </p>
+                    <PatientProfile />
+                </div>
+            {:else}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
+                    <p>Seems like you're lost. Click on the tabs to navigate</p>
+                </div>
             {/if}
         </main>
     </SectionWrapper>

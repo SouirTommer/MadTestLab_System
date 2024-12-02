@@ -1,4 +1,6 @@
 <script>
+    import { fade } from "svelte/transition";
+
     import SectionWrapper from "./SectionWrapper.svelte";
 
     var selectedTab = "general";
@@ -18,7 +20,6 @@
         <button
             class="items-start text-start bg-transparent text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
             class:bg-slate-100={selectedTab === "general"}
-
             on:click={() => (selectedTab = "general")}
         >
             General
@@ -26,7 +27,6 @@
         <button
             class="bg-transparent text-start text-slate-600 font-medium sm:text-md md:text-md py-3 w-full items-start rounded-2xl hover:bg-slate-100 transition"
             class:bg-slate-100={selectedTab === "authentication"}
-
             on:click={() => (selectedTab = "authentication")}
         >
             Authentication
@@ -111,34 +111,33 @@
                 </div>
             </div>
         {:else if selectedTab === "authentication"}
-        <div
-        class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200"
-    >
-        <div>
-            <h1 class="text-xl font-semibold">Authentication</h1>
-            <p class="text-slate-500 font-normal">
-                Manage your Authentication Credentials
-            </p>
-        </div>
-
-        <div class="flex flex-col">
-            <label
-                for="password"
-                class="text-md font-medium text-slate-600"
+            <div
+                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200"
             >
-                Password
-            </label>
-            <input
-                readonly
-                id="password"
-                type="text"
-                placeholder="Enter your password"
-                value={staff.password}
-                class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
-        </div>
-        
-    </div>
+                <div>
+                    <h1 class="text-xl font-semibold">Authentication</h1>
+                    <p class="text-slate-500 font-normal">
+                        Manage your Authentication Credentials
+                    </p>
+                </div>
+
+                <div class="flex flex-col">
+                    <label
+                        for="password"
+                        class="text-md font-medium text-slate-600"
+                    >
+                        Password
+                    </label>
+                    <input
+                        readonly
+                        id="password"
+                        type="text"
+                        placeholder="Enter your password"
+                        value={staff.password}
+                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
+            </div>
         {/if}
     </div>
 </div>

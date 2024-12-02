@@ -1,4 +1,6 @@
 <script>
+        import {fade} from "svelte/transition";
+
     import SectionWrapper from "./SectionWrapper.svelte";
     var selectedTab = "pgeneral";
 

@@ -1,14 +1,34 @@
 <script>
-    import { onMount } from 'svelte';
-    import { orders } from '../../stores/ordersStore';
+  let orders = [
+        {
+            OrderID: "ORD001",
+            PatientID: "PAT001",
+            LabStaffID: "LAB001",
+            SecretaryID: "SEC001",
+            TestCode: "TC001",
+            OrderDateTime: "2023-10-01 10:00",
+            OrderStatus: "Pending"
+        },
+        {
+            OrderID: "ORD002",
+            PatientID: "PAT002",
+            LabStaffID: "LAB002",
+            SecretaryID: "SEC002",
+            TestCode: "TC002",
+            OrderDateTime: "2023-10-02 11:00",
+            OrderStatus: "Completed"
+        },
+        {
+            OrderID: "ORD003",
+            PatientID: "PAT003",
+            LabStaffID: "LAB003",
+            SecretaryID: "SEC003",
+            TestCode: "TC003",
+            OrderDateTime: "2023-10-03 12:00",
+            OrderStatus: "In Progress"
+        }
+    ];
 
-    let ordersList = [];
-
-    onMount(() => {
-        orders.subscribe(value => {
-            ordersList = value;
-        });
-    });
 
     function getStatusClass(status) {
         switch (status) {
@@ -16,8 +36,8 @@
                 return 'bg-yellow-200 text-yellow-800';
             case 'Completed':
                 return 'bg-green-200 text-green-800';
-            case 'Cancelled':
-                return 'bg-red-200 text-red-800';
+            case 'In Progress':
+                return 'bg-blue-200 text-blue-800';
             default:
                 return 'bg-gray-200 text-gray-800';
         }
@@ -33,6 +53,7 @@
                 <th class="py-2 px-4 border-b">TestCode</th>
                 <th class="py-2 px-4 border-b">OrderDateTime</th>
                 <th class="py-2 px-4 border-b">OrderStatus</th>
+                <th class="py-2 px-4 border-b">Details</th>
             </tr>
         </thead>
         <tbody>
@@ -45,6 +66,11 @@
                 <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
                 <td class="py-2 px-4 border-b">
                     <span class="status-tag  {getStatusClass(order.OrderStatus)}">{order.OrderStatus}</span>
+                </td>
+                <td class="py-2 px-4 border-b">
+                    <a href="" class="text-indigo-400 hover:underline">
+                        <i class="fas fa-eye"></i> View
+                    </a>
                 </td>
             </tr>
             {/each}

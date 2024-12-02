@@ -1,4 +1,5 @@
 <script>
+    import {fade} from "svelte/transition";
     let orders = [
         {
             OrderID: "ORD001",
@@ -54,6 +55,8 @@
                 <th class="py-2 px-4 border-b">TestCode</th>
                 <th class="py-2 px-4 border-b">OrderDateTime</th>
                 <th class="py-2 px-4 border-b">OrderStatus</th>
+                <th class="py-2 px-4 border-b">Details</th>
+
             </tr>
         </thead>
         <tbody>
@@ -66,6 +69,11 @@
                     <td class="py-2 px-4 border-b">{order.OrderDateTime}</td>
                     <td class="py-2 px-4 border-b">
                         <span class="status-tag  {getStatusClass(order.OrderStatus)}">{order.OrderStatus}</span>
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        <a href="" class="text-indigo-400 hover:underline">
+                            <i class="fas fa-eye"></i> View
+                        </a>
                     </td>
                 </tr>
             {/each}
