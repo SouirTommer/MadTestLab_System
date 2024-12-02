@@ -18,6 +18,7 @@ docker compose up
 - The application is accessible on port **8080**.
 - phpMyAdmin can be accessed on port **8081**.
 - MySQL is accessible on port **3306**.
+- Proxysql is accessible on port **6033**.
 
 ### Accessing the Application
 

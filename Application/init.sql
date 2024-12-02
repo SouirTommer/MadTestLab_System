@@ -8,6 +8,9 @@ ALTER INSTANCE ROTATE INNODB MASTER KEY;
 
 SET block_encryption_mode = 'aes-256-cbc';
 
+
+
+
 CREATE TABLE Accounts (
     AccountID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
@@ -210,3 +213,9 @@ GRANT SELECT(TestName,TestCode) ON MadTestLab.TestsCatalog TO 'pathologist'@'%';
 GRANT SELECT(SecretaryID,FirstName,LastName) ON MadTestLab.Secretaries TO 'pathologist'@'%';
 
 FLUSH PRIVILEGES;
+
+
+
+
+
+
