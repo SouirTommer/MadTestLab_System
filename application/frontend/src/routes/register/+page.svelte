@@ -1,6 +1,9 @@
 <script>
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
+    import {fade} from "svelte/transition";
+    import { cubicInOut } from "svelte/easing";
+
 
     async function handleRegister(event) {
         event.preventDefault(); // Prevent page reload
@@ -23,7 +26,8 @@
 <SectionWrapper>
     <Header />
     <main
-        class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14"
+        class="flex flex-col gap-10 flex-1 items-center justify-center pb-10 md:pb-14" 
+        
     >
         <h2
             class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl max-w-[1200px] mx-auto w-full text-center font-semibold"

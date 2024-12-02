@@ -4,6 +4,8 @@
     import PatientProfile from "../../components/PatientProfile.svelte";
     import Orders from "../../components/Orders.svelte";
     import Results from "../../components/Results.svelte";
+    import Billing from "../../components/Billing.svelte";
+
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
 
@@ -30,7 +32,11 @@
     };
 </script>
 
-<div class="flex h-screen">
+<div
+    class="flex h-screen"
+    in:fade={{ delay: 200, duration: 200 }}
+    out:fade={{ duration: 200, easing: cubicInOut }}
+>
     <!-- Sidebar -->
     <aside
         class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15"
@@ -163,6 +169,7 @@
                         Check your bills, make payments, or view payment
                         history.
                     </p>
+                    <Billing />
                 </div>
             {:else if currentTab === "profile"}
                 <div

@@ -2,6 +2,10 @@
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
     import StaffProfile from "../../components/StaffProfile.svelte";
+    import {fade} from "svelte/transition";
+    import { cubicInOut } from "svelte/easing";
+
+
     let currentTab = "dashboard"; // Tracks the active tab
 
     let user = {
