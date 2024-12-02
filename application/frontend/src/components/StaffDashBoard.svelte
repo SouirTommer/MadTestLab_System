@@ -156,7 +156,7 @@
 
     <div class="flex flex-row gap-4">
         <div
-            class="flex flex-col gap-6 p-6 h-fit w-full max-w-[400px] h-auto bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200"
+            class="flex flex-col gap-6 p-6 h-fit w-full max-w-[400px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200"
         >
             <h2 class="text-xl font-semibold text-slate-700">
                 Today's Appointments
@@ -213,6 +213,14 @@
                 <h2 class="text-xl font-semibold text-slate-700">
                     Patient Info
                 </h2>
+                <p class="text-slate-600 flex items-center gap-1 text-lg">
+                    <i class="fa-solid fa-clock"></i>
+                    <span class="pl-2">Patient Name:</span>
+                    <span class="flex-1"></span>
+                    <span class="ml-2">{selectedPatientAppointment.patient}</span>
+                </p>
+                <hr class="border-slate-200" />
+
                 <p class="text-slate-600 flex items-center gap-1 text-lg">
                     <i class="fa-solid fa-clock"></i>
                     <span class="pl-2">Appointment Time:</span>
