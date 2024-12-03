@@ -7,6 +7,7 @@
     import StaffDashBoard from "../../components/StaffDashBoard.svelte";
     import StaffBilling from "../../components/StaffBilling.svelte";
     import StaffRecord from "../../components/StaffRecords.svelte";
+    import NewAppointment from "../../components/StaffCreateAppointment.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { onMount } from "svelte";
@@ -35,6 +36,29 @@
             user.id = getCookie("accountId");
         }
     });
+
+    function logout() {
+        showAlertBox("Logging out...", "#f44336");
+        handleLogout(goto);
+    }
+
+    function showAlertBox(message, backgroundColor) {
+        const alertBox = document.createElement("div");
+        document.body.appendChild(alertBox);
+        setTimeout(() => {
+            document.body.removeChild(alertBox);
+        }, 3000);
+        alertBox.textContent = message;
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.left = "50%";
+        alertBox.style.transform = "translateX(-50%)";
+        alertBox.style.backgroundColor = backgroundColor || "#4caf50";
+        alertBox.style.color = "white";
+        alertBox.style.padding = "10px 20px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.zIndex = "1000";
+    }
 </script>
 
 <div class="flex h-screen overflow-x-hidden">
@@ -123,7 +147,7 @@
             <div class="flex-1"></div>
             <button
                 class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                on:click={() => handleLogout(goto)}
+                on:click={() => logout()}
             >
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 Logout
@@ -134,8 +158,8 @@
             <div
                 class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
-            <p class="text-xl">{user.name}</p>
-            <p class="text-slate-400">User ID: {user.id}</p>
+                <p class="text-xl">{user.name}</p>
+                <p class="text-slate-400">User ID: {user.id}</p>
             </div>
         </nav>
     </aside>

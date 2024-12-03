@@ -17,6 +17,5 @@ export function deleteAllCookies() {
 
 export function handleLogout(goto) {
     deleteAllCookies();
-    alert("You have been logged out. Redirecting to login page...");
     goto("/");
 }

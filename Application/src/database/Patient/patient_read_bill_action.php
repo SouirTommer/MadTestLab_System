@@ -83,6 +83,9 @@ if ($billsResult->num_rows > 0) {
 $stmt->close();
 $conn->close();
 
-// Return JSON response
-header('Content-Type: application/json');
-echo json_encode($bills);
+if (!empty($results)) {
+    echo json_encode(['status' => 'success', 'data' => $results]);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'No results found']);
+}
+?>

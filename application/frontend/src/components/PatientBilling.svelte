@@ -2,28 +2,35 @@
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import SectionWrapper from "./SectionWrapper.svelte";
+    import { onMount } from "svelte";
+
     let selectedTab = "outstanding"; // Default selected tab
 
-    let staff = {
-        id: "12345",
-        name: "Tommer",
-        role: "Lab Secretary",
-        email: "souirTOmmer@gmail.com",
-        phone: "54329876",
-        password: "password123", // Note: In a real application, never store passwords in plain text
-    };
+    let outstandingPayments = []; // Reactive variable to store outstanding payments
+    let paymentHistory = []; // Reactive variable to store payment history
 
-    let outstandingPayments = [
-        { id: 1, amount: "$200", dueDate: "2023-10-01" },
-        { id: 2, amount: "$150", dueDate: "2023-11-01" },
-    ];
+    onMount(() => {
+        fetchBillingInfo(); // Fetch billing information when the component is mounted
+    });
 
-    let paymentHistory = [
-        { id: 1, amount: "$100", date: "2023-09-01" },
-        { id: 2, amount: "$50", date: "2023-08-01" },
-    ];
+    async function fetchBillingInfo() {
+        try {
+            const response = await fetch("http://localhost:8080/database/Patient/patient_read_bill_action.php", {
+                credentials: 'include' // Include credentials (cookies) with the request
+            });
+            const data = await response.json();
+            console.log('Fetched data:', data); // Debugging: Log fetched data
 
-    console.log("Billing component loaded");
+            if (data.status === 'success') {
+                // Separate outstanding payments and payment history
+                outstandingPayments = data.data.filter(payment => payment.PaymentStatus === 'Outstanding');
+                paymentHistory = data.data.filter(payment => payment.PaymentStatus !== 'Outstanding');
+            }
+        } catch (error) {
+            console.error('Error fetching billing info:', error);
+        }
+    }
+
 </script>
 
 <div class="flex flex-col h-full">
@@ -63,9 +70,12 @@
                 </div>
                 {#each outstandingPayments as payment}
                     <div class="flex justify-between w-full">
-                        <span>Payment ID: {payment.id}</span>
-                        <span>Amount: {payment.amount}</span>
-                        <span>Due Date: {payment.dueDate}</span>
+                        <span>Payment ID: {payment.BillID}</span>
+                        <span>Order ID: {payment.OrderID}</span>
+                        <span>Amount: {payment.Amount}</span>
+                        <span>Due Date: {payment.BillDateTime}</span>
+                        <span>Test Name: {payment.TestName}</span>
+                        <span>Insurance: {payment.InsuranceName}</span>
                     </div>
                 {/each}
             </div>
@@ -83,9 +93,12 @@
                 </div>
                 {#each paymentHistory as payment}
                     <div class="flex justify-between w-full">
-                        <span>Payment ID: {payment.id}</span>
-                        <span>Amount: {payment.amount}</span>
-                        <span>Date: {payment.date}</span>
+                        <span>Payment ID: {payment.BillID}</span>
+                        <span>Order ID: {payment.OrderID}</span>
+                        <span>Amount: {payment.Amount}</span>
+                        <span>Date: {payment.BillDateTime}</span>
+                        <span>Test Name: {payment.TestName}</span>
+                        <span>Insurance: {payment.InsuranceName}</span>
                     </div>
                 {/each}
             </div>

@@ -6,7 +6,7 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import { getCookie } from "../../lib/api.js";
-    
+
     onMount(() => {
         const username = getCookie("username");
         const role = getCookie("role");
@@ -27,6 +27,24 @@
             }
         }
     });
+
+    function showAlertBox(message, backgroundColor) {
+        const alertBox = document.createElement("div");
+        document.body.appendChild(alertBox);
+        setTimeout(() => {
+            document.body.removeChild(alertBox);
+        }, 3000);
+        alertBox.textContent = message;
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.left = "50%";
+        alertBox.style.transform = "translateX(-50%)";
+        alertBox.style.backgroundColor = backgroundColor || "#4caf50";
+        alertBox.style.color = "white";
+        alertBox.style.padding = "10px 20px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.zIndex = "1000";
+    }
     async function handleLogin(event) {
         event.preventDefault(); // Prevent page reload
         const formData = new FormData(event.target);
@@ -51,9 +69,7 @@
                 document.cookie = `username=${result.username}; path=/`;
                 document.cookie = `role=${result.role}; path=/`;
                 document.cookie = `accountId=${result.accountId}; path=/`;
-                alert(
-                    "Login successful! Redirecting to appropriate landing page...",
-                );
+                showAlertBox("Login successful! Redirecting...", "#4caf50");
                 switch (result.role) {
                     case "Patient":
                         goto("/patient");
@@ -66,15 +82,18 @@
                         break;
                     default:
                         console.error("Unknown role:", result.role);
-                        alert("Unknown role. Please contact support.");
+                        showAlertBox(
+                            "Unknown role. Please contact support.",
+                            "#f44336",
+                        );
                 }
             } else {
                 console.error("Login failed:", result.message);
-                alert("Login failed. Please try again.");
+                showAlertBox("Login failed. Please try again.", "#f44336");
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("An error occurred. Please try again.");
+            showAlertBox("An error occurred. Please try again.", "#f44336");
         }
     }
 </script>

@@ -2,75 +2,45 @@
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { goto } from "$app/navigation";
-    import { onMount, afterUpdate } from "svelte";
+    import { onMount } from "svelte";
 
     let appointments = []; // Reactive variable to store fetched orders
-    let patients = [];
-    let physicians = [];
-    let allAppointments = []; // All appointments
-    let scheduledAppointments = []; // Scheduled appointments
-    let completedAppointments = []; // Completed appointments
-    let filteredAppointments = []; // Reactive variable to store filtered appointments
-    let filter = "all";
 
-    onMount(async () => {
+    onMount(() => {
+        fetchOrders(); // Fetch orders when the component is mounted
+    });
+
+    async function fetchOrders() {
         try {
             const response = await fetch(
-                "http://localhost:8080/database/Secretary/secretary_read_appointment_action.php",
+                "http://localhost:8080/database/Patient/patient_read_appointment_action.php",
                 {
                     credentials: "include", // Include credentials (cookies) with the request
                 },
             );
             const data = await response.json();
-            patients = data.patients;
-            physicians = data.physicians;
-            appointments = data.appointments;
-            console.log("Fetched data:", data);
-            categorizeAppointments();
-            filterAppointments();
+            console.log("Fetched data:", data); // Debugging: Log fetched data
+            appointments = data;
+            console.log("Appointments:", appointments);
         } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    });
-
-    function categorizeAppointments() {
-        allAppointments = appointments;
-        scheduledAppointments = appointments.filter(
-            (appointment) =>
-                appointment.AppointmentsStatus.toLowerCase() === "scheduled",
-        );
-        completedAppointments = appointments.filter(
-            (appointment) =>
-                appointment.AppointmentsStatus.toLowerCase() === "completed",
-        );
-    }
-
-    function filterAppointments() {
-        switch (filter) {
-            case "all":
-                filteredAppointments = allAppointments;
-                break;
-            case "scheduled":
-                filteredAppointments = scheduledAppointments;
-                break;
-            case "completed":
-                filteredAppointments = completedAppointments;
-                break;
-            default:
-                filteredAppointments = allAppointments;
+            console.error("Error fetching orders:", error);
         }
     }
 
     function getStatusClass(status) {
-        switch (status.toLowerCase()) {
-            case "scheduled":
+        switch (status) {
+            case "Scheduled":
                 return "bg-yellow-200 text-yellow-800";
-            case "completed":
+            case "Completed":
                 return "bg-green-200 text-green-800";
+            case "In Progress":
+                return "bg-blue-200 text-blue-800";
             default:
                 return "bg-gray-200 text-gray-800";
         }
     }
+
+    var filter = "all";
 </script>
 
 <div class="flex flex-col mt-8">
@@ -80,10 +50,7 @@
             'all'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "all";
-                filterAppointments();
-            }}
+            on:click={() => (filter = "all")}
         >
             All
         </button>
@@ -92,10 +59,7 @@
             'scheduled'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "scheduled";
-                filterAppointments();
-            }}
+            on:click={() => (filter = "scheduled")}
         >
             Scheduled
         </button>
@@ -104,13 +68,11 @@
             'completed'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "completed";
-                filterAppointments();
-            }}
+            on:click={() => (filter = "completed")}
         >
             Completed
         </button>
+
     </div>
     <div>
         <table class="min-w-full bg-white border border-gray-200">
@@ -125,11 +87,8 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-                {#each filteredAppointments as appointment}
-                    <tr
-                        in:fade={{ delay: 200, duration: 200 }}
-                        out:fade={{ duration: 200, easing: cubicInOut }}
-                    >
+                {#each appointments as appointment}
+                    <tr>
                         <td class="py-2 px-4 border"
                             >{appointment.AppointmentID}</td
                         >
@@ -148,14 +107,9 @@
                         <td class="py-2 px-4 border"
                             >{appointment.AppointmentDateTime}</td
                         >
-                        <td
-                            class="py-2 px-4 border status-tag
+                        <td class="py-2 px-4 border status-tag 
                                 )}"
-                            ><span
-                                class="status-tag {getStatusClass(
-                                    appointment.AppointmentsStatus,
-                                )}">{appointment.AppointmentsStatus}</span
-                            ></td
+                            ><span class="status-tag {getStatusClass(appointment.AppointmentsStatus)}">{appointment.AppointmentsStatus}</span></td
                         >
                     </tr>
                 {/each}

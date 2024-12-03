@@ -5,6 +5,7 @@
     import Orders from "../../components/PatientOrders.svelte";
     import Results from "../../components/PatientResults.svelte";
     import Billing from "../../components/PatientBilling.svelte";
+    import Appointment from "../../components/PatientAppointment.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { onMount } from "svelte";
@@ -50,6 +51,29 @@
     }
 
     const { greeting, icon } = getGreetingWithIcon();
+
+    function logout() {
+        showAlertBox("Logging out...", "#f44336");
+        handleLogout(goto);
+    }
+
+    function showAlertBox(message, backgroundColor) {
+        const alertBox = document.createElement("div");
+        document.body.appendChild(alertBox);
+        setTimeout(() => {
+            document.body.removeChild(alertBox);
+        }, 3000);
+        alertBox.textContent = message;
+        alertBox.style.position = "fixed";
+        alertBox.style.top = "20px";
+        alertBox.style.left = "50%";
+        alertBox.style.transform = "translateX(-50%)";
+        alertBox.style.backgroundColor = backgroundColor || "#4caf50";
+        alertBox.style.color = "white";
+        alertBox.style.padding = "10px 20px";
+        alertBox.style.borderRadius = "5px";
+        alertBox.style.zIndex = "1000";
+    }
 </script>
 
 <div
@@ -81,6 +105,17 @@
                 Dashboard
             </button>
             <p class="text-slate-500 text-m font-medium px-2">My Test</p>
+            <button
+                class="navItem {currentTab === 'appointment'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "appointment"}
+                on:click={() => (currentTab = "appointment")}
+            >
+                <i class="fa-solid fa-calendar-check"></i>
+
+                Appointment
+            </button>
             <button
                 class="navItem {currentTab === 'test_order'
                     ? 'selected'
@@ -129,7 +164,7 @@
             <div class="flex-1"></div>
             <button
                 class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                on:click={() => handleLogout(goto)}
+                on:click={() => logout()}
             >
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 Logout
@@ -144,7 +179,7 @@
     </aside>
 
     <SectionWrapper>
-        <main class="flex-1 p-6 ml-72 overflow-y-auto">
+        <main class="flex-1 p-6 ml-72 overflow-y-auto w-[1400px]">
             <div class="flex items-center gap-2 mb-6 py-4">
                 <i class={`fa-solid ${icon} text-yellow-500 text-4xl`}></i>
                 <h1 class="text-4xl font-bold pl-2">
@@ -162,6 +197,15 @@
                         Welcome to your patient portal. Here’s an overview of
                         your recent activity.
                     </p>
+                </div>
+            {:else if currentTab === "appointment"}
+                <div
+                    in:fade={{ delay: 200, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Appointment</h2>
+                    <p>View your Appointment.</p>
+                    <Appointment />
                 </div>
             {:else if currentTab === "test_order"}
                 <div

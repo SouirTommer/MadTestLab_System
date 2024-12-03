@@ -2,6 +2,7 @@
     import { cubicInOut } from "svelte/easing";
     import { fade } from "svelte/transition";
     import { tick } from "svelte";
+    import StaffCreateAppointment from "./StaffCreateAppointment.svelte";
 
     let todayAppointments = [
         {
@@ -107,6 +108,7 @@
 
     let selectedPatientAppointment = "";
     let showPatientInfo = false;
+    let showModal = false; // State variable to control modal visibility
 
     function viewPatientInfo(appointment) {
         if (appointment === selectedPatientAppointment) {
@@ -119,12 +121,17 @@
     }
 
     function newAppointment() {
-        alert("New Appointment button clicked");
+        
+        showModal = true; // Show the modal when the button is clicked
     }
 
     function closePatientInfo() {
         selectedPatientAppointment = "";
         showPatientInfo = false;
+    }
+
+    function closeModal() {
+        showModal = false; // Close the modal
     }
 </script>
 
@@ -159,22 +166,25 @@
             class="flex flex-col gap-6 p-6 h-fit w-full max-w-[400px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200"
         >
             <h2 class="text-xl font-semibold text-slate-700">
-            Today's Appointments
+                Today's Appointments
             </h2>
             {#each todayAppointments as appointment}
-            <div
-                class="flex justify-between w-full items-center {selectedPatientAppointment === appointment ? 'bg-slate-200' : ''} rounded-lg"
-            >
-                <span class="pl-4">{appointment.patient}</span>
-                <span class="flex-1"></span>
-                <span>{appointment.time}</span>
-                <button
-                class="text-indigo-400 bg-transparent"
-                on:click={() => viewPatientInfo(appointment)}
+                <div
+                    class="flex justify-between w-full items-center {selectedPatientAppointment ===
+                    appointment
+                        ? 'bg-slate-200'
+                        : ''} rounded-lg"
                 >
-                <i class="fa-solid fa-eye"></i>
-                </button>
-            </div>
+                    <span class="pl-4">{appointment.patient}</span>
+                    <span class="flex-1"></span>
+                    <span>{appointment.time}</span>
+                    <button
+                        class="text-indigo-400 bg-transparent"
+                        on:click={() => viewPatientInfo(appointment)}
+                    >
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
             {/each}
         </div>
 
@@ -185,19 +195,22 @@
                 Tomorrow's Appointments
             </h2>
             {#each tomorrowAppointments as appointment}
-            <div
-            class="flex justify-between w-full items-center {selectedPatientAppointment === appointment ? 'bg-slate-200' : ''} rounded-lg"
-        >
-            <span class="pl-4">{appointment.patient}</span>
-            <span class="flex-1"></span>
-            <span>{appointment.time}</span>
-            <button
-            class="text-indigo-400 bg-transparent"
-            on:click={() => viewPatientInfo(appointment)}
-            >
-            <i class="fa-solid fa-eye"></i>
-            </button>
-        </div>
+                <div
+                    class="flex justify-between w-full items-center {selectedPatientAppointment ===
+                    appointment
+                        ? 'bg-slate-200'
+                        : ''} rounded-lg"
+                >
+                    <span class="pl-4">{appointment.patient}</span>
+                    <span class="flex-1"></span>
+                    <span>{appointment.time}</span>
+                    <button
+                        class="text-indigo-400 bg-transparent"
+                        on:click={() => viewPatientInfo(appointment)}
+                    >
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                </div>
             {/each}
         </div>
         {#if showPatientInfo}
@@ -220,7 +233,9 @@
                     <i class="fa-solid fa-clock"></i>
                     <span class="pl-2">Patient Name:</span>
                     <span class="flex-1"></span>
-                    <span class="ml-2">{selectedPatientAppointment.patient}</span>
+                    <span class="ml-2"
+                        >{selectedPatientAppointment.patient}</span
+                    >
                 </p>
                 <hr class="border-slate-200" />
 
@@ -258,4 +273,12 @@
             </div>
         {/if}
     </div>
+ 
 </div>
+   <!-- Modal for creating an appointment -->
+   {#if showModal}
+   <div in:fade={{ duration: 300, easing: cubicInOut }}
+   out:fade={{ duration: 300, easing: cubicInOut }} >
+   <StaffCreateAppointment  onClose={closeModal} />
+</div>
+{/if}
