@@ -14,42 +14,74 @@ services:
         working_dir: /app
         command: [ "composer", "install" ]
     web:
-        image: php:8-alpine
-        working_dir: /var/www
-        command: php -S 0.0.0.0:8080 -t public
-        environment:
-            docker: "true"
+        build:
+            context: .
+            dockerfile: Dockerfile
         ports:
-            - "8080:8080"
+            - "8080:80"
         volumes:
-            - .:/var/www
-            - logs:/var/www/logs
+             - ./src:/var/www/html
         depends_on:
-            - composer
-            - db
-    db:
-        image: percona/percona-server:8.0.35-aarch64 #  ARM64
-        #image: percona/percona-server:8.0.35 # x86
-        command: --default-authentication-plugin=caching_sha2_password --early-plugin-load=keyring_file.so --keyring_file_data=/var/lib/mysql-keyring/keyring --default-table-encryption=ON
+            - proxysql
         environment:
-            MYSQL_ROOT_PASSWORD: root_password
+            - AES_KEY_PATIENT=by5xXrl33BkHTeqSou3MdBJb2FZEZf47
+            - AES_KEY_SECRETARY=ztxyY9INKmygoaq0ThbQYUMr3gf3dR2Z
+            - AES_KEY_LABSTAFF=p4xqYkmopKb1JfTZBO2nXp0YXd7uWaA6
+            - AES_KEY_PATIENT_PRIVATE=pgmRbqBQs6WlKE97rMYhfQaalaHGKAsL
+
+    mysql:
+        image: percona/percona-server:8.0.35-aarch64  #  ARM64
+        #image: percona/percona-server:8.0.35 # x86
+        environment:
+            MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: MadTestLab
             MYSQL_USER: admin
             MYSQL_PASSWORD: admin
-            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+        ports:
+            - "3306:3306"
+        command:
+            - --default-authentication-plugin=caching_sha2_password
+            - --early-plugin-load=keyring_file.so 
+            - --keyring_file_data=/var/lib/mysql-keyring/keyring
+            - --default-table-encryption=ON
         volumes:
             - ./init.sql:/docker-entrypoint-initdb.d/init.sql
             - ./keyring:/var/lib/mysql-keyring
+
     phpmyadmin:
         image: arm64v8/phpmyadmin #ARM64
         #image: phpmyadmin/phpmyadmin #x86
         environment:
-            PMA_HOST: db
+            PMA_HOST: proxysql
+            PMA_PORT: 6033
         ports:
             - "8081:80"
         depends_on:
-            - db
+            - proxysql
 
-volumes:
-    logs:
-        driver: local
+    proxysql:
+        image: proxysql/proxysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+            - "6032:6032"
+            - "6033:6033"
+        volumes:
+            - ./proxysql.cnf:/etc/proxysql.cnf
+            - ./log/:/var/lib/proxysql/log
+        depends_on:
+            - mysql
+
+    monitor:
+        image: python:3.9-slim
+        volumes:
+            - ./monitor.py:/app/monitor.py
+            - ./log/:/app/log
+            - ./alert:/app/alert/
+        working_dir: /app
+        command: ["python", "monitor.py"]
+        depends_on:
+            - proxysql
+
+# volumes:
+#   db_data:

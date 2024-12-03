@@ -159,21 +159,22 @@
             class="flex flex-col gap-6 p-6 h-fit w-full max-w-[400px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200"
         >
             <h2 class="text-xl font-semibold text-slate-700">
-                Today's Appointments
+            Today's Appointments
             </h2>
             {#each todayAppointments as appointment}
-                <div class="flex justify-between w-full items-center">
-                    <span>{appointment.patient}</span>
-                    <span class="flex-1"></span>
-
-                    <span>{appointment.time}</span>
-                    <button
-                        class="text-indigo-400"
-                        on:click={() => viewPatientInfo(appointment)}
-                    >
-                        <i class="fa-solid fa-eye"></i>
-                    </button>
-                </div>
+            <div
+                class="flex justify-between w-full items-center {selectedPatientAppointment === appointment ? 'bg-slate-200' : ''} rounded-lg"
+            >
+                <span class="pl-4">{appointment.patient}</span>
+                <span class="flex-1"></span>
+                <span>{appointment.time}</span>
+                <button
+                class="text-indigo-400 bg-transparent"
+                on:click={() => viewPatientInfo(appointment)}
+                >
+                <i class="fa-solid fa-eye"></i>
+                </button>
+            </div>
             {/each}
         </div>
 
@@ -184,17 +185,19 @@
                 Tomorrow's Appointments
             </h2>
             {#each tomorrowAppointments as appointment}
-                <div class="flex justify-between w-full items-center">
-                    <span>{appointment.patient}</span>
-                    <span class="flex-1"></span>
-                    <span>{appointment.time}</span>
-                    <button
-                        class="text-indigo-400"
-                        on:click={() => viewPatientInfo(appointment)}
-                    >
-                        <i class="fa-solid fa-eye"></i>
-                    </button>
-                </div>
+            <div
+            class="flex justify-between w-full items-center {selectedPatientAppointment === appointment ? 'bg-slate-200' : ''} rounded-lg"
+        >
+            <span class="pl-4">{appointment.patient}</span>
+            <span class="flex-1"></span>
+            <span>{appointment.time}</span>
+            <button
+            class="text-indigo-400 bg-transparent"
+            on:click={() => viewPatientInfo(appointment)}
+            >
+            <i class="fa-solid fa-eye"></i>
+            </button>
+        </div>
             {/each}
         </div>
         {#if showPatientInfo}

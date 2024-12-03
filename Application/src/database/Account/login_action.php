@@ -1,13 +1,17 @@
 <?php
 
 require_once '../../connection/mysqli_conn_Guest.php';
-session_start();
 
 $aesKeys = [
     'Patient' => getenv('AES_KEY_PATIENT'),
     'Secretary' => getenv('AES_KEY_SECRETARY'),
     'LabStaff' => getenv('AES_KEY_LABSTAFF')
 ];
+
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Accept');
+header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -35,67 +39,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->fetch();
 
             if ($accountStatus === 'Block') {
-                echo "<script type='text/javascript'> 
-                        alert('Your account is blocked!');
-                        document.location = '../../Page/Account/login.php'; 
-                      </script>";
+                echo json_encode(['status' => 'error', 'message' => 'Your account is blocked!']);
                 exit();
             }
 
             if (password_verify($password, $decryptedPassword)) {
+                session_start();
                 $_SESSION['username'] = $username;
                 $_SESSION['accountId'] = $accountId;
                 $_SESSION['role'] = $role;
-                if ($role === 'Patient') {
-                    header("Location: ../../Page/patient.php");
-                } elseif ($role === 'Secretary') {
-                    header("Location: ../../Page/secretary.php");
-                } elseif ($role === 'LabStaff') {
-                    // Check LabStaffType
-                    $stmt = $conn->prepare("SELECT LabStaffType FROM LabStaffs WHERE AccountID = ?");
-                    $stmt->bind_param("i", $accountId);
-                    $stmt->execute();
-                    $stmt->bind_result($labStaffType);
-                    $stmt->fetch();
-                    if ($labStaffType === 'Physician') {
-                        $_SESSION['labStaffType'] = $labStaffType;
-                        header("Location: ../../Page/physician.php");
-                    } elseif ($labStaffType === 'Pathologist') {
-                        $_SESSION['labStaffType'] = $labStaffType;
-                        header("Location: ../../Page/pathologist.php");
-                    } else {
-                        echo "<script type='text/javascript'> 
-                                alert('Unauthorized LabStaff type!');
-                                document.location = '../../Page/Account/login.php'; 
-                              </script>";
-                    }
-                    $stmt->close();
-                }
+
+                setcookie('username', $username, time() + (86400 * 30), "/"); // 86400 = 1 day
+                setcookie('accountId', $accountId, time() + (86400 * 30), "/");
+                setcookie('role', $role, time() + (86400 * 30), "/");
+            
+                echo json_encode(['status' => 'success', 'username' => $username, 'accountId' => $accountId, 'role' => $role]);
                 exit();
             } else {
-                echo "<script type='text/javascript'> 
-                        alert('Invalid password!');
-                        document.location = '../../Page/Account/login.php'; 
-                      </script>";
+                echo json_encode(['status' => 'error', 'message' => 'Invalid password']);
                 exit();
             }
         } else {
-            echo "<script type='text/javascript'> 
-                    alert('Invalid password!');
-                    document.location = '../../Page/Account/login.php'; 
-                  </script>";
+            echo json_encode(['status' => 'error', 'message' => 'User not found']);
             exit();
         }
-
-        $stmt->close();
     } else {
-        echo "<script type='text/javascript'> 
-                alert('Invalid password!');
-                document.location = '../../Page/Account/login.php'; 
-              </script>";
+        echo json_encode(['status' => 'error', 'message' => 'User not found']);
         exit();
     }
-
-    $conn->close();
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
+    exit();
 }
-?>

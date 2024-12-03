@@ -4,9 +4,78 @@
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+    import { getCookie } from "../../lib/api.js";
+    
+    onMount(() => {
+        const username = getCookie("username");
+        const role = getCookie("role");
 
-    function gotoPatientLandingPage() {
-        goto("/patient");
+        if (username && role) {
+            switch (role) {
+                case "Patient":
+                    goto("/patient");
+                    break;
+                case "Secretary":
+                    goto("/secretary");
+                    break;
+                case "LabStaff":
+                    goto("/labstaff");
+                    break;
+                default:
+                    break;
+            }
+        }
+    });
+    async function handleLogin(event) {
+        event.preventDefault(); // Prevent page reload
+        const formData = new FormData(event.target);
+
+        try {
+            console.log("Sending login request...");
+            const response = await fetch(
+                "http://localhost:8080/database/Account/login_action.php",
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Accept: "application/json",
+                    },
+                },
+            );
+
+            const result = await response.json();
+            console.log("Response received:", result);
+
+            if (response.ok && result.status === "success") {
+                document.cookie = `username=${result.username}; path=/`;
+                document.cookie = `role=${result.role}; path=/`;
+                document.cookie = `accountId=${result.accountId}; path=/`;
+                alert(
+                    "Login successful! Redirecting to appropriate landing page...",
+                );
+                switch (result.role) {
+                    case "Patient":
+                        goto("/patient");
+                        break;
+                    case "Secretary":
+                        goto("/secretary");
+                        break;
+                    case "LabStaff":
+                        goto("/labstaff");
+                        break;
+                    default:
+                        console.error("Unknown role:", result.role);
+                        alert("Unknown role. Please contact support.");
+                }
+            } else {
+                console.error("Login failed:", result.message);
+                alert("Login failed. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        }
     }
 </script>
 
@@ -24,8 +93,7 @@
             <span class="text-slate-600">Lab </span>
         </h2>
         <form
-            method="GET"
-            action="/patient"
+            on:submit={handleLogin}
             class="flex flex-col gap-6 w-full max-w-[400px] mx-auto bg-white p-8 rounded-lg shadow-lg"
         >
             <div class="flex flex-col gap-2">
@@ -37,6 +105,7 @@
                 </label>
                 <input
                     id="username"
+                    name="username"
                     type="text"
                     placeholder="Enter your username"
                     class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
@@ -51,6 +120,7 @@
                 </label>
                 <input
                     id="password"
+                    name="password"
                     type="password"
                     placeholder="Enter your password"
                     class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"

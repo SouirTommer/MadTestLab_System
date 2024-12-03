@@ -2,12 +2,37 @@
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
     import PatientProfile from "../../components/PatientProfile.svelte";
-    import Orders from "../../components/Orders.svelte";
-    import Results from "../../components/Results.svelte";
-    import Billing from "../../components/Billing.svelte";
-
+    import Orders from "../../components/PatientOrders.svelte";
+    import Results from "../../components/PatientResults.svelte";
+    import Billing from "../../components/PatientBilling.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
+    import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
+    import {
+        handleLogout,
+        getCookie,
+        deleteAllCookies,
+    } from "../../lib/api.js";
+
+    let user = {
+        name: "",
+        id: "",
+        role: "",
+    };
+
+    onMount(() => {
+        const username = getCookie("username");
+        const role = getCookie("role");
+
+        if (!username || role !== "Patient") {
+            goto("/");
+        } else {
+            user.name = getCookie("username");
+            user.role = getCookie("role");
+            user.id = getCookie("accountId");
+        }
+    });
 
     let currentTab = "dashboard"; // Tracks the active tab
 
@@ -25,15 +50,10 @@
     }
 
     const { greeting, icon } = getGreetingWithIcon();
-
-    let user = {
-        name: "Tommer",
-        email: "souirtommer@gmail.com",
-    };
 </script>
 
 <div
-    class="flex h-screen"
+    class="flex h-screen overflow-x-hidden"
     in:fade={{ delay: 200, duration: 200 }}
     out:fade={{ duration: 200, easing: cubicInOut }}
 >
@@ -109,7 +129,7 @@
             <div class="flex-1"></div>
             <button
                 class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                on:click={() => (window.location.href = "/")}
+                on:click={() => handleLogout(goto)}
             >
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 Logout
@@ -118,7 +138,7 @@
                 class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
                 <p class="text-xl">{user.name}</p>
-                <p class="text-slate-400">{user.email}</p>
+                <p class="text-slate-400">User ID: {user.id}</p>
             </div>
         </nav>
     </aside>
@@ -127,7 +147,9 @@
         <main class="flex-1 p-6 ml-72 overflow-y-auto">
             <div class="flex items-center gap-2 mb-6 py-4">
                 <i class={`fa-solid ${icon} text-yellow-500 text-4xl`}></i>
-                <h1 class="text-4xl font-bold pl-2">{greeting} , Tommer !</h1>
+                <h1 class="text-4xl font-bold pl-2">
+                    {greeting} , {user.name} !
+                </h1>
             </div>
 
             {#if currentTab === "dashboard"}

@@ -2,23 +2,42 @@
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
     import StaffProfile from "../../components/StaffProfile.svelte";
-    import Appointment from "../../components/Appointment.svelte";
+    import Appointment from "../../components/StaffAppointment.svelte";
     import PatientRecord from "../../components/PatientRecord.svelte";
     import StaffDashBoard from "../../components/StaffDashBoard.svelte";
     import StaffBilling from "../../components/StaffBilling.svelte";
     import StaffRecord from "../../components/StaffRecords.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
+    import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
+    import {
+        handleLogout,
+        getCookie,
+        deleteAllCookies,
+    } from "../../lib/api.js";
 
     let currentTab = "dashboard"; // Tracks the active tab
-
     let user = {
-        name: "Marco",
-        email: "stse2122@gmail.com",
+        name: "",
+        id: "",
+        role: "",
     };
+    onMount(() => {
+        const username = getCookie("username");
+        const role = getCookie("role");
+
+        if (!username || role !== "Secretary") {
+            goto("/");
+        } else {
+            user.name = getCookie("username");
+            user.role = getCookie("role");
+            user.id = getCookie("accountId");
+        }
+    });
 </script>
 
-<div class="flex h-screen">
+<div class="flex h-screen overflow-x-hidden">
     <!-- Sidebar -->
     <aside
         class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
@@ -100,23 +119,23 @@
             </button>
 
             <!-- push the div to bottom -->
-             
+
             <div class="flex-1"></div>
             <button
                 class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                on:click={() => (window.location.href = "/")}
+                on:click={() => handleLogout(goto)}
             >
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 Logout
             </button>
             <p class="text-slate-500 font-medium text-xl px-4 py-1">
-                Secretary Staff
+                {user.role}
             </p>
             <div
                 class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
             >
-                <p class="text-xl">{user.name}</p>
-                <p class="text-slate-400">{user.email}</p>
+            <p class="text-xl">{user.name}</p>
+            <p class="text-slate-400">User ID: {user.id}</p>
             </div>
         </nav>
     </aside>

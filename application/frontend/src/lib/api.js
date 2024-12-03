@@ -1,44 +1,22 @@
-async function getAPI(url, params = {}) {
-    try {
-        // Construct query string from params
-        const queryString = new URLSearchParams(params).toString();
-        const response = await fetch(`${url}?${queryString}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+export function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
+export function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('GET API Error:', error);
-        throw error;
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
     }
 }
 
-async function postAPI(url, body = {}) {
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('POST API Error:', error);
-        throw error;
-    }
+export function handleLogout(goto) {
+    deleteAllCookies();
+    alert("You have been logged out. Redirecting to login page...");
+    goto("/");
 }

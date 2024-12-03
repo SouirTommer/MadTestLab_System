@@ -1,37 +1,28 @@
 <script>
     import { fade } from "svelte/transition";
+    import { cubicInOut } from "svelte/easing";
+    import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
 
-    let orders = [
-        {
-            OrderID: "ORD001",
-            PatientID: "PAT001",
-            LabStaffID: "LAB001",
-            SecretaryID: "SEC001",
-            TestCode: "TC001",
-            OrderDateTime: "2023-10-01 10:00",
-            OrderStatus: "Pending",
-        },
-        {
-            OrderID: "ORD002",
-            PatientID: "PAT002",
-            LabStaffID: "LAB002",
-            SecretaryID: "SEC002",
-            TestCode: "TC002",
-            OrderDateTime: "2023-10-02 11:00",
-            OrderStatus: "Completed",
-        },
-        {
-            OrderID: "ORD003",
-            PatientID: "PAT003",
-            LabStaffID: "LAB003",
-            SecretaryID: "SEC003",
-            TestCode: "TC003",
-            OrderDateTime: "2023-10-03 12:00",
-            OrderStatus: "In Progress",
-        },
-    ];
+    let orders = []; // Reactive variable to store fetched orders
 
-    var filter = "all";
+    onMount(() => {
+        fetchOrders(); // Fetch orders when the component is mounted
+    });
+    
+    async function fetchOrders() {
+        try {
+            const response = await fetch("http://localhost:8080/database/Patient/patient_read_order_action.php", {
+                credentials: 'include' // Include credentials (cookies) with the request
+            });
+            const data = await response.json();
+            console.log('Fetched data:', data); // Debugging: Log fetched data
+            orders = data.data;
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    }
+
     function getStatusClass(status) {
         switch (status) {
             case "Pending":
@@ -44,6 +35,8 @@
                 return "bg-gray-200 text-gray-800";
         }
     }
+
+    var filter = "all";
 </script>
 
 <div class="flex flex-col mt-8">
@@ -89,35 +82,44 @@
         <table class="min-w-full bg-white border border-slate-200">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">OrderID</th>
-                    <th class="py-2 px-4 border-b">LabStaffID</th>
-                    <th class="py-2 px-4 border-b">SecretaryID</th>
-                    <th class="py-2 px-4 border-b">TestCode</th>
-                    <th class="py-2 px-4 border-b">OrderDateTime</th>
-                    <th class="py-2 px-4 border-b">OrderStatus</th>
-                    <th class="py-2 px-4 border-b">Details</th>
+                    <th class="border px-4 py-2">Order ID</th>
+                    <th class="border px-4 py-2">Lab Staff First Name</th>
+                    <th class="border px-4 py-2">Lab Staff Last Name</th>
+                    <th class="border px-4 py-2">Secretary First Name</th>
+                    <th class="border px-4 py-2">Secretary Last Name</th>
+                    <th class="border px-4 py-2">Test Name</th>
+                    <th class="border px-4 py-2">Date and Time</th>
+                    <th class="border px-4 py-2">Status</th>
                 </tr>
             </thead>
             <tbody>
                 {#each orders as order}
                     <tr>
                         <td class="py-2 px-4 border-b">{order.OrderID}</td>
-                        <td class="py-2 px-4 border-b">{order.LabStaffID}</td>
-                        <td class="py-2 px-4 border-b">{order.SecretaryID}</td>
-                        <td class="py-2 px-4 border-b">{order.TestCode}</td>
+   
+                        <td class="py-2 px-4 border-b"
+                            >{order.LabStaffFirstName}</td
+                        >
+                        <td class="py-2 px-4 border-b"
+                            >{order.LabStaffLastName}</td
+                        >
+                        <td class="py-2 px-4 border-b"
+                            >{order.SecretaryFirstName}</td
+                        >
+                        <td class="py-2 px-4 border-b"
+                            >{order.SecretaryLastName}</td
+                        >
+                        <td class="py-2 px-4 border-b">{order.TestName}</td>
                         <td class="py-2 px-4 border-b">{order.OrderDateTime}</td
                         >
                         <td class="py-2 px-4 border-b">
                             <span
                                 class="status-tag {getStatusClass(
                                     order.OrderStatus,
-                                )}">{order.OrderStatus}</span
+                                )}"
                             >
-                        </td>
-                        <td class="py-2 px-4 border-b">
-                            <a href="" class="text-indigo-400 hover:underline">
-                                <i class="fas fa-eye"></i> View
-                            </a>
+                                {order.OrderStatus}
+                            </span>
                         </td>
                     </tr>
                 {/each}
