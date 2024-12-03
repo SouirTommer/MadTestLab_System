@@ -3,11 +3,14 @@
     import Header from "../../components/Header.svelte";
     import StaffProfile from "../../components/StaffProfile.svelte";
     import Appointment from "../../components/StaffAppointment.svelte";
-    import PatientRecord from "../../components/PatientRecord.svelte";
+    import PatientOrder from "../../components/StaffCheckOrders.svelte";
     import StaffDashBoard from "../../components/StaffDashBoard.svelte";
     import StaffBilling from "../../components/StaffBilling.svelte";
     import StaffRecord from "../../components/StaffRecords.svelte";
     import NewAppointment from "../../components/StaffCreateAppointment.svelte";
+    import PatientResults from "../../components/StaffCheckResults.svelte";
+    import StaffInsurance from "../../components/StaffInsurance.svelte";
+    import StaffTestCatalog from "../../components/StaffTestCatalog.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { onMount } from "svelte";
@@ -97,25 +100,24 @@
                 Appointments
             </button>
             <button
-                class="navItem {currentTab === 'patient_records'
+                class="navItem {currentTab === 'patient_orders'
                     ? 'selected'
                     : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "patient_records"}
-                on:click={() => (currentTab = "patient_records")}
+                class:selected={currentTab === "patient_orders"}
+                on:click={() => (currentTab = "patient_orders")}
             >
-                <i class="fa-solid fa-book-medical"></i>
-                Patient Records
+                <i class="fa-solid fa-file-medical"></i>
+                Patient Orders
             </button>
 
             <button
-                class="navItem {currentTab === 'staff_records'
+                class="navItem {currentTab === 'patient_results'
                     ? 'selected'
                     : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "staff_records"}
-                on:click={() => (currentTab = "staff_records")}
+                class:selected={currentTab === "patient_results"}
+                on:click={() => (currentTab = "patient_results")}
             >
-                <i class="fa-solid fa-users"></i>
-                Staff Records
+                <i class="fa-solid fa-vials"></i> Patient Results
             </button>
 
             <button
@@ -128,7 +130,27 @@
                 <i class="fa-solid fa-wallet"></i>
                 Billing
             </button>
+            <p class="text-slate-500 text-m font-medium px-2">Information</p>
 
+            <button
+                class="navItem {currentTab === 'testcatalog'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "testcatalog"}
+                on:click={() => (currentTab = "testcatalog")}
+            >
+                <i class="fa-solid fa-flask-vial"></i> Test Catalog
+            </button>
+            <button
+                class="navItem {currentTab === 'insurance'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "insurance"}
+                on:click={() => (currentTab = "insurance")}
+            >
+                <i class="fa-solid fa-book-medical"></i>
+                Insurance Plans
+            </button>
             <p class="text-slate-500 text-m font-medium px-2">Setting</p>
 
             <button
@@ -141,7 +163,6 @@
                 <i class="fa-solid fa-user"></i>
                 Profile
             </button>
-
             <!-- push the div to bottom -->
 
             <div class="flex-1"></div>
@@ -193,14 +214,14 @@
                     <p>View and manage appointments for patients.</p>
                     <Appointment />
                 </div>
-            {:else if currentTab === "patient_records"}
+            {:else if currentTab === "patient_orders"}
                 <div
                     in:fade={{ delay: 201, duration: 200 }}
                     out:fade={{ duration: 200, easing: cubicInOut }}
                 >
-                    <h2 class="text-3xl font-bold mb-4">Patient Records</h2>
-                    <p>View and manage patient records and history.</p>
-                    <PatientRecord />
+                    <h2 class="text-3xl font-bold mb-4">Patient Orders</h2>
+                    <p>View and manage patient Orders.</p>
+                    <PatientOrder />
                 </div>
             {:else if currentTab === "billing"}
                 <div
@@ -214,14 +235,14 @@
                     </p>
                     <StaffBilling />
                 </div>
-            {:else if currentTab === "staff_records"}
+            {:else if currentTab === "patient_results"}
                 <div
                     in:fade={{ delay: 201, duration: 200 }}
                     out:fade={{ duration: 200, easing: cubicInOut }}
                 >
-                    <h2 class="text-3xl font-bold mb-4">Staff Records</h2>
-                    <p>View and manage staff records and history.</p>
-                    <StaffRecord />
+                    <h2 class="text-3xl font-bold mb-4">Patients Results</h2>
+                    <p>View and manage patient results.</p>
+                    <PatientResults />
                 </div>
             {:else if currentTab === "profile"}
                 <div
@@ -233,6 +254,27 @@
                         Update your personal information and account settings.
                     </p>
                     <StaffProfile />
+                </div>
+            {:else if currentTab === "testcatalog"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Test Catalog</h2>
+                    <p>
+                        View all the tests available in the lab and their
+                        details.
+                    </p>
+                    <StaffTestCatalog />
+                </div>
+            {:else if currentTab === "insurance"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Insurance Plans</h2>
+                    <p>View insurance plans and patient coverage.</p>
+                    <StaffInsurance />
                 </div>
             {:else}
                 <div
