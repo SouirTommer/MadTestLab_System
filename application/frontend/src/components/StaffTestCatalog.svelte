@@ -29,14 +29,16 @@
         }
     }
 
-    function getStatusClass(status) {
-        switch (status) {
-            case "Pending":
+    function getStatusClass(testType) {
+        switch (testType.toLowerCase()) {
+            case "blood test":
+                return "bg-red-200 text-red-800";
+            case "urine test":
                 return "bg-yellow-200 text-yellow-800";
-            case "Completed":
-                return "bg-green-200 text-green-800";
-            case "In Progress":
+            case "imaging test":
                 return "bg-blue-200 text-blue-800";
+            case "molecular test":
+                return "bg-green-200 text-green-800";
             default:
                 return "bg-gray-200 text-gray-800";
         }
@@ -64,7 +66,7 @@
                         <td class="py-2 px-4 border-b">{test.TestName}</td>
                         <td class="py-2 px-4 border-b">{test.Description}</td>
                         <td class="text-end py-2 px-4 border-b">{test.Price}</td>
-                        <td class="py-2 px-4 border-b">{test.TestType}</td>
+                        <td class="py-2 px-4 border-b"><span class="status-tag {getStatusClass(test.TestType)}">{test.TestType}</span></td>
                     </tr>
                 {/each}
             </tbody>

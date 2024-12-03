@@ -29,17 +29,17 @@
     function getIconClass(insuranceName) {
         switch (insuranceName) {
             case "HealthPlus Insurance":
-                return "fas fa-heartbeat";
+                return "fas fa-heartbeat text-red-400";
             case "FamilyCare Insurance":
-                return "fas fa-users";
+                return "fas fa-users text-indigo-400 ";
             case "Senior Health Insurance":
-                return "fas fa-user-nurse";
+                return "fas fa-user-nurse text-blue-400";
             case "Basic Health Insurance":
-                return "fas fa-hospital";
+                return "fas fa-hospital text-gray-400";
             case "Elite Medical Insurance":
-                return "fas fa-star";
+                return "fas fa-star text-yellow-400";
             case "Preventive Care Insurance":
-                return "fas fa-syringe";
+                return "fas fa-syringe text-emerald-400";
             default:
                 return "fas fa-question-circle";
         }
@@ -50,7 +50,7 @@
 <div class="flex flex-col mt-8">
     <div class="card-container">
         {#each insurances.slice(0, 6) as insurance}
-            <div class="card">
+            <div class="card ">
                 <i class="icon {getIconClass(insurance.InsuranceName)}"></i>
                 <div class="card-header">{insurance.InsuranceName}</div>
                 <div class="card-body">{insurance.InsuranceDetails}</div>

@@ -4,7 +4,7 @@ session_start();
 require_once '../../connection/mysqli_conn_Physician.php';
 
 require '../../Page/Account/auth.php';
-check_labstaff_type('Physician');
+// check_labstaff_type('Physician');
 
 // Function to get the LabStaffID from the AccountID
 function getLabStaffID($conn, $accountId) {

@@ -1,13 +1,22 @@
 <?php
 session_start();
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+} else {
+    header('Access-Control-Allow-Origin: ' . $allowed_origins[0]); // Default to the first allowed origin
+}
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Allow specific HTTP methods
+header('Access-Control-Allow-Headers: Content-Type, Accept'); // Allow specific headers
+header(header: 'Access-Control-Allow-Credentials: true'); // Allow credentials (cookies) to be sent
+header(header: 'Content-Type: application/json'); // Set the content type to JSON
 
 require_once '../../connection/mysqli_conn_Physician.php';
-
 require '../../Page/Account/auth.php';
-check_labstaff_type('Physician');
+// check_labstaff_type('Physician');
 
 // Function to get the LabStaffID from the AccountID
 function getLabStaffID($conn, $accountId) {
+    $labStaffID = null;
     $query = "SELECT LabStaffID FROM LabStaffs WHERE AccountID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $accountId);
@@ -20,6 +29,7 @@ function getLabStaffID($conn, $accountId) {
 
 // Function to get the PatientID from the patient's name
 function getPatientID($conn, $patientName) {
+    $patientID = null;
     $query = "SELECT PatientID FROM Patients WHERE CONCAT(FirstName, ' ', LastName) = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('s', $patientName);
@@ -32,6 +42,7 @@ function getPatientID($conn, $patientName) {
 
 // Function to get the SecretaryID from the secretary's name
 function getSecretaryID($conn, $secretaryName) {
+    $secretaryID = null;
     $query = "SELECT SecretaryID FROM Secretaries WHERE CONCAT(FirstName, ' ', LastName) = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('s', $secretaryName);

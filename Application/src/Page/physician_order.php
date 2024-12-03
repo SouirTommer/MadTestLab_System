@@ -1,7 +1,7 @@
 <?php
 session_start();
 require './Account/auth.php';
-check_labstaff_type('Physician');
+// check_labstaff_type('Physician');
 ?>
 
 <!DOCTYPE html>

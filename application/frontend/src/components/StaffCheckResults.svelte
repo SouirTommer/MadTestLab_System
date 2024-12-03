@@ -11,7 +11,7 @@
     let filteredResults = [];
     let filter = "all";
 
-    // //testing data
+    //testing data
     // results = [
     //         {
     //             ResultID: "1",
@@ -52,7 +52,7 @@
     //     ];
     //     categorizeResults();
     //     filterResults();
-    // //testing data
+    //testing data
     onMount(async () => {
         try {
             const response = await fetch(
@@ -66,15 +66,13 @@
             console.log("Fetched data:", data);
             if (results === undefined || results.length == 0) {
                 console.log("No results found");
-            }else{
+            } else {
                 categorizeResults();
                 filterResults();
             }
-            
         } catch (error) {
             console.error("Error fetching data:", error);
         }
-       
     });
 
     function categorizeResults() {
@@ -155,11 +153,18 @@
     </div>
 
     {#if filteredResults.length === 0}
-        <h1 class="pt-56 text-center text-2xl text-gray-800">
+        <h1
+            class="pt-56 text-center text-2xl text-gray-800"
+            in:fade={{ delay: 200, duration: 200 }}
+            out:fade={{ duration: 200, easing: cubicInOut }}
+        >
             No Results found
         </h1>
     {:else}
-        <div>
+        <div
+            in:fade={{ delay: 200, duration: 200 }}
+            out:fade={{ duration: 200, easing: cubicInOut }}
+        >
             <table class="min-w-full bg-white border border-slate-200">
                 <thead>
                     <tr>
@@ -190,8 +195,12 @@
                             <td class="py-2 px-4 border-b"
                                 >{result.ResultDateTime}</td
                             >
-                            <td class="py-2 px-4 border-b " 
-                                ><span class="status-tag {getStatusClass(result.ResultStatus)}">{result.ResultStatus}</span></td
+                            <td class="py-2 px-4 border-b"
+                                ><span
+                                    class="status-tag {getStatusClass(
+                                        result.ResultStatus,
+                                    )}">{result.ResultStatus}</span
+                                ></td
                             >
                             <td class="py-2 px-4 border-b"
                                 >{result.PatientFirstName}
