@@ -12,6 +12,7 @@
     let filteredOrders = [];
     let filter = "pending";
 
+    let insurance = [] ;
     // orders = [
     //     {
     //         OrderID: "101",
@@ -63,14 +64,15 @@
     async function fetchOrders() {
         try {
             const response = await fetch(
-                "http://localhost:8080/database/Physician/physician_read_order_action.php",
+                "http://localhost:8080/database/Pathologist/pathologist_read_order_action.php",
                 {
                     credentials: "include", // Include credentials (cookies) with the request
                 },
             );
             const data = await response.json();
             console.log("Fetched data:", data); // Debugging: Log fetched data
-            orders = data;
+            orders = data.orders;
+            insurance = data.insurance;
             categorizeOrders();
             filterOrders();
         } catch (error) {

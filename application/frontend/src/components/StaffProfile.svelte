@@ -1,6 +1,6 @@
 <script>
     import { fade } from "svelte/transition";
-    import {cubicInOut} from "svelte/easing";
+    import { cubicInOut } from "svelte/easing";
     import SectionWrapper from "./SectionWrapper.svelte";
 
     var selectedTab = "general";
@@ -18,7 +18,7 @@
 <div class="flex flex-row mt-8">
     <div class="flex flex-col gap-2 items-start pb-10 md:pb-14 mr-20">
         <button
-            class="items-start text-start  text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
+            class="items-start text-start text-slate-600 font-medium sm:text-md md:text-md py-3 rounded-2xl w-full hover:bg-slate-100 transition"
             class:bg-slate-200={selectedTab === "general"}
             on:click={() => (selectedTab = "general")}
         >
@@ -36,10 +36,9 @@
     <div class="flex flex-col flex-1 items-start pb-10 transition">
         {#if selectedTab === "general"}
             <div
-                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200 transition "
+                class="flex flex-col gap-6 p-6 w-[800px] rounded-lg border-solid border-2 border-slate-200 transition"
                 in:fade={{ delay: 150, duration: 150 }}
                 out:fade={{ duration: 150, easing: cubicInOut }}
-                
             >
                 <div>
                     <h1 class="text-xl font-semibold">My information</h1>
@@ -128,17 +127,43 @@
 
                 <div class="flex flex-col">
                     <label
-                        for="password"
+                        for="old-password"
                         class="text-md font-medium text-slate-600"
                     >
-                        Password
+                        Old Password
                     </label>
                     <input
-                        readonly
-                        id="password"
-                        type="text"
-                        placeholder="Enter your password"
-                        value={staff.password}
+                        id="old-password"
+                        type="password"
+                        placeholder="Enter your old password"
+                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
+                <div class="flex flex-col">
+                    <label
+                        for="new-password"
+                        class="text-md font-medium text-slate-600"
+                    >
+                        New Password
+                    </label>
+                    <input
+                        id="new-password"
+                        type="password"
+                        placeholder="Enter your new password"
+                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
+                <div class="flex flex-col">
+                    <label
+                        for="confirm-new-password"
+                        class="text-md font-medium text-slate-600"
+                    >
+                        Confirm New Password
+                    </label>
+                    <input
+                        id="confirm-new-password"
+                        type="password"
+                        placeholder="Confirm your new password"
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>

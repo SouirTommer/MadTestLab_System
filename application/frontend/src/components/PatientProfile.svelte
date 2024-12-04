@@ -130,17 +130,43 @@
 
                 <div class="flex flex-col">
                     <label
-                        for="password"
+                        for="old-password"
                         class="text-md font-medium text-slate-600"
                     >
-                        Password
+                        Old Password
                     </label>
                     <input
-                        readonly
-                        id="password"
-                        type="text"
-                        placeholder="Enter your password"
-                        value={staff.password}
+                        id="old-password"
+                        type="password"
+                        placeholder="Enter your old password"
+                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
+                <div class="flex flex-col">
+                    <label
+                        for="new-password"
+                        class="text-md font-medium text-slate-600"
+                    >
+                        New Password
+                    </label>
+                    <input
+                        id="new-password"
+                        type="password"
+                        placeholder="Enter your new password"
+                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    />
+                </div>
+                <div class="flex flex-col">
+                    <label
+                        for="confirm-new-password"
+                        class="text-md font-medium text-slate-600"
+                    >
+                        Confirm New Password
+                    </label>
+                    <input
+                        id="confirm-new-password"
+                        type="password"
+                        placeholder="Confirm your new password"
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>

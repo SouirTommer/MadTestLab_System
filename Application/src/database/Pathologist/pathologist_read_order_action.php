@@ -17,13 +17,8 @@ header(header: 'Content-Type: application/json'); // Set the content type to JSO
 require_once '../../connection/mysqli_conn_Pathologist.php';
 require '../../Page/Account/auth.php';
 
-check_labstaff_type('Pathologist');
-check_labstaff_type('Pathologist');
-if (!isset($_COOKIE['accountId'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Not authenticated']);
-    exit();
-}
-$accountId = $_COOKIE['accountId'];
+// check_labstaff_type('Pathologist');
+
 
 // Fetch all orders
 $ordersQuery = "
@@ -43,7 +38,7 @@ $ordersQuery = "
     JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Orders.SecretaryID = Secretaries.SecretaryID
     JOIN TestsCatalog ON Orders.TestCode = TestsCatalog.TestCode
-    WHERE Orders.OrderStatus = 'Paid'
+    WHERE Orders.OrderStatus = 'In Progress'
 ";
 $ordersResult = $conn->query($ordersQuery);
 
@@ -59,7 +54,7 @@ if ($ordersResult->num_rows > 0) {
         $orders[] = $row;
     }
 } else {
-    error_log('No orders found with status Paid');
+    error_log('No orders found with status In Progress');
 }
 
 // Fetch all insurances

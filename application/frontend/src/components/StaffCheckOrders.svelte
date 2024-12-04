@@ -14,6 +14,8 @@
     let insurances = [];
     let testsCatalog = [];
 
+    let showModal = false;
+    let selectedOrder = {};
     // orders = [
     //     {
     //         OrderID: "101",
@@ -126,6 +128,53 @@
                 return "bg-gray-200 text-gray-800";
         }
     }
+
+    function getTestPrice(testName) {
+        const test = testsCatalog.find((t) => t.TestName === testName);
+        return test ? test.Price : "N/A";
+    }
+
+    function handleButtonClick(order) {
+        selectedOrder = order;
+        showModal = true;
+    }
+
+    function closeModal() {
+        showModal = false;
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault(); // Prevent page reload
+        const formData = new FormData(event.target);
+
+        try {
+            const response = await fetch(
+                "http://localhost:8080/database/Physician/physician_create_order_action.php",
+                {
+                    method: "POST",
+                    credentials: "include", // Include credentials (cookies) with the request
+                    body: formData,
+                },
+            );
+            // for (let [key, value] of formData.entries()) {
+            //     console.log(`${key}: ${value}`);
+            // }
+            const result = await response.json();
+            console.log("Create appointment response:", result); // Debugging statement
+            if (result.status === "success") {
+                alert("Appointment created successfully");
+                closeModal(); // Call the onClose function to close the modal
+
+                location.reload();
+            } else {
+                alert("Failed to create appointment: " + result.message);
+            }
+        } catch (error) {
+            console.error("Error creating appointment:", error);
+            alert("Error creating appointment. Please try again.");
+        }
+        console.log("Form submitted");
+    }
 </script>
 
 <div class="flex flex-col mt-8">
@@ -185,7 +234,8 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i>  No Orders found
+            <i class="fa-solid fa-magnifying-glass text-4xl pr-4"></i> No Orders
+            found
         </h1>
     {:else}
         <div
@@ -202,7 +252,7 @@
                         <th class="border px-4 py-2">Test Name</th>
                         <th class="border px-4 py-2">Order DateTime</th>
                         <th class="border px-4 py-2">Order Status</th>
-                        <th class="border px-4 py-2">Insurance Name</th>
+                        <th class="border px-4 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -225,6 +275,8 @@
                             <td class="py-2 px-4 border"
                                 >{order.OrderDateTime}</td
                             >
+                            
+                        
                             <td class="py-2 px-4 border">
                                 <span
                                     class="status-tag {getStatusClass(
@@ -232,9 +284,28 @@
                                     )}">{order.OrderStatus}</span
                                 >
                             </td>
-                            <td class="py-2 px-4 border"
-                                >{order.InsuranceName}</td
-                            >
+                            <td class="py-2 px-4 border">
+                                {#if order.OrderStatus === "Pending"}
+                                    <button
+                                        class="px-4 py-2 text-green-700 text-3xl"
+                                        on:click={() =>
+                                            handleButtonClick(order)}
+                                        aria-label="Create Order"
+                                    >
+                                        <i
+                                            class="fa-solid fa-money-check-dollar hover:text-green-900"
+                                        ></i>
+                                    </button>
+                                {:else}
+                                    <button
+                                        class="px-4 py-2 text-slate-600 text-3xl"
+                                        aria-label="Cannot Create Order"
+                                    >
+                                        <i class="fa-regular fa-square-minus"
+                                        ></i>
+                                    </button>
+                                {/if}
+                            </td>
                         </tr>
                     {/each}
                 </tbody>
@@ -242,3 +313,206 @@
         </div>
     {/if}
 </div>
+
+<div
+    in:fade={{ duration: 200, easing: cubicInOut }}
+    out:fade={{ duration: 200, easing: cubicInOut }}
+>
+    {#if showModal}
+        <div
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            in:fade={{ duration: 300 }}
+            out:fade={{ duration: 300 }}
+        >
+            <div
+                class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
+            >
+                <button
+                    class="absolute top-2 right-2 text-gray-500"
+                    on:click={closeModal}
+                >
+                    &times;
+                </button>
+                <h2 class="text-xl font-semibold mb-4">Create Bill</h2>
+                <form on:submit={handleSubmit} class="space-y-4">
+                    <div>
+                        <label
+                            for="orderID"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Test Order ID:</strong></label
+                        >
+                        <input
+                            type="text"
+                            name="orderID"
+                            id="orderID"
+                            value={selectedOrder.OrderID}
+                            readonly
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="patientName"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Patient Name:</strong></label
+                        >
+                        <input
+                            type="text"
+                            name="patient"
+                            id="patientName"
+                            value={`${selectedOrder.PatientFirstName} ${selectedOrder.PatientLastName}`}
+                            readonly
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="physicianName"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Lab Staff Name:</strong></label
+                        >
+                        <input
+                            type="text"
+                            id="physicianName"
+                            value={`${selectedOrder.LabStaffFirstName} ${selectedOrder.LabStaffLastName}`}
+                            readonly
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="secretaryName"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Secretary Name:</strong></label
+                        >
+                        <input
+                            type="text"
+                            id="secretaryName"
+                            value={`${selectedOrder.SecretaryFirstName} ${selectedOrder.SecretaryLastName}`}
+                            readonly
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="amount"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Total Price :</strong></label
+                        >
+                        <input
+                            type="text"
+                            id="amount"
+                            value={`$${getTestPrice(selectedOrder.TestName)}`}
+                            readonly
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label
+                            for="insuranceID"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Insurance:</strong></label
+                        >
+                        <div>
+                            <label
+                                for="insuranceID"
+                                class="block text-sm font-medium text-gray-700"
+                            ></label>
+                            <select
+                                id="insuranceID"
+                                name="insuranceID"
+                                class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="" disabled selected
+                                    >-- Select an Insurance --</option
+                                >
+                                {#each insurances as insurances}
+                                    <option value={insurances.InsuranceID}
+                                        >{insurances.InsuranceName}</option
+                                    >
+                                {/each}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label
+                            for="status"
+                            class=" text-sm font-medium text-gray-700"
+                            ><strong>Payment:</strong></label
+                        >
+                        <select
+                            name="status"
+                            id="status"
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                            <option value="" disabled selected
+                                >-- Select a Status --</option
+                            >
+                            <option value="Cash">Cash</option>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Alipay">Alipay</option>
+                            <option value="WeChat Pay">WeChat Pay</option>
+                        </select>
+                    </div>
+                    <div class="pt-8 mt-4 w-full flex justify-center">
+                        <button
+                            type="submit"
+                            name="submit"
+                            class="px-10 py-2 bg-green-700 text-white rounded-md shadow-sm hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >Create Bill
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    {/if}
+</div>
+
+<style>
+    .fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    .bg-white {
+        background: white;
+    }
+    .rounded-lg {
+        border-radius: 8px;
+    }
+    .shadow-lg {
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .p-6 {
+        padding: 1.5rem;
+    }
+    .w-full {
+        width: 100%;
+    }
+    .max-w-lg {
+        max-width: 32rem;
+    }
+    .relative {
+        position: relative;
+    }
+    .absolute {
+        position: absolute;
+    }
+    .top-2 {
+        top: 0.5rem;
+    }
+    .right-2 {
+        right: 0.5rem;
+    }
+    .text-gray-500 {
+        color: #6b7280;
+    }
+</style>

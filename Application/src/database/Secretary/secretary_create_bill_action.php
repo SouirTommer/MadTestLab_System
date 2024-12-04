@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bind_param('iisss', $orderID, $insuranceID, $amount, $paymentStatus, $billDateTime);
 
         if ($stmt->execute()) {
-            // Update the order status to 'Paid'
+            // Update the order status to 'In Progress'
             $updateOrderQuery = "
                 UPDATE Orders
-                SET OrderStatus = 'Paid'
+                SET OrderStatus = 'In Progress'
                 WHERE OrderID = ?
             ";
             $updateStmt = $conn->prepare($updateOrderQuery);

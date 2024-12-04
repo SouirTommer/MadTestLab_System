@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/stse2122/Local_Repo/MadTestLab_System/application/src/database/Pathologist",
+      "program": "/Users/stse2122/Local_Repo/MadTestLab_System/application/src/database/Pathologist/build/Debug/outDebug"
+    }
+  ]
+}

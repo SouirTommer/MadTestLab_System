@@ -14,7 +14,8 @@
     let filteredAppointments = []; // Reactive variable to store filtered appointments
     let filter = "scheduled";
     let showModal = false;
-    let selectedAppointment = {};
+    
+    
 
     const tests = [
         { code: "1", name: "Complete Blood Count" },

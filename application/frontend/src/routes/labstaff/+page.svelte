@@ -5,6 +5,8 @@
     import TestingOrder from "../../components/PhysicianCheckOrder.svelte";
     import TestCatalog from "../../components/StaffTestCatalog.svelte";
     import Appointment from "../../components/PhysicianAppointment.svelte";
+    import PathologistOrder from "../../components/PathCheckOrders.svelte";
+    import PathologistResult from "../../components/PathCheckResults.svelte";
     import { fade } from "svelte/transition";
     import { cubicInOut } from "svelte/easing";
     import { onMount } from "svelte";
@@ -14,8 +16,10 @@
         getCookie,
         deleteAllCookies,
     } from "../../lib/api.js";
+    import PathCheckOrders from "../../components/PathCheckOrders.svelte";
+    import PathCheckResults from "../../components/PathCheckResults.svelte";
 
-    let currentTab = "appointments"; // Tracks the active tab
+    let currentTab = ""; // Tracks the active tab
     let user = {
         id: "",
         name: "",
@@ -29,6 +33,11 @@
             role: getCookie("role"),
             type: getCookie("labStaffType"),
         };
+        if (user.type === "Physician") {
+            currentTab = "appointments";
+        } else if (user.type === "Pathologist") {
+            currentTab = "path_test_orders";
+        }
     });
 
     function logout() {
@@ -275,6 +284,35 @@
                         details.
                     </p>
                     <TestCatalog />
+                </div>
+            {:else if currentTab === "path_test_orders"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Test Orders</h2>
+                    <p>
+                        View and manage all the test orders.
+                        <PathCheckOrders />
+                    </p>
+                </div>
+            {:else if currentTab === "path_test_results"}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Test Results</h2>
+                    <p>
+                        View and manage all the test results.
+                        <PathCheckResults />
+                    </p>
+                </div>
+            {:else if currentTab === ""}
+                <div
+                    in:fade={{ delay: 201, duration: 200 }}
+                    out:fade={{ duration: 200, easing: cubicInOut }}
+                >
+                    <h2 class="text-3xl font-bold mb-4">Redirecting...</h2>
                 </div>
             {:else}
                 <div
