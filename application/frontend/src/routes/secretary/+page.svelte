@@ -272,7 +272,7 @@
                     <p>
                         Update your personal information and account settings.
                     </p>
-                    <StaffProfile />
+                    <StaffProfile {user} />
                 </div>
             {:else if currentTab === "testcatalog"}
                 <div

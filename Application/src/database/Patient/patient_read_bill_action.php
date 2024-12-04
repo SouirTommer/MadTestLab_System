@@ -38,10 +38,10 @@ $stmt->bind_result($patientID);
 $stmt->fetch();
 $stmt->close();
 
-if (!$patientID) {
-    header("Location: ../login.php");
-    exit();
-}
+// if (!$patientID) {
+//     header("Location: ../login.php");
+//     exit();
+// }
 
 // Fetch all bills for the logged-in patient
 $billsQuery = "
@@ -83,9 +83,9 @@ if ($billsResult->num_rows > 0) {
 $stmt->close();
 $conn->close();
 
-if (!empty($results)) {
-    echo json_encode(['status' => 'success', 'data' => $results]);
+if (!empty($bills)) {
+    echo json_encode(['status' => 'success', 'data' => $bills]);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'No results found']);
+    echo json_encode(['status' => 'error', 'message' => 'No results found', 'patientID' => $patientID]);
 }
 ?>

@@ -281,7 +281,7 @@
                 >
                     <h2 class="text-3xl font-bold mb-4">Profile</h2>
                     <p>View and manage your profile information.</p>
-                    <Profile />
+                    <Profile {user} />
                 </div>
             {:else if currentTab === "testcatalog"}
                 <div

@@ -128,30 +128,6 @@
             All
         </button>
 
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'in progress'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "in progress";
-                filterResults();
-            }}
-        >
-            In Progress
-        </button>
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'completed'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "completed";
-                filterResults();
-            }}
-        >
-            Completed
-        </button>
     </div>
     {#if filteredResults.length === 0 }
         <h1

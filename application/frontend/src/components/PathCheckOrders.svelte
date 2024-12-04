@@ -387,7 +387,6 @@
                             <option value="" disabled selected
                                 >-- Select a Status --</option
                             >
-                            <option value="In Progress">In Progress</option>
                             <option value="Completed">Completed</option>
                         </select>
                     </div>

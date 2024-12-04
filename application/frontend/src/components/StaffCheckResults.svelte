@@ -62,7 +62,7 @@
                 },
             );
             const data = await response.json();
-            results = data.results;
+            results = data;
             console.log("Fetched data:", data);
             if (results === undefined || results.length == 0) {
                 console.log("No results found");
@@ -126,30 +126,7 @@
         >
             All
         </button>
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'inprogress'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "inprogress";
-                filterResults();
-            }}
-        >
-            Scheduled
-        </button>
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'completed'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "completed";
-                filterResults();
-            }}
-        >
-            Completed
-        </button>
+
     </div>
 
     {#if filteredResults.length === 0}
@@ -181,32 +158,32 @@
                 <tbody>
                     {#each filteredResults as result}
                         <tr>
-                            <td class="py-2 px-4 border-b">{result.ResultID}</td
+                            <td class="py-2 px-4 border">{result.ResultID}</td
                             >
-                            <td class="py-2 px-4 border-b">{result.OrderID}</td>
-                            <td class="py-2 px-4 border-b"
+                            <td class="py-2 px-4 border">{result.OrderID}</td>
+                            <td class="py-2 px-4 border"
                                 ><a href={result.ReportURL} target="_blank"
                                     >View Report</a
                                 ></td
                             >
-                            <td class="py-2 px-4 border-b"
+                            <td class="py-2 px-4 border"
                                 >{result.Interpretation}</td
                             >
-                            <td class="py-2 px-4 border-b"
+                            <td class="py-2 px-4 border"
                                 >{result.ResultDateTime}</td
                             >
-                            <td class="py-2 px-4 border-b"
+                            <td class="py-2 px-4 border"
                                 ><span
                                     class="status-tag {getStatusClass(
                                         result.ResultStatus,
                                     )}">{result.ResultStatus}</span
                                 ></td
                             >
-                            <td class="py-2 px-4 border-b"
+                            <td class="py-2 px-4 border"
                                 >{result.PatientFirstName}
                                 {result.PatientLastName}</td
                             >
-                            <td class="py-2 px-4 border-b"
+                            <td class="py-2 px-4 border"
                                 >{result.LabStaffFirstName}
                                 {result.LabStaffLastName}</td
                             >

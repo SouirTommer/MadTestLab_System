@@ -5,14 +5,7 @@
 
     var selectedTab = "general";
 
-    let staff = {
-        id: "12345",
-        name: "Marco",
-        role: "Lab Secretary",
-        email: "stse2122@gmail.com",
-        phone: "98765432",
-        password: "password123", // Note: In a real application, never store passwords in plain text
-    };
+    export let user = {};
 </script>
 
 <div class="flex flex-row mt-8">
@@ -59,7 +52,7 @@
                         id="username"
                         type="text"
                         placeholder="Enter your username"
-                        value={staff.name}
+                        value={user.name}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>
@@ -68,49 +61,35 @@
                         for="email"
                         class="text-md font-medium text-slate-600"
                     >
-                        Email Address
+                        User ID
                     </label>
                     <input
                         readonly
                         id="email"
                         type="text"
                         placeholder="Enter your email address"
-                        value={staff.email}
+                        value={user.id}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>
                 <div class="flex flex-col">
                     <label
-                        for="phone"
+                        for="email"
                         class="text-md font-medium text-slate-600"
                     >
-                        Contact Number
+                    Role
                     </label>
                     <input
                         readonly
-                        id="phone"
+                        id="email"
                         type="text"
-                        placeholder="Enter your phone number"
-                        value={staff.phone}
+                        placeholder="Enter your email address"
+                        value={user.role}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>
-                <div class="flex flex-col">
-                    <label
-                        for="role"
-                        class="text-md font-medium text-slate-600"
-                    >
-                        Role
-                    </label>
-                    <input
-                        readonly
-                        id="role"
-                        type="text"
-                        placeholder="Enter your Date of Birth"
-                        value={staff.role}
-                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                    />
-                </div>
+
+      
             </div>
         {:else if selectedTab === "authentication"}
             <div
