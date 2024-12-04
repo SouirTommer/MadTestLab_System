@@ -9,8 +9,9 @@
     let pendingOrders = [];
     let inProgressOrders = [];
     let completedOrders = [];
+    let cancelledOrders = [];
     let filteredOrders = [];
-    let filter = "all";
+    let filter = "pending";
     let insurances = [];
     let testsCatalog = [];
 
@@ -93,6 +94,9 @@
         inProgressOrders = orders.filter(
             (order) => order.OrderStatus.toLowerCase() === "in progress",
         );
+        cancelledOrders = orders.filter(
+            (order) => order.OrderStatus.toLowerCase() === "cancelled",
+        );
     }
 
     function filterOrders() {
@@ -109,6 +113,9 @@
             case "completed":
                 filteredOrders = completedOrders;
                 break;
+            case "cancelled":
+                filteredOrders = cancelledOrders;
+                break;
             default:
                 filteredOrders = allOrders;
         }
@@ -122,6 +129,8 @@
                 return "bg-green-200 text-green-800";
             case "In Progress":
                 return "bg-blue-200 text-blue-800";
+            case "Cancelled":
+                return "bg-red-200 text-red-800";
             default:
                 return "bg-gray-200 text-gray-800";
         }
@@ -130,18 +139,7 @@
 
 <div class="flex flex-col mt-8">
     <div class="flex gap-4 pb-4">
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'all'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transparent text-slate-600'}"
-            on:click={() => {
-                filter = "all";
-                filterOrders();
-            }}
-        >
-            All
-        </button>
+      
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
             'pending'
@@ -178,6 +176,30 @@
         >
             Completed
         </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'cancelled'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transparent text-slate-600'}"
+            on:click={() => {
+                filter = "cancelled";
+                filterOrders();
+            }}
+        >
+            Cancelled
+        </button>
+        <button
+        class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+        'all'
+            ? 'bg-slate-200 text-slate-600'
+            : 'bg-transparent text-slate-600'}"
+        on:click={() => {
+            filter = "all";
+            filterOrders();
+        }}
+    >
+        All
+    </button>
     </div>
     {#if filteredOrders.length === 0}
         <h1
@@ -185,7 +207,7 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-            No orders found
+        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i> No orders found
         </h1>
     {:else}
         <div
@@ -202,7 +224,7 @@
                         <th class="border px-4 py-2">Test Name</th>
                         <th class="border px-4 py-2">Order DateTime</th>
                         <th class="border px-4 py-2">Order Status</th>
-                        <th class="border px-4 py-2">Insurance Name</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -232,9 +254,6 @@
                                     )}">{order.OrderStatus}</span
                                 >
                             </td>
-                            <td class="py-2 px-4 border"
-                                >{order.InsuranceName}</td
-                            >
                         </tr>
                     {/each}
                 </tbody>

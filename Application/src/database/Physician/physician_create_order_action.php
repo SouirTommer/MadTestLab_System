@@ -1,5 +1,9 @@
 <?php
 session_start();
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://localhost:3000'
+];
 if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
     header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 } else {
@@ -12,12 +16,13 @@ header(header: 'Content-Type: application/json'); // Set the content type to JSO
 
 require_once '../../connection/mysqli_conn_Physician.php';
 require '../../Page/Account/auth.php';
-// check_labstaff_type('Physician');
+// // check_labstaff_type('Physician');
 if (!isset($_COOKIE['accountId'])) {
     echo json_encode(['status' => 'error', 'message' => 'Not authenticated']);
     exit();
 }
 $accountId = $_COOKIE['accountId'];
+// $accountId = 4;
 
 // Function to get the LabStaffID from the AccountID
 function getLabStaffID($conn, $accountId)
@@ -113,5 +118,4 @@ $stmt->close();
 $conn->close();
 
 // Return JSON response
-header('Content-Type: application/json');
 echo json_encode($response);

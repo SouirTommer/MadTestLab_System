@@ -118,7 +118,7 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-            No orders found
+        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i> No Appointment found
         </h1>
     {:else}
         <div

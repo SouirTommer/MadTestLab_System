@@ -12,7 +12,7 @@
     let scheduledAppointments = []; // Scheduled appointments
     let completedAppointments = []; // Completed appointments
     let filteredAppointments = []; // Reactive variable to store filtered appointments
-    let filter = "all";
+    let filter = "scheduled";
     let showModal = false;
     let selectedAppointment = {};
 
@@ -70,6 +70,8 @@
                 return "bg-yellow-200 text-yellow-800";
             case "completed":
                 return "bg-green-200 text-green-800";
+            case "cancelled":
+                return "bg-red-200 text-red-800";
             default:
                 return "bg-gray-200 text-gray-800";
         }
@@ -83,26 +85,28 @@
         showModal = false;
     }
 
-
     async function handleSubmit(event) {
         event.preventDefault(); // Prevent page reload
         const formData = new FormData(event.target);
 
         try {
             const response = await fetch(
-                "http://localhost:8080/database/Secretary/secretary_create_appointment_action.php",
+                "http://localhost:8080/database/Physician/physician_create_order_action.php",
                 {
                     method: "POST",
                     credentials: "include", // Include credentials (cookies) with the request
                     body: formData,
                 },
             );
-
+            // for (let [key, value] of formData.entries()) {
+            //     console.log(`${key}: ${value}`);
+            // }
             const result = await response.json();
             console.log("Create appointment response:", result); // Debugging statement
             if (result.status === "success") {
                 alert("Appointment created successfully");
-                onClose(); // Call the onClose function to close the modal
+                closeModal(); // Call the onClose function to close the modal
+                location.reload();
             } else {
                 alert("Failed to create appointment: " + result.message);
             }
@@ -110,25 +114,12 @@
             console.error("Error creating appointment:", error);
             alert("Error creating appointment. Please try again.");
         }
-        console.log('Form submitted:', selectedAppointment);
-        closeModal();
+        console.log("Form submitted");
     }
 </script>
 
 <div class="flex flex-col mt-8">
     <div class="flex gap-4 pb-4">
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'all'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "all";
-                filterAppointments();
-            }}
-        >
-            All
-        </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
             'scheduled'
@@ -153,6 +144,18 @@
         >
             Completed
         </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'all'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => {
+                filter = "all";
+                filterAppointments();
+            }}
+        >
+            All
+        </button>
     </div>
     {#if filteredAppointments.length === 0}
         <h1
@@ -160,7 +163,7 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-            No orders found
+        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i> No Appointment found 
         </h1>
     {:else}
         <div
@@ -194,7 +197,8 @@
                             >
                             <td class="py-2 px-4 border"
                                 >{appointment.SecretaryFirstName}
-                                {appointment.SecretaryLastName}</td
+                                {appointment.SecretaryLastName}
+                                {appointment.SecretaryId}</td
                             >
                             <td class="py-2 px-4 border"
                                 >{appointment.AppointmentDateTime}</td
@@ -229,8 +233,8 @@
 </div>
 
 <div
-    in:fade={{ duration: 300, easing: cubicInOut }}
-    out:fade={{ duration: 300, easing: cubicInOut }}
+    in:fade={{ duration: 200, easing: cubicInOut }}
+    out:fade={{ duration: 200, easing: cubicInOut }}
 >
     {#if showModal}
         <div
@@ -247,32 +251,42 @@
                 >
                     &times;
                 </button>
-                <h2>Appointment Details</h2>
-                <form on:submit={handleSubmit}>
+                <h2 class="text-xl font-semibold mb-4">Create Test Order</h2>
+                <form on:submit={handleSubmit} class="space-y-4">
                     <div>
-                        <label for="appointmentId"
+                        <label
+                            for="appointmentId"
+                            class="block text-sm font-medium text-gray-700"
                             ><strong>Appointment ID:</strong></label
                         >
                         <input
                             type="text"
+                            name="appointmentID"
                             id="appointmentId"
                             value={selectedAppointment.AppointmentID}
                             readonly
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
-                        <label for="patientName"
+                        <label
+                            for="patientName"
+                            class="block text-sm font-medium text-gray-700"
                             ><strong>Patient Name:</strong></label
                         >
                         <input
                             type="text"
+                            name="patient"
                             id="patientName"
                             value={`${selectedAppointment.PatientFirstName} ${selectedAppointment.PatientLastName}`}
                             readonly
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
-                        <label for="physicianName"
+                        <label
+                            for="physicianName"
+                            class="block text-sm font-medium text-gray-700"
                             ><strong>Physician Name:</strong></label
                         >
                         <input
@@ -280,44 +294,78 @@
                             id="physicianName"
                             value={`${selectedAppointment.PhysicianFirstName} ${selectedAppointment.PhysicianLastName}`}
                             readonly
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
-                        <label for="secretaryName"
+                        <label
+                            for="secretaryName"
+                            class="block text-sm font-medium text-gray-700"
                             ><strong>Secretary Name:</strong></label
                         >
                         <input
                             type="text"
+                            name="secretary"
                             id="secretaryName"
                             value={`${selectedAppointment.SecretaryFirstName} ${selectedAppointment.SecretaryLastName}`}
                             readonly
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
-                        <label for="appointmentDateTime"
-                            ><strong>Appointment DateTime:</strong></label
+                        <label
+                            for="orderDateTime"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Test Order Date Time:</strong></label
                         >
                         <input
-                            type="text"
-                            id="appointmentDateTime"
-                            value={selectedAppointment.AppointmentDateTime}
-                            readonly
+                            type="datetime-local"
+                            name="orderDateTime"
+                            id="orderDateTime"
+                            value=""
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
-                        <label for="status"><strong>Status:</strong></label>
-                        <select id="status" bind:value={selectedAppointment.AppointmentsStatus}>
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
+                        <label
+                            for="orderStatus"
+                            class=" text-sm font-medium text-gray-700"
+                            ><strong>Order Status:</strong></label
+                        >
+                        <select
+                            name="orderStatus"
+                            id="orderStatus"
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        >
+                            <option value="">-- Select a Status --</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
                         </select>
                     </div>
-                    <div class="mt-4">
-                        <button
-                            type="submit"
-                            class="px-4 py-2 bg-blue-500 text-white rounded"
-                            >Submit</button
+                    <div>
+                        <label
+                            for="test"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Test:</strong></label
                         >
+                        <input
+                            type="number"
+                            name="testCode"
+                            id="test"
+                            placeholder="Enter test code"
+                            max="8"
+                            min="1"
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                        <div class="pt-8 mt-4 w-full flex justify-center">
+                            <button
+                                type="submit"
+                                name="submit"
+                                class="px-10 py-2 bg-indigo-500 text-white rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >Create Test Order</button
+                            >
+                        </div>
                     </div>
                 </form>
             </div>

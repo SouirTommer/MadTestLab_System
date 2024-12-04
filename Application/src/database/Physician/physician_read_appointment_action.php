@@ -69,8 +69,10 @@ $appointmentsQuery = "
     JOIN Patients ON Appointments.PatientID = Patients.PatientID
     JOIN LabStaffs ON Appointments.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Appointments.SecretaryID = Secretaries.SecretaryID
-    WHERE Appointments.LabStaffID = ? AND Appointments.AppointmentsStatus = 'Scheduled'
+    WHERE Appointments.LabStaffID = ?
+     
 ";
+// AND Appointments.AppointmentsStatus = 'Scheduled'
 $stmt = $conn->prepare($appointmentsQuery);
 $stmt->bind_param('i', $labStaffID);
 $stmt->execute();
