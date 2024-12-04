@@ -9,11 +9,8 @@
     let pendingOrders = [];
     let inProgressOrders = [];
     let completedOrders = [];
-    let cancelledOrders = [];
     let filteredOrders = [];
     let filter = "pending";
-    let insurances = [];
-    let testsCatalog = [];
 
     // orders = [
     //     {
@@ -66,16 +63,14 @@
     async function fetchOrders() {
         try {
             const response = await fetch(
-                "http://localhost:8080/database/Secretary/secretary_read_order_action.php",
+                "http://localhost:8080/database/Physician/physician_read_order_action.php",
                 {
                     credentials: "include", // Include credentials (cookies) with the request
                 },
             );
             const data = await response.json();
             console.log("Fetched data:", data); // Debugging: Log fetched data
-            orders = data.orders;
-            insurances = data.insurances;
-            testsCatalog = data.testsCatalog;
+            orders = data;
             categorizeOrders();
             filterOrders();
         } catch (error) {
@@ -85,6 +80,7 @@
 
     function categorizeOrders() {
         allOrders = orders;
+
         pendingOrders = orders.filter(
             (order) => order.OrderStatus.toLowerCase() === "pending",
         );
@@ -94,9 +90,7 @@
         inProgressOrders = orders.filter(
             (order) => order.OrderStatus.toLowerCase() === "in progress",
         );
-        cancelledOrders = orders.filter(
-            (order) => order.OrderStatus.toLowerCase() === "cancelled",
-        );
+
     }
 
     function filterOrders() {
@@ -113,24 +107,19 @@
             case "completed":
                 filteredOrders = completedOrders;
                 break;
-            case "cancelled":
-                filteredOrders = cancelledOrders;
-                break;
             default:
                 filteredOrders = allOrders;
         }
     }
 
     function getStatusClass(status) {
-        switch (status) {
-            case "Pending":
+        switch (status.toLowerCase()) {
+            case "pending":
                 return "bg-yellow-200 text-yellow-800";
-            case "Completed":
+            case "completed":
                 return "bg-green-200 text-green-800";
-            case "In Progress":
+            case "in progress":
                 return "bg-blue-200 text-blue-800";
-            case "Cancelled":
-                return "bg-red-200 text-red-800";
             default:
                 return "bg-gray-200 text-gray-800";
         }
@@ -154,7 +143,7 @@
         </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'In Progress'
+            'in progress'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transparent text-slate-600'}"
             on:click={() => {
@@ -176,18 +165,7 @@
         >
             Completed
         </button>
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'cancelled'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transparent text-slate-600'}"
-            on:click={() => {
-                filter = "cancelled";
-                filterOrders();
-            }}
-        >
-            Cancelled
-        </button>
+
         <button
         class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
         'all'

@@ -10,6 +10,7 @@
     onMount(() => {
         const username = getCookie("username");
         const role = getCookie("role");
+        let labStaffType;
 
         if (username && role) {
             switch (role) {

@@ -226,16 +226,28 @@
                                 ></td
                             >
                             <td class="py-2 px-4 border">
-                                <button
-                                    class="px-4 py-2 text-indigo-400 text-3xl"
-                                    on:click={() =>
-                                        handleButtonClick(appointment)}
-                                    aria-label="Open appointment details"
-                                >
-                                    <i
-                                        class="fa-regular fa-square-plus hover:fa-solid"
-                                    ></i>
-                                </button>
+                                {#if appointment.AppointmentsStatus === "Scheduled"}
+                                    <button
+                                        class="px-4 py-2 text-indigo-400 text-3xl"
+                                        on:click={() =>
+                                            handleButtonClick(appointment)}
+                                        aria-label="Create Order"
+                                    >
+                                        <i
+                                            class="fa-regular fa-square-plus hover:text-indigo-600"
+                                        ></i>
+                                    </button>
+                                {:else}
+                                    <button
+                                        class="px-4 py-2 text-slate-600 text-3xl"
+                                        aria-label="Cannot Create Order"
+                                    >
+                                        <i
+                                            class="fa-regular fa-square-minus "
+                                        ></i>
+                                    </button>
+                                {/if}
+                         
                             </td>
                         </tr>
                     {/each}

@@ -20,6 +20,7 @@
         name: "",
         id: "",
         role: "",
+        type: "",
     };
     onMount(() => {
         const username = getCookie("username");
@@ -31,8 +32,38 @@
             user.name = getCookie("username");
             user.role = getCookie("role");
             user.id = getCookie("accountId");
+            getLabStaffType().then((labStaffType) => {
+                if (labStaffType) {
+                    user.type = labStaffType;
+                }
+            });
+            
         }
     });
+    
+    async function getLabStaffType() {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/database/Account/get_lab_staff_type.php",
+                {
+                    credentials: "include",
+                },
+            );
+
+            const result = await response.json();
+            console.log("Response received:", result);
+
+            if (response.ok && result.status === "success") {
+                return result.labStaffType;
+            } else {
+                console.error("Failed to get lab staff type:", result.message);
+                return null;
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            return null;
+        }
+    }
 
     function logout() {
         showAlertBox("Logging out...", "#f44336");
@@ -63,13 +94,14 @@
     <aside
         class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
     >
+    {#if user.type === ""}
         <div class="p-6 pt-10">
             <h1 class="font-semibold text-3xl">
                 <span class="text-indigo-400"> MedTest </span>
                 <span class="text-slate-600">Lab </span>
                 <i class=" text-slate-600 fa-solid fa-vial"></i>
             </h1>
-            <p class="text-lg font-semibold text-slate-600">Secretary Portal</p>
+            <p class="text-lg font-semibold text-slate-600">Physician Portal</p>
         </div>
         <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
            
@@ -137,6 +169,8 @@
                 <p class="text-slate-400">User ID: {user.id}</p>
             </div>
         </nav>
+        
+    {/if}
     </aside>
 
     <SectionWrapper>

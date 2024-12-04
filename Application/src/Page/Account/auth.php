@@ -44,3 +44,11 @@ function check_labstaff_type($labStaffType) {
         exit();
     }
 }
+
+function check_labstaff_type_cookie($labStaffType) {
+    check_login();
+    if ($_SESSION['role'] !== 'LabStaff' || $_SESSION['labStaffType'] !== $labStaffType) {
+        header("Location: login.php");
+        exit();
+    }
+}
