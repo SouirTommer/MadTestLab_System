@@ -13,9 +13,15 @@ header(header: 'Content-Type: application/json'); // Set the content type to JSO
 require_once '../../connection/mysqli_conn_Physician.php';
 require '../../Page/Account/auth.php';
 // check_labstaff_type('Physician');
+if (!isset($_COOKIE['accountId'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Not authenticated']);
+    exit();
+}
+$accountId = $_COOKIE['accountId'];
 
 // Function to get the LabStaffID from the AccountID
-function getLabStaffID($conn, $accountId) {
+function getLabStaffID($conn, $accountId)
+{
     $labStaffID = null;
     $query = "SELECT LabStaffID FROM LabStaffs WHERE AccountID = ?";
     $stmt = $conn->prepare($query);
@@ -28,7 +34,8 @@ function getLabStaffID($conn, $accountId) {
 }
 
 // Function to get the PatientID from the patient's name
-function getPatientID($conn, $patientName) {
+function getPatientID($conn, $patientName)
+{
     $patientID = null;
     $query = "SELECT PatientID FROM Patients WHERE CONCAT(FirstName, ' ', LastName) = ?";
     $stmt = $conn->prepare($query);
@@ -41,7 +48,8 @@ function getPatientID($conn, $patientName) {
 }
 
 // Function to get the SecretaryID from the secretary's name
-function getSecretaryID($conn, $secretaryName) {
+function getSecretaryID($conn, $secretaryName)
+{
     $secretaryID = null;
     $query = "SELECT SecretaryID FROM Secretaries WHERE CONCAT(FirstName, ' ', LastName) = ?";
     $stmt = $conn->prepare($query);
@@ -54,7 +62,6 @@ function getSecretaryID($conn, $secretaryName) {
 }
 
 // Get the LabStaffID from the session
-$accountId = $_SESSION['accountId'];
 $labStaffID = getLabStaffID($conn, $accountId);
 
 // Get the form data
@@ -108,4 +115,3 @@ $conn->close();
 // Return JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
-?>

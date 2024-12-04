@@ -2,7 +2,7 @@
     import SectionWrapper from "../../components/SectionWrapper.svelte";
     import Header from "../../components/Header.svelte";
     import Profile from "../../components/StaffProfile.svelte";
-    import CreateOrder from "../../components/PhysicianCreateOrder.svelte";
+    import TestingOrder from "../../components/PhysicianCheckOrder.svelte";
     import TestCatalog from "../../components/StaffTestCatalog.svelte";
     import Appointment from "../../components/PhysicianAppointment.svelte";
     import { fade } from "svelte/transition";
@@ -15,7 +15,7 @@
         deleteAllCookies,
     } from "../../lib/api.js";
 
-    let currentTab = "dashboard"; // Tracks the active tab
+    let currentTab = "appointments"; // Tracks the active tab
     let user = {
         name: "",
         id: "",
@@ -75,16 +75,6 @@
            
             <p class="text-slate-500 text-m font-medium px-2">Administration</p>
             <button
-                class="navItem {currentTab === 'create_order'
-                    ? 'selected'
-                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "create_order"}
-                on:click={() => (currentTab = "create_order")}
-            >
-                <i class="fa-regular fa-plus"></i>
-                Create Order
-            </button>
-            <button
                 class="navItem {currentTab === 'appointments'
                     ? 'selected'
                     : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
@@ -93,6 +83,16 @@
             >
                 <i class="fa-regular fa-calendar-check"></i>
                 Appointments
+            </button>
+            <button
+                class="navItem {currentTab === 'create_order'
+                    ? 'selected'
+                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                class:selected={currentTab === "create_order"}
+                on:click={() => (currentTab = "create_order")}
+            >
+                <i class="fa-solid fa-file-medical"></i>
+                Testing Orders
             </button>
             <p class="text-slate-500 text-m font-medium px-2">Information</p>
 
@@ -173,12 +173,11 @@
                     out:fade={{ duration: 200, easing: cubicInOut }}
                 >
                     <h2 class="text-3xl font-bold mb-4">
-                        Create Testing Order
+                        Testing Order
                     </h2>
                     <p>
-                        Create a new order for a patient. You can search for a
-                        patient by their name or ID.
-                        <CreateOrder />
+                        View your testing orders.
+                        <TestingOrder />
                     </p>
                 </div>
             {:else if currentTab === "profile"}

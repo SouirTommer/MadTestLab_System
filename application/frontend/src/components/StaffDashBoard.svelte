@@ -178,6 +178,7 @@
                     <span class="pl-4">{appointment.patient}</span>
                     <span class="flex-1"></span>
                     <span>{appointment.time}</span>
+                    <!-- svelte-ignore a11y_consider_explicit_label -->
                     <button
                         class="text-indigo-400 bg-transparent"
                         on:click={() => viewPatientInfo(appointment)}
@@ -204,6 +205,7 @@
                     <span class="pl-4">{appointment.patient}</span>
                     <span class="flex-1"></span>
                     <span>{appointment.time}</span>
+                    <!-- svelte-ignore a11y_consider_explicit_label -->
                     <button
                         class="text-indigo-400 bg-transparent"
                         on:click={() => viewPatientInfo(appointment)}
@@ -219,6 +221,7 @@
                 in:fade={{ duration: 200, easing: cubicInOut }}
                 out:fade={{ duration: 200, easing: cubicInOut }}
             >
+                <!-- svelte-ignore a11y_consider_explicit_label -->
                 <button
                     class="absolute top-2 right-2 text-slate-600"
                     on:click={closePatientInfo}

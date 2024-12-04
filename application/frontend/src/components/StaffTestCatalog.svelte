@@ -62,11 +62,11 @@
             <tbody>
                 {#each testsCatalog as test}
                     <tr>
-                        <td class="text-center py-2 px-4 border-b">{test.TestCode}</td>
-                        <td class="py-2 px-4 border-b">{test.TestName}</td>
-                        <td class="py-2 px-4 border-b">{test.Description}</td>
-                        <td class="text-end py-2 px-4 border-b">{test.Price}</td>
-                        <td class="py-2 px-4 border-b"><span class="status-tag {getStatusClass(test.TestType)}">{test.TestType}</span></td>
+                        <td class="text-center py-2 px-4 border">{test.TestCode}</td>
+                        <td class="py-2 px-4 border">{test.TestName}</td>
+                        <td class="py-2 px-4 border">{test.Description}</td>
+                        <td class="text-end py-2 px-4 border">{test.Price}</td>
+                        <td class="py-2 px-4 border"><span class="status-tag {getStatusClass(test.TestType)}">{test.TestType}</span></td>
                     </tr>
                 {/each}
             </tbody>

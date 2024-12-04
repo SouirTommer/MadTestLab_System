@@ -6,7 +6,6 @@
     import PatientOrder from "../../components/StaffCheckOrders.svelte";
     import StaffDashBoard from "../../components/StaffDashBoard.svelte";
     import StaffBilling from "../../components/StaffBilling.svelte";
-    import StaffRecord from "../../components/StaffRecords.svelte";
     import NewAppointment from "../../components/StaffCreateAppointment.svelte";
     import PatientResults from "../../components/StaffCheckResults.svelte";
     import StaffInsurance from "../../components/StaffInsurance.svelte";
