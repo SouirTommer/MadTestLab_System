@@ -16,6 +16,17 @@
     let showModal = false;
     let selectedAppointment = {};
 
+    const tests = [
+        { code: "1", name: "Complete Blood Count" },
+        { code: "2", name: "Lipid Panel" },
+        { code: "3", name: "Basic Metabolic Panel" },
+        { code: "4", name: "Urinalysis" },
+        { code: "5", name: "Thyroid Function Test" },
+        { code: "6", name: "X-Ray" },
+        { code: "7", name: "MRI Scan" },
+        { code: "8", name: "COVID-19 PCR Test" },
+    ];
+
     onMount(async () => {
         try {
             const response = await fetch(
@@ -106,6 +117,7 @@
             if (result.status === "success") {
                 alert("Appointment created successfully");
                 closeModal(); // Call the onClose function to close the modal
+
                 location.reload();
             } else {
                 alert("Failed to create appointment: " + result.message);
@@ -163,7 +175,8 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i> No Appointment found 
+            <i class="fa-solid fa-magnifying-glass text-4xl pr-4"></i> No Appointment
+            found
         </h1>
     {:else}
         <div
@@ -265,7 +278,7 @@
                             id="appointmentId"
                             value={selectedAppointment.AppointmentID}
                             readonly
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
@@ -280,7 +293,7 @@
                             id="patientName"
                             value={`${selectedAppointment.PatientFirstName} ${selectedAppointment.PatientLastName}`}
                             readonly
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
@@ -294,7 +307,7 @@
                             id="physicianName"
                             value={`${selectedAppointment.PhysicianFirstName} ${selectedAppointment.PhysicianLastName}`}
                             readonly
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
@@ -309,13 +322,13 @@
                             id="secretaryName"
                             value={`${selectedAppointment.SecretaryFirstName} ${selectedAppointment.SecretaryLastName}`}
                             readonly
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
                         <label
                             for="orderDateTime"
-                            class="block text-sm font-medium text-gray-700"
+                            class="block text-sm font-medium  text-gray-700"
                             ><strong>Test Order Date Time:</strong></label
                         >
                         <input
@@ -323,7 +336,7 @@
                             name="orderDateTime"
                             id="orderDateTime"
                             value=""
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full  border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
@@ -335,9 +348,9 @@
                         <select
                             name="orderStatus"
                             id="orderStatus"
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4  mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
-                            <option value="">-- Select a Status --</option>
+                            <option value="" disabled selected>-- Select a Status --</option>
                             <option value="Pending">Pending</option>
                             <option value="Completed">Completed</option>
                             <option value="Cancelled">Cancelled</option>
@@ -349,15 +362,24 @@
                             class="block text-sm font-medium text-gray-700"
                             ><strong>Test:</strong></label
                         >
-                        <input
-                            type="number"
-                            name="testCode"
-                            id="test"
-                            placeholder="Enter test code"
-                            max="8"
-                            min="1"
-                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
+                        <div>
+                            <label
+                                for="testCode"
+                                class="block text-sm font-medium text-gray-700"
+                            ></label>
+                            <select
+                                id="testCode"
+                                name="testCode"
+                                class="py-2 px-4  mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            >
+                                <option value="" disabled selected>-- Select a Test --</option>
+                                {#each tests as test}
+                                    <option value={test.code}
+                                        >{test.name}</option
+                                    >
+                                {/each}
+                            </select>
+                        </div>
                         <div class="pt-8 mt-4 w-full flex justify-center">
                             <button
                                 type="submit"
