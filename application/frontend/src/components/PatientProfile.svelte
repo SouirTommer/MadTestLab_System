@@ -4,14 +4,7 @@
     import SectionWrapper from "./SectionWrapper.svelte";
     var selectedTab = "pgeneral";
 
-    let staff = {
-        id: "12345",
-        name: "Tommer",
-        role: "Lab Secretary",
-        email: "souirTOmmer@gmail.com",
-        phone: "54329876",
-        password: "password123", // Note: In a real application, never store passwords in plain text
-    };
+    export let user = {};
 </script>
 
 <div class="flex flex-row mt-8">
@@ -62,39 +55,23 @@
                         id="username"
                         type="text"
                         placeholder="Enter your username"
-                        value={staff.name}
+                        value={user.name}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>
                 <div class="flex flex-col">
                     <label
-                        for="email"
+                        for="role"
                         class="text-md font-medium text-slate-600"
                     >
-                        Email Address
+                        User ID
                     </label>
                     <input
                         readonly
-                        id="email"
+                        id="role"
                         type="text"
-                        placeholder="Enter your email address"
-                        value={staff.email}
-                        class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                    />
-                </div>
-                <div class="flex flex-col">
-                    <label
-                        for="phone"
-                        class="text-md font-medium text-slate-600"
-                    >
-                        Contact Number
-                    </label>
-                    <input
-                        readonly
-                        id="phone"
-                        type="text"
-                        placeholder="Enter your phone number"
-                        value={staff.phone}
+                        placeholder="Enter your Date of Birth"
+                        value={user.id}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>
@@ -110,7 +87,7 @@
                         id="role"
                         type="text"
                         placeholder="Enter your Date of Birth"
-                        value={staff.role}
+                        value={user.role}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>

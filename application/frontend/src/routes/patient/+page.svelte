@@ -244,7 +244,7 @@
                     <p>
                         Update your personal information and account settings.
                     </p>
-                    <PatientProfile />
+                    <PatientProfile {user}/>
                 </div>
             {:else}
                 <div
