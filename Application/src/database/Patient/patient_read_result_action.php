@@ -27,6 +27,7 @@ if (!isset($_COOKIE['accountId'])) {
 
 // Get the AccountID from the cookies
 $accountId = $_COOKIE['accountId'];
+$patientId = $_COOKIE['patientId'];
 
 // Fetch all results for the logged-in patient
 $resultsQuery = "
@@ -48,7 +49,7 @@ $resultsQuery = "
     WHERE Orders.PatientID = ?
 ";
 $stmt = $conn->prepare($resultsQuery);
-$stmt->bind_param('i', $patientID);
+$stmt->bind_param('i', $patientId);
 $stmt->execute();
 $resultsResult = $stmt->get_result();
 

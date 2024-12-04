@@ -20,6 +20,7 @@
         name: "",
         id: "",
         role: "",
+        pid: "",
     };
 
     onMount(() => {
@@ -32,9 +33,27 @@
             user.name = getCookie("username");
             user.role = getCookie("role");
             user.id = getCookie("accountId");
+            fetchStaffId();
         }
     });
 
+    async function fetchStaffId() {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/database/Account/getPatient_action.php",
+                {
+                    credentials: "include",
+                },
+            );
+            const data = await response.json();
+            console.log("Fetched data:", data);
+            if (data.status === "success") {
+                user.pid = data;
+            }
+        } catch (error) {
+            console.error("Error fetching patient info:", error);
+        }
+    }
     let currentTab = "appointment"; // Tracks the active tab
 
     function getGreetingWithIcon() {
@@ -94,7 +113,6 @@
             <p class="text-lg font-semibold text-slate-600">Patient Portal</p>
         </div>
         <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
-            
             <p class="text-slate-500 text-m font-medium px-2">My Test</p>
             <button
                 class="navItem {currentTab === 'appointment'

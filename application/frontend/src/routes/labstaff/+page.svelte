@@ -33,7 +33,7 @@
             role: getCookie("role"),
             type: getCookie("labStaffType"),
         };
-        if (!user.id || role!=="LabStaff") {
+        if (!user.id || user.role!=="LabStaff") {
             goto("/");
         }
         if (user.type === "Physician") {
@@ -232,7 +232,14 @@
         <main class="flex-1 ml-72 p-6 overflow-y-auto min-w-[1400px]">
             <div class="flexs items-center gap-2 mb-6 py-4">
                 <h1 class="text-4xl font-bold pl-2">
-                    <i class="fa-solid fa-wrench text-slate-600"></i> Admin Panel
+                    {#if user.type === "Physician"}
+                        <i class="fa-solid fa-user-md text-slate-600 pr-4"></i>
+                         Physician Panel
+                    {:else if user.type === "Pathologist"}
+                        <i class="fa-solid fa-microscope text-slate-600 pr-4"></i>
+                         Pathologist Panel
+                    {/if}
+        
                 </h1>
             </div>
 

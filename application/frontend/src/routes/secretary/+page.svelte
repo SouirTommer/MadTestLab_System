@@ -33,14 +33,12 @@
             id: getCookie("accountId"),
             name: getCookie("username"),
             role: getCookie("role"),
+            secretaryId: "",
         };
         if (!user.name || user.role !== "Secretary") {
             goto("/");
         }
-       
-        user.secretaryId = fetchStaffId();
-        
-        
+        fetchStaffId();
     });
 
     async function fetchStaffId() {
@@ -54,7 +52,7 @@
             const data = await response.json();
             console.log("Fetched data:", data);
             if (data.status === "success") {
-                user = data;
+                user.secretaryId = data;
             }
         } catch (error) {
             console.error("Error fetching staff info:", error);

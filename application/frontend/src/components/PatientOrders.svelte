@@ -206,10 +206,10 @@
                             <td class="py-2 px-4 border-b">{order.OrderID}</td>
 
                             <td class="py-2 px-4 border-b"
-                                >{order.LabStaffFirstName}{order.LabStaffLastName}</td
+                                >{order.LabStaffFirstName} {order.LabStaffLastName}</td
                             >
                             <td class="py-2 px-4 border-b"
-                                >{order.SecretaryFirstName}{order.SecretaryLastName}</td
+                                >{order.SecretaryFirstName} {order.SecretaryLastName}</td
                             >
                             <td class="py-2 px-4 border-b">{order.TestName}</td>
                             <td class="py-2 px-4 border-b"

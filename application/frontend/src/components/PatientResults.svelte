@@ -4,11 +4,10 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
-    var filter = "all";
+    let filter = "all";
 
     let results = []; // Reactive variable to store fetched orders
     let allResults = []; // All appointments
-    let pendingResults = []; // Pending appointments
     let completedResults = []; // Completed appointments
     let inprogressResults = []; // In Progress appointments
     let filteredResults = []; // Filtered appointments
@@ -79,14 +78,11 @@
 
     function categorizeResults() {
         allResults = results;
-        pendingResults = results.filter(
-            (result) => result.ResultStatus.toLowerCase() === "pending",
-        );
         completedResults = results.filter(
             (result) => result.ResultStatus.toLowerCase() === "completed",
         );
         inprogressResults = results.filter(
-            (result) => result.ResultStatus.toLowerCase() === "inprogress",
+            (result) => result.ResultStatus.toLowerCase() === "in progress",
         );
     }
     function filterResults() {
@@ -94,13 +90,10 @@
             case "all":
                 filteredResults = allResults;
                 break;
-            case "pending":
-                filteredResults = pendingResults;
-                break;
             case "completed":
                 filteredResults = completedResults;
                 break;
-            case "inprogress":
+            case "in progress":
                 filteredResults = inprogressResults;
                 break;
             default:
@@ -110,11 +103,9 @@
 
     function getStatusClass(status) {
         switch (status.toLowerCase()) {
-            case "pending":
-                return "bg-yellow-200 text-yellow-800";
             case "completed":
                 return "bg-green-200 text-green-800";
-            case "inprogress":
+            case "in progress":
                 return "bg-blue-200 text-blue-800";
             default:
                 return "bg-gray-200 text-gray-800";
@@ -136,25 +127,14 @@
         >
             All
         </button>
+
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'pending'
+            'in progress'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
             on:click={() => {
-                filter = "pending";
-                filterResults();
-            }}
-        >
-            Pending
-        </button>
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'inprogress'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => {
-                filter = "inprogress";
+                filter = "in progress";
                 filterResults();
             }}
         >
@@ -173,7 +153,7 @@
             Completed
         </button>
     </div>
-    {#if filteredResults.length === 0}
+    {#if filteredResults.length === 0 }
         <h1
             class="pt-56 text-center text-2xl text-gray-800"
             in:fade={{ delay: 200, duration: 200 }}
@@ -207,8 +187,8 @@
                             <td class="border px-4 py-2">{result.ResultID}</td>
                             <td class="border px-4 py-2">{result.OrderID}</td>
                             <td class="border px-4 py-2"
-                                ><a href={result.ReportURL} target="_blank"
-                                    >View Report</a
+                                ><a href={result.ReportURL} target="_blank" class="text-indigo-400 hover:underline" 
+                                    > View Report <i class="fa-solid fa-link"></i> </a
                                 ></td
                             >
                             <td class="border px-4 py-2"
