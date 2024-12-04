@@ -73,7 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['labStaffType'] = $labStaffType;
                     setcookie('labStaffType', $labStaffType, time() + (86400 * 30), "/");
                 }
-                echo json_encode(['status' => 'success', 'username' => $username, 'accountId' => $accountId, 'role' => $role, 'labStaffType' => $labStaffType ?? null]);
+               
+                echo json_encode(['status' => 'success', 'username' => $username, 'accountId' => $accountId, 'role' => $role, 'labStaffType' => $labStaffType ?? null , 'secretaryId' => $secretaryId ?? null]);
                 exit();
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Invalid password']);

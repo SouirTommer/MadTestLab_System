@@ -9,7 +9,7 @@
     let scheduledAppointments = []; // Scheduled appointments
     let completedAppointments = []; // Completed appointments
     let filteredAppointments = []; // Reactive variable to store filtered appointments
-    let filter = "all";
+    let filter = "scheduled";
     let showModal = false;
     let selectedAppointment = {};
 

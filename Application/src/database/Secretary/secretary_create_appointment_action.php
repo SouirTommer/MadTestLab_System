@@ -22,7 +22,6 @@ if (!isset($_COOKIE['accountId'])) {
     echo json_encode(['status' => 'error', 'message' => 'Not authenticated']);
     exit();
 }
-$accountId = $_COOKIE['accountId'];
 
 $response = ['status' => 'error', 'message' => 'An error occurred.'];
 
@@ -31,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $patientID = $_POST['patient'];
     $physicianID = $_POST['physician'];
     $appointmentDateTime = $_POST['datetime'];
-    $secretaryID = $accountId; // Assuming secretary ID is stored in session
+    $secretaryID = $_COOKIE['secretaryId'];
 
     // Insert the new appointment into the database
     $insertQuery = "

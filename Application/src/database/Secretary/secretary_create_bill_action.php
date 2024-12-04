@@ -1,5 +1,9 @@
 <?php
 session_start();
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://localhost:3000'
+];
 if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
     header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 } else {

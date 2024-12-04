@@ -61,9 +61,11 @@ $ordersQuery = "
     JOIN LabStaffs ON Orders.LabStaffID = LabStaffs.LabStaffID
     JOIN Secretaries ON Orders.SecretaryID = Secretaries.SecretaryID
     JOIN TestsCatalog ON Orders.TestCode = TestsCatalog.TestCode
+    WHERE Orders.PatientID = ?
 ";
-
+ 
 $stmt = $conn->prepare($ordersQuery);
+$stmt->bind_param('i', $patientID);
 $stmt->execute();
 $result = $stmt->get_result();
 $orders = $result->fetch_all(MYSQLI_ASSOC);

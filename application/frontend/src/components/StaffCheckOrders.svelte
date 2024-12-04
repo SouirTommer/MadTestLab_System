@@ -10,7 +10,7 @@
     let inProgressOrders = [];
     let completedOrders = [];
     let filteredOrders = [];
-    let filter = "all";
+    let filter = "pending";
     let insurances = [];
     let testsCatalog = [];
 
@@ -149,16 +149,16 @@
 
         try {
             const response = await fetch(
-                "http://localhost:8080/database/Physician/physician_create_order_action.php",
+                "http://localhost:8080/database/Secretary/secretary_create_bill_action.php",
                 {
                     method: "POST",
                     credentials: "include", // Include credentials (cookies) with the request
                     body: formData,
                 },
             );
-            // for (let [key, value] of formData.entries()) {
-            //     console.log(`${key}: ${value}`);
-            // }
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
             const result = await response.json();
             console.log("Create appointment response:", result); // Debugging statement
             if (result.status === "success") {
@@ -284,7 +284,7 @@
                                     )}">{order.OrderStatus}</span
                                 >
                             </td>
-                            <td class="py-2 px-4 border">
+                            <td class="text-center py-2 px-4 border">
                                 {#if order.OrderStatus === "Pending"}
                                     <button
                                         class="px-4 py-2 text-green-700 text-3xl"
@@ -298,7 +298,7 @@
                                     </button>
                                 {:else}
                                     <button
-                                        class="px-4 py-2 text-slate-600 text-3xl"
+                                        class=" px-4 py-2 text-slate-600 text-3xl"
                                         aria-label="Cannot Create Order"
                                     >
                                         <i class="fa-regular fa-square-minus"
@@ -395,14 +395,29 @@
                     </div>
                     <div>
                         <label
+                            for="test"
+                            class="block text-sm font-medium text-gray-700"
+                            ><strong>Test Name:</strong></label
+                        >
+                        <input
+                            type="test"
+                            id="test"
+                            value={selectedOrder.TestName}
+                            readonly
+                            class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        />
+                    </div>
+                    <div>
+                        <label
                             for="amount"
                             class="block text-sm font-medium text-gray-700"
-                            ><strong>Total Price :</strong></label
+                            ><strong>Test Price:</strong></label
                         >
                         <input
                             type="text"
                             id="amount"
-                            value={`$${getTestPrice(selectedOrder.TestName)}`}
+                            name="amount"
+                            value={`${getTestPrice(selectedOrder.TestName)}`}
                             readonly
                             class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
@@ -426,11 +441,13 @@
                                 <option value="" disabled selected
                                     >-- Select an Insurance --</option
                                 >
+                                
                                 {#each insurances as insurances}
                                     <option value={insurances.InsuranceID}
                                         >{insurances.InsuranceName}</option
                                     >
                                 {/each}
+                                <option value=""> * No need for insurance</option>
                             </select>
                         </div>
                     </div>

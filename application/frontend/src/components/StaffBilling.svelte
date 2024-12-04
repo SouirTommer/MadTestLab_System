@@ -1,10 +1,14 @@
 <script>
     import { onMount } from "svelte";
+    import { cubicInOut } from "svelte/easing";
+    import { fade } from "svelte/transition";
 
     let bills = [];
     let allBills = [];
-    let pendingBills = [];
-    let completedBills = [];
+    let cashBills = [];
+    let creditCardBills = [];
+    let alipayBills = [];
+    let wechatPayBills = [];
     let filteredBills = [];
     let filter = "all";
 
@@ -69,7 +73,7 @@
                 },
             );
             const data = await response.json();
-            bills = data.bills;
+            bills = data;
             console.log("Fetched data:", data);
             if (bills === undefined || bills.length == 0) {
                 console.log("No bills found");
@@ -84,11 +88,17 @@
 
     function categorizeBills() {
         allBills = bills;
-        pendingBills = bills.filter(
-            (bill) => bill.PaymentStatus.toLowerCase() === "pending",
+        cashBills = bills.filter(
+            (bill) => bill.PaymentStatus.toLowerCase() === "cash",
         );
-        completedBills = bills.filter(
-            (bill) => bill.PaymentStatus.toLowerCase() === "completed",
+        creditCardBills = bills.filter(
+            (bill) => bill.PaymentStatus.toLowerCase() === "credit card",
+        );
+        alipayBills = bills.filter(
+            (bill) => bill.PaymentStatus.toLowerCase() === "alipay",
+        );
+        wechatPayBills = bills.filter(
+            (bill) => bill.PaymentStatus.toLowerCase() === "wechat pay",
         );
     }
 
@@ -97,25 +107,48 @@
             case "all":
                 filteredBills = allBills;
                 break;
-            case "pending":
-                filteredBills = pendingBills;
+            case "cash":
+                filteredBills = cashBills;
                 break;
-            case "completed":
-                filteredBills = completedBills;
+            case "credit card":
+                filteredBills = creditCardBills;
                 break;
-            default:
-                filteredBills = allBills;
+            case "alipay":
+                filteredBills = alipayBills;
+                break;
+            case "wechat pay":
+                filteredBills = wechatPayBills;
+                break;
         }
     }
 
     function getStatusClass(status) {
         switch (status.toLowerCase()) {
-            case "pending":
-                return "bg-yellow-200 text-yellow-800";
-            case "completed":
-                return "bg-green-200 text-green-800";
+            case "cash":
+                return "bg-blue-200 text-blue-800";
+            case "credit card":
+                return "bg-purple-200 text-purple-800";
+            case "alipay":
+                return "bg-teal-200 text-teal-800";
+            case "wechat pay":
+                return "bg-red-200 text-red-800";
             default:
                 return "bg-gray-200 text-gray-800";
+        }
+    }
+
+    function getPaymentTag(status) {
+        switch (status.toLowerCase()) {
+            case "cash":
+                return "<i class='text-xl fa-solid fa-money-bill-wave'></i>";
+            case "credit card":
+                return "<i class='text-xl fa-regular fa-credit-card'></i>";
+            case "alipay":
+                return "<i class='text-xl fa-brands fa-alipay'></i>";
+            case "wechat pay":
+                return "<i class='text-xl fa-brands fa-weixin'></i>";
+            default:
+                return "<i class='text-xl fa-solid fa-money-bill-wave'></i>";
         }
     }
 </script>
@@ -136,27 +169,51 @@
         </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'pending'
+            'cash'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transparent text-slate-600'}"
             on:click={() => {
-                filter = "pending";
+                filter = "cash";
                 filterBills();
             }}
         >
-            Pending
+            Cash
         </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'completed'
+            'credit card'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transparent text-slate-600'}"
             on:click={() => {
-                filter = "completed";
+                filter = "credit card";
                 filterBills();
             }}
         >
-            Completed
+            Credit Card
+        </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'alipay'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transparent text-slate-600'}"
+            on:click={() => {
+                filter = "alipay";
+                filterBills();
+            }}
+        >
+            Alipay
+        </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'wechat pay'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transparent text-slate-600'}"
+            on:click={() => {
+                filter = "wechat pay";
+                filterBills();
+            }}
+        >
+            Wechat Pay
         </button>
     </div>
 
@@ -166,14 +223,15 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i> No Billing found
+            <i class="fa-solid fa-magnifying-glass text-4xl pr-4"></i> No Billing
+            found
         </h1>
     {:else}
         <div
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-            <table class="min-w-full bg-white border border-slate-200">
+            <table class="text-center min-w-full bg-white border border-slate-200">
                 <thead>
                     <tr>
                         <th class="border px-4 py-2">Bill ID</th>
@@ -182,10 +240,10 @@
                         <th class="border px-4 py-2">Lab Staff Name</th>
                         <th class="border px-4 py-2">Secretary Name</th>
                         <th class="border px-4 py-2">Test Name</th>
-                        <th class="border px-4 py-2">Amount</th>
-                        <th class="border px-4 py-2">Payment Status</th>
-                        <th class="border px-4 py-2">Bill DateTime</th>
                         <th class="border px-4 py-2">Insurance Name</th>
+                        <th class="border px-4 py-2">Bill DateTime</th>
+                        <th class="border px-4 py-2">Amount</th>
+                        <th class="border px-4 py-2">Payment </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -206,19 +264,21 @@
                                 {bill.SecretaryLastName}</td
                             >
                             <td class="py-2 px-4 border">{bill.TestName}</td>
+                            <td class="py-2 px-4 border"
+                                >{bill.InsuranceName}</td
+                            >
+                            <td class="py-2 px-4 border">{bill.BillDateTime}</td>
                             <td class="py-2 px-4 border">{bill.Amount}</td>
                             <td class="py-2 px-4 border">
                                 <span
                                     class="status-tag {getStatusClass(
                                         bill.PaymentStatus,
-                                    )}">{bill.PaymentStatus}</span
-                                ></td
-                            >
-                            <td class="py-2 px-4 border">{bill.BillDateTime}</td
-                            >
-                            <td class="py-2 px-4 border"
-                                >{bill.InsuranceName}</td
-                            >
+                                    )}"
+                                    >{@html getPaymentTag(
+                                        bill.PaymentStatus,
+                                    )}</span
+                                >
+                            </td>
                         </tr>
                     {/each}
                 </tbody>

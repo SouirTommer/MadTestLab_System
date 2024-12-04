@@ -33,6 +33,9 @@
             role: getCookie("role"),
             type: getCookie("labStaffType"),
         };
+        if (!user.id || role!=="LabStaff") {
+            goto("/");
+        }
         if (user.type === "Physician") {
             currentTab = "appointments";
         } else if (user.type === "Pathologist") {

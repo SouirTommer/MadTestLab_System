@@ -25,19 +25,41 @@
         name: "",
         id: "",
         role: "",
+        secretaryId: "",
     };
-    onMount(() => {
-        const username = getCookie("username");
-        const role = getCookie("role");
 
-        if (!username || role !== "Secretary") {
+    onMount(() => {
+        user = {
+            id: getCookie("accountId"),
+            name: getCookie("username"),
+            role: getCookie("role"),
+        };
+        if (!user.name || user.role !== "Secretary") {
             goto("/");
-        } else {
-            user.name = getCookie("username");
-            user.role = getCookie("role");
-            user.id = getCookie("accountId");
         }
+       
+        user.secretaryId = fetchStaffId();
+        
+        
     });
+
+    async function fetchStaffId() {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/database/Account/getStaffId_action.php",
+                {
+                    credentials: "include",
+                }
+            );
+            const data = await response.json();
+            console.log("Fetched data:", data);
+            if (data.status === "success") {
+                user = data;
+            }
+        } catch (error) {
+            console.error("Error fetching staff info:", error);
+        }
+    }
 
     function logout() {
         showAlertBox("Logging out...", "#f44336");
