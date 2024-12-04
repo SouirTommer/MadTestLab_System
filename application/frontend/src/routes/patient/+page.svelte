@@ -35,7 +35,7 @@
         }
     });
 
-    let currentTab = "dashboard"; // Tracks the active tab
+    let currentTab = "appointment"; // Tracks the active tab
 
     function getGreetingWithIcon() {
         const now = new Date();
@@ -62,10 +62,10 @@
         document.body.appendChild(alertBox);
         setTimeout(() => {
             document.body.removeChild(alertBox);
-        }, 3000);
+        }, 2000);
         alertBox.textContent = message;
         alertBox.style.position = "fixed";
-        alertBox.style.top = "20px";
+        alertBox.style.bottom = "10rem";
         alertBox.style.left = "50%";
         alertBox.style.transform = "translateX(-50%)";
         alertBox.style.backgroundColor = backgroundColor || "#4caf50";
@@ -94,16 +94,7 @@
             <p class="text-lg font-semibold text-slate-600">Patient Portal</p>
         </div>
         <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
-            <button
-                class="navItem {currentTab === 'test_order'
-                    ? 'selected'
-                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "dashboard"}
-                on:click={() => (currentTab = "dashboard")}
-            >
-                <i class="fa-solid fa-chart-line"></i>
-                Dashboard
-            </button>
+            
             <p class="text-slate-500 text-m font-medium px-2">My Test</p>
             <button
                 class="navItem {currentTab === 'appointment'
@@ -187,18 +178,7 @@
                 </h1>
             </div>
 
-            {#if currentTab === "dashboard"}
-                <div
-                    in:fade={{ delay: 200, duration: 200 }}
-                    out:fade={{ duration: 200, easing: cubicInOut }}
-                >
-                    <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
-                    <p>
-                        Welcome to your patient portal. Here’s an overview of
-                        your recent activity.
-                    </p>
-                </div>
-            {:else if currentTab === "appointment"}
+            {#if currentTab === "appointment"}
                 <div
                     in:fade={{ delay: 200, duration: 200 }}
                     out:fade={{ duration: 200, easing: cubicInOut }}

@@ -3,6 +3,7 @@
     import { cubicInOut } from "svelte/easing";
     import { goto } from "$app/navigation";
     import { onMount, afterUpdate } from "svelte";
+    import StaffCreateAppointment from "./StaffCreateAppointment.svelte";
 
     let appointments = []; // Reactive variable to store fetched orders
     let patients = [];
@@ -12,6 +13,8 @@
     let completedAppointments = []; // Completed appointments
     let filteredAppointments = []; // Reactive variable to store filtered appointments
     let filter = "all";
+
+    let showModal = false; // State variable to control modal visibility
 
     onMount(async () => {
         try {
@@ -71,10 +74,45 @@
                 return "bg-gray-200 text-gray-800";
         }
     }
+
+    function newAppointment() {
+        showModal = true; // Show the modal when the button is clicked
+    }
+
+    function closePatientInfo() {
+        selectedPatientAppointment = "";
+        showPatientInfo = false;
+    }
+
+    function closeModal() {
+        showModal = false; // Close the modal
+    }
 </script>
 
 <div class="flex flex-col mt-8">
-    <div class="flex gap-4 pb-4">
+    <div class="flex justify-start">
+        <div
+            class="flex flex-col gap-6 p-6 w-full max-w-[800px] bg-white rounded-lg shadow-lg border-solid border-2 border-slate-200 cursor-pointer"
+            on:click={newAppointment}
+            role="button"
+            tabindex="0"
+            on:keydown={(e) => e.key === "Enter" && newAppointment()}
+        >
+            <div class="flex items-start gap-4">
+                <i class="fa-solid fa-plus text-indigo-400 text-2xl"></i>
+                <div>
+                    <h2 class="text-xl font-semibold text-slate-700">
+                        New Appointment
+                    </h2>
+                    <p class="text-slate-500">
+                        Create new appointment for the patient in the future
+                        schedule
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex gap-4 pb-4 mt-10">
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
             'all'
@@ -118,7 +156,8 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i> No Appointment found
+            <i class="fa-solid fa-magnifying-glass text-4xl pr-4"></i> No Appointment
+            found
         </h1>
     {:else}
         <div
@@ -173,3 +212,12 @@
         </div>
     {/if}
 </div>
+<!-- Modal for creating an appointment -->
+{#if showModal}
+    <div
+        in:fade={{ duration: 300, easing: cubicInOut }}
+        out:fade={{ duration: 300, easing: cubicInOut }}
+    >
+        <StaffCreateAppointment onClose={closeModal} />
+    </div>
+{/if}

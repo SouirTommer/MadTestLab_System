@@ -36,7 +36,7 @@
         }, 3000);
         alertBox.textContent = message;
         alertBox.style.position = "fixed";
-        alertBox.style.top = "20px";
+        alertBox.style.bottom = "10rem";
         alertBox.style.left = "50%";
         alertBox.style.transform = "translateX(-50%)";
         alertBox.style.backgroundColor = backgroundColor || "#4caf50";
@@ -69,7 +69,7 @@
                 document.cookie = `username=${result.username}; path=/`;
                 document.cookie = `role=${result.role}; path=/`;
                 document.cookie = `accountId=${result.accountId}; path=/`;
-                showAlertBox("Login successful! Redirecting...", "#4caf50");
+                showAlertBox("Login successful!", "#4caf50");
                 switch (result.role) {
                     case "Patient":
                         goto("/patient");

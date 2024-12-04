@@ -52,7 +52,7 @@
         {#each insurances.slice(0, 6) as insurance}
             <div class="card ">
                 <i class="icon {getIconClass(insurance.InsuranceName)}"></i>
-                <div class="card-header">{insurance.InsuranceName}</div>
+                <div class="card-header text-2xl">{insurance.InsuranceName}</div>
                 <div class="card-body">{insurance.InsuranceDetails}</div>
             </div>
         {/each}

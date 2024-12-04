@@ -49,10 +49,10 @@
         document.body.appendChild(alertBox);
         setTimeout(() => {
             document.body.removeChild(alertBox);
-        }, 3000);
+        }, 2000);
         alertBox.textContent = message;
         alertBox.style.position = "fixed";
-        alertBox.style.top = "20px";
+        alertBox.style.bottom = "10rem";
         alertBox.style.left = "50%";
         alertBox.style.transform = "translateX(-50%)";
         alertBox.style.backgroundColor = backgroundColor || "#4caf50";

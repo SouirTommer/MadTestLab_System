@@ -89,7 +89,7 @@
             case "all":
                 filteredResults = allResults;
                 break;
-            case "pending":
+            case "inprogress":
                 filteredResults = pendingResults;
                 break;
             case "completed":
@@ -128,11 +128,11 @@
         </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'scheduled'
+            'inprogress'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
             on:click={() => {
-                filter = "scheduled";
+                filter = "inprogress";
                 filterResults();
             }}
         >

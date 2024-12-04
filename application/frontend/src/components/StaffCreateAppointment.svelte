@@ -45,6 +45,7 @@
             console.log("Create appointment response:", result); // Debugging statement
             if (result.status === "success") {
                 alert("Appointment created successfully");
+                location.reload(); // Reload the page to show the new appointment
                 onClose(); // Call the onClose function to close the modal
             } else {
                 alert("Failed to create appointment: " + result.message);

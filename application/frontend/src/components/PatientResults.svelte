@@ -6,8 +6,55 @@
 
     var filter = "all";
 
-    let Results = []; // Reactive variable to store fetched orders
-
+    let results = []; // Reactive variable to store fetched orders
+    let allResults = []; // All appointments
+    let pendingResults = []; // Pending appointments
+    let completedResults = []; // Completed appointments
+    let inprogressResults = []; // In Progress appointments
+    let filteredResults = []; // Filtered appointments
+    
+    // // mockupdata
+    // results = [
+    //     {
+    //         ResultID: "1",
+    //         OrderID: "101",
+    //         ReportURL: "http://example.com/report1",
+    //         Interpretation: "Normal",
+    //         ResultDateTime: "2023-10-01 10:00",
+    //         ResultStatus: "Pending",
+    //         PatientFirstName: "John",
+    //         PatientLastName: "Doe",
+    //         LabStaffFirstName: "Jane",
+    //         LabStaffLastName: "Smith",
+    //     },
+    //     {
+    //         ResultID: "2",
+    //         OrderID: "102",
+    //         ReportURL: "http://example.com/report2",
+    //         Interpretation: "Abnormal",
+    //         ResultDateTime: "2023-10-02 11:00",
+    //         ResultStatus: "Completed",
+    //         PatientFirstName: "Mary",
+    //         PatientLastName: "Jane",
+    //         LabStaffFirstName: "Robert",
+    //         LabStaffLastName: "Brown",
+    //     },
+    //     {
+    //         ResultID: "3",
+    //         OrderID: "103",
+    //         ReportURL: "http://example.com/report3",
+    //         Interpretation: "Normal",
+    //         ResultDateTime: "2023-10-03 12:00",
+    //         ResultStatus: "Pending",
+    //         PatientFirstName: "Alice",
+    //         PatientLastName: "Johnson",
+    //         LabStaffFirstName: "Emily",
+    //         LabStaffLastName: "Davis",
+    //     },
+    // ];
+    // categorizeResults();
+    // filterResults();
+    // // mockupdata
     onMount(() => {
         fetchOrders(); // Fetch orders when the component is mounted
     });
@@ -22,19 +69,52 @@
             );
             const data = await response.json();
             console.log("Fetched data:", data); // Debugging: Log fetched data
-            Results = data.data;
+            results = data.data;
+            categorizeResults();
+            filterResults();
         } catch (error) {
             console.error("Error fetching orders:", error);
         }
     }
 
+    function categorizeResults() {
+        allResults = results;
+        pendingResults = results.filter(
+            (result) => result.ResultStatus.toLowerCase() === "pending",
+        );
+        completedResults = results.filter(
+            (result) => result.ResultStatus.toLowerCase() === "completed",
+        );
+        inprogressResults = results.filter(
+            (result) => result.ResultStatus.toLowerCase() === "inprogress",
+        );
+    }
+    function filterResults() {
+        switch (filter) {
+            case "all":
+                filteredResults = allResults;
+                break;
+            case "pending":
+                filteredResults = pendingResults;
+                break;
+            case "completed":
+                filteredResults = completedResults;
+                break;
+            case "inprogress":
+                filteredResults = inprogressResults;
+                break;
+            default:
+                filteredResults = allResults;
+        }
+    }
+
     function getStatusClass(status) {
-        switch (status) {
-            case "Pending":
+        switch (status.toLowerCase()) {
+            case "pending":
                 return "bg-yellow-200 text-yellow-800";
-            case "Completed":
+            case "completed":
                 return "bg-green-200 text-green-800";
-            case "In Progress":
+            case "inprogress":
                 return "bg-blue-200 text-blue-800";
             default:
                 return "bg-gray-200 text-gray-800";
@@ -49,7 +129,10 @@
             'all'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
-            on:click={() => (filter = "all")}
+            on:click={() => {
+                filter = "all";
+                filterResults();
+            }}
         >
             All
         </button>
@@ -58,72 +141,98 @@
             'pending'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
-            on:click={() => (filter = "pending")}
+            on:click={() => {
+                filter = "pending";
+                filterResults();
+            }}
         >
             Pending
-        </button>
-        <button
-            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
-            'completed'
-                ? 'bg-slate-200 text-slate-600'
-                : 'bg-transapraent text-slate-600'}"
-            on:click={() => (filter = "completed")}
-        >
-            Completed
         </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
             'inprogress'
                 ? 'bg-slate-200 text-slate-600'
                 : 'bg-transapraent text-slate-600'}"
-            on:click={() => (filter = "inprogress")}
+            on:click={() => {
+                filter = "inprogress";
+                filterResults();
+            }}
         >
             In Progress
         </button>
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'completed'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => {
+                filter = "completed";
+                filterResults();
+            }}
+        >
+            Completed
+        </button>
     </div>
-    <div>
-        <table class="min-w-full bg-white border border-slate-200">
-            <thead>
-                <tr>
-                    <th class="border px-4 py-2">Result ID</th>
-                    <th class="border px-4 py-2">Order ID</th>
-                    <th class="border px-4 py-2">Report URL</th>
-                    <th class="border px-4 py-2">Interpretation</th>
-                    <th class="border px-4 py-2">Result Date and Time</th>
-                    <th class="border px-4 py-2">Result Status</th>
-                    <th class="border px-4 py-2">Lab Staff First Name</th>
-                    <th class="border px-4 py-2">Lab Staff Last Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each Results as result}
+    {#if filteredResults.length === 0}
+        <h1
+            class="pt-56 text-center text-2xl text-gray-800"
+            in:fade={{ delay: 200, duration: 200 }}
+            out:fade={{ duration: 200, easing: cubicInOut }}
+        >
+            <i class="fa-solid fa-magnifying-glass text-4xl pr-4"></i> No Results
+            found
+        </h1>
+    {:else}
+        <div
+            in:fade={{ delay: 200, duration: 200 }}
+            out:fade={{ duration: 200, easing: cubicInOut }}
+        >
+            <table
+                class="text-center min-w-full bg-white border border-slate-200"
+            >
+                <thead>
                     <tr>
-                        <td class="border px-4 py-2">{result.ResultID}</td>
-                        <td class="border px-4 py-2">{result.OrderID}</td>
-                        <td class="border px-4 py-2"
-                            ><a href={result.ReportURL} target="_blank"
-                                >View Report</a
-                            ></td
-                        >
-                        <td class="border px-4 py-2">{result.Interpretation}</td
-                        >
-                        <td class="border px-4 py-2">{result.ResultDateTime}</td
-                        >
-                        <td
-                            class="border px-4 py-2 {getStatusClass(
-                                result.ResultStatus,
-                            )}">{result.ResultStatus}</td
-                        >
-
-                        <td class="border px-4 py-2"
-                            >{result.LabStaffFirstName}</td
-                        >
-                        <td class="border px-4 py-2"
-                            >{result.LabStaffLastName}</td
-                        >
+                        <th class="border px-4 py-2">Result ID</th>
+                        <th class="border px-4 py-2">Order ID</th>
+                        <th class="border px-4 py-2">Report URL</th>
+                        <th class="border px-4 py-2">Interpretation</th>
+                        <th class="border px-4 py-2">Result Date and Time</th>
+                        <th class="border px-4 py-2">Lab Staff Name</th>
+                        <th class="border px-4 py-2">Result Status</th>
                     </tr>
-                {/each}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    {#each filteredResults as result}
+                        <tr>
+                            <td class="border px-4 py-2">{result.ResultID}</td>
+                            <td class="border px-4 py-2">{result.OrderID}</td>
+                            <td class="border px-4 py-2"
+                                ><a href={result.ReportURL} target="_blank"
+                                    >View Report</a
+                                ></td
+                            >
+                            <td class="border px-4 py-2"
+                                >{result.Interpretation}</td
+                            >
+                            <td class="border px-4 py-2"
+                                >{result.ResultDateTime}</td
+                            >
+
+                            <td class="border px-4 py-2"
+                                >{result.LabStaffFirstName}
+                                {result.LabStaffLastName}</td
+                            >
+                            <td class="border px-4 py-2">
+                                <span
+                                    class="status-tag {getStatusClass(
+                                        result.ResultStatus,
+                                    )}">{result.ResultStatus}</span
+                                ></td
+                            >
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
+    {/if}
 </div>
