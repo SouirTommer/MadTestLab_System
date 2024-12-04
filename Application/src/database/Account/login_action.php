@@ -8,10 +8,19 @@ $aesKeys = [
     'LabStaff' => getenv('AES_KEY_LABSTAFF')
 ];
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Accept');
-header('Content-Type: application/json');
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://localhost:3000'
+];
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
+    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+} else {
+    header('Access-Control-Allow-Origin: ' . $allowed_origins[0]); // Default to the first allowed origin
+}
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Allow specific HTTP methods
+header('Access-Control-Allow-Headers: Content-Type, Accept'); // Allow specific headers
+header(header: 'Access-Control-Allow-Credentials: true'); // Allow credentials (cookies) to be sent
+header(header: 'Content-Type: application/json'); // Set the content type to JSON
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -53,8 +62,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 setcookie('username', $username, time() + (86400 * 30), "/"); // 86400 = 1 day
                 setcookie('accountId', $accountId, time() + (86400 * 30), "/");
                 setcookie('role', $role, time() + (86400 * 30), "/");
-            
-                echo json_encode(['status' => 'success', 'username' => $username, 'accountId' => $accountId, 'role' => $role]);
+                if ($role === 'LabStaff') {
+                    $stmt = $conn->prepare("SELECT LabStaffType FROM LabStaffs WHERE AccountID = ?");
+                    $stmt->bind_param("i", $accountId);
+                    $stmt->execute();
+                    $stmt->bind_result($labStaffType);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    $_SESSION['labStaffType'] = $labStaffType;
+                    setcookie('labStaffType', $labStaffType, time() + (86400 * 30), "/");
+                }
+                echo json_encode(['status' => 'success', 'username' => $username, 'accountId' => $accountId, 'role' => $role, 'labStaffType' => $labStaffType ?? null]);
                 exit();
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Invalid password']);

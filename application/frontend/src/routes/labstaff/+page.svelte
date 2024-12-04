@@ -17,53 +17,19 @@
 
     let currentTab = "appointments"; // Tracks the active tab
     let user = {
-        name: "",
         id: "",
+        name: "",
         role: "",
         type: "",
     };
     onMount(() => {
-        const username = getCookie("username");
-        const role = getCookie("role");
-
-        if (!username || role !== "LabStaff") {
-            goto("/");
-        } else {
-            user.name = getCookie("username");
-            user.role = getCookie("role");
-            user.id = getCookie("accountId");
-            getLabStaffType().then((labStaffType) => {
-                if (labStaffType) {
-                    user.type = labStaffType;
-                }
-            });
-            
-        }
+        user = {
+            id: getCookie("accountId"),
+            name: getCookie("username"),
+            role: getCookie("role"),
+            type: getCookie("labStaffType"),
+        };
     });
-    
-    async function getLabStaffType() {
-        try {
-            const response = await fetch(
-                "http://localhost:8080/database/Account/get_lab_staff_type.php",
-                {
-                    credentials: "include",
-                },
-            );
-
-            const result = await response.json();
-            console.log("Response received:", result);
-
-            if (response.ok && result.status === "success") {
-                return result.labStaffType;
-            } else {
-                console.error("Failed to get lab staff type:", result.message);
-                return null;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            return null;
-        }
-    }
 
     function logout() {
         showAlertBox("Logging out...", "#f44336");
@@ -94,83 +60,160 @@
     <aside
         class="w-72 text-white flex flex-col border-r items-start bg-indigo-400 bg-opacity-15 fixed top-0 left-0 h-screen"
     >
-    {#if user.type === ""}
-        <div class="p-6 pt-10">
-            <h1 class="font-semibold text-3xl">
-                <span class="text-indigo-400"> MedTest </span>
-                <span class="text-slate-600">Lab </span>
-                <i class=" text-slate-600 fa-solid fa-vial"></i>
-            </h1>
-            <p class="text-lg font-semibold text-slate-600">Physician Portal</p>
-        </div>
-        <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
-           
-            <p class="text-slate-500 text-m font-medium px-2">Administration</p>
-            <button
-                class="navItem {currentTab === 'appointments'
-                    ? 'selected'
-                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "appointments"}
-                on:click={() => (currentTab = "appointments")}
-            >
-                <i class="fa-regular fa-calendar-check"></i>
-                Appointments
-            </button>
-            <button
-                class="navItem {currentTab === 'create_order'
-                    ? 'selected'
-                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "create_order"}
-                on:click={() => (currentTab = "create_order")}
-            >
-                <i class="fa-solid fa-file-medical"></i>
-                Testing Orders
-            </button>
-            <p class="text-slate-500 text-m font-medium px-2">Information</p>
+        <!-- ######### Physician page here  #######-->
 
-            <button
-                class="navItem {currentTab === 'testcatalog'
-                    ? 'selected'
-                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "testcatalog"}
-                on:click={() => (currentTab = "testcatalog")}
-            >
-                <i class="fa-solid fa-flask-vial"></i> Test Catalog
-            </button>
-            <p class="text-slate-500 text-m font-medium px-2">Setting</p>
-
-            <button
-                class="navItem {currentTab === 'profile'
-                    ? 'selected'
-                    : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                class:selected={currentTab === "profile"}
-                on:click={() => (currentTab = "profile")}
-            >
-                <i class="fa-solid fa-user"></i>
-                Profile
-            </button>
-            <!-- push the div to bottom -->
-
-            <div class="flex-1"></div>
-            <button
-                class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
-                on:click={() => logout()}
-            >
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                Logout
-            </button>
-            <p class="text-slate-500 font-medium text-xl px-4 py-1">
-                {user.role}
-            </p>
-            <div
-                class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
-            >
-                <p class="text-xl">{user.name}</p>
-                <p class="text-slate-400">User ID: {user.id}</p>
+        {#if user.type === "Physician"}
+            <div class="p-6 pt-10">
+                <h1 class="font-semibold text-3xl">
+                    <span class="text-indigo-400"> MedTest </span>
+                    <span class="text-slate-600">Lab </span>
+                    <i class=" text-slate-600 fa-solid fa-vial"></i>
+                </h1>
+                <p class="text-lg font-semibold text-slate-600">
+                    Physician Portal
+                </p>
             </div>
-        </nav>
-        
-    {/if}
+            <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
+                <p class="text-slate-500 text-m font-medium px-2">
+                    Administration
+                </p>
+                <button
+                    class="navItem {currentTab === 'appointments'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "appointments"}
+                    on:click={() => (currentTab = "appointments")}
+                >
+                    <i class="fa-regular fa-calendar-check"></i>
+                    Appointments
+                </button>
+                <button
+                    class="navItem {currentTab === 'create_order'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "create_order"}
+                    on:click={() => (currentTab = "create_order")}
+                >
+                    <i class="fa-solid fa-file-medical"></i>
+                    Testing Orders
+                </button>
+                <p class="text-slate-500 text-m font-medium px-2">
+                    Information
+                </p>
+
+                <button
+                    class="navItem {currentTab === 'testcatalog'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "testcatalog"}
+                    on:click={() => (currentTab = "testcatalog")}
+                >
+                    <i class="fa-solid fa-flask-vial"></i> Test Catalog
+                </button>
+                <p class="text-slate-500 text-m font-medium px-2">Setting</p>
+
+                <button
+                    class="navItem {currentTab === 'profile'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "profile"}
+                    on:click={() => (currentTab = "profile")}
+                >
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                </button>
+                <!-- push the div to bottom -->
+
+                <div class="flex-1"></div>
+                <button
+                    class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    on:click={() => logout()}
+                >
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    Logout
+                </button>
+                <p class="text-slate-500 font-medium text-xl px-4 py-1">
+                    {user.role}
+                </p>
+                <div
+                    class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
+                >
+                    <p class="text-xl">{user.name}</p>
+                    <p class="text-slate-400">User ID: {user.id}</p>
+                </div>
+            </nav>
+
+            <!-- ######### Pathologist page here  #######-->
+        {:else if user.type === "Pathologist"}
+            <div class="p-6 pt-10">
+                <h1 class="font-semibold text-3xl">
+                    <span class="text-indigo-400"> MedTest </span>
+                    <span class="text-slate-600">Lab </span>
+                    <i class=" text-slate-600 fa-solid fa-vial"></i>
+                </h1>
+                <p class="text-lg font-semibold text-slate-600">
+                    Pathologist Portal
+                </p>
+            </div>
+            <nav class="flex flex-col gap-2 px-2 mt-8 w-full h-full">
+                <p class="text-slate-500 text-m font-medium px-2">
+                    Administration
+                </p>
+                <button
+                    class="navItem {currentTab === 'path_test_orders'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "path_test_orders"}
+                    on:click={() => (currentTab = "path_test_orders")}
+                >
+                    <i class="fa-solid fa-vials"></i> Testing Orders
+                </button>
+                <button
+                    class="navItem {currentTab === 'path_test_results'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "path_test_results"}
+                    on:click={() => (currentTab = "path_test_results")}
+                >
+                    <i class="fa-solid fa-file-medical"></i>
+                    Testing Results
+                </button>
+
+                <p class="text-slate-500 text-m font-medium px-2">Setting</p>
+
+                <button
+                    class="navItem {currentTab === 'profile'
+                        ? 'selected'
+                        : ''} flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    class:selected={currentTab === "profile"}
+                    on:click={() => (currentTab = "profile")}
+                >
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                </button>
+                <!-- push the div to bottom -->
+
+                <div class="flex-1"></div>
+                <button
+                    class="navItem flex w-full items-center gap-2 text-left text-lg rounded-lg navTabBtn text-slate-600 transition"
+                    on:click={() => logout()}
+                >
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    Logout
+                </button>
+                <p class="text-slate-500 font-medium text-xl px-4 py-1">
+                    {user.role}
+                </p>
+                <div
+                    class="userCard text-slate-600 h-18 mb-4 mx-1 py-4 px-6 rounded-2xl border-solid border-2 border-slate-300 trasition"
+                >
+                    <p class="text-xl">{user.name}</p>
+                    <p class="text-slate-400">User ID: {user.id}</p>
+                </div>
+            </nav>
+        {:else}
+            <h1>Looks like you have lost</h1>
+        {/if}
     </aside>
 
     <SectionWrapper>
@@ -206,9 +249,7 @@
                     in:fade={{ delay: 201, duration: 200 }}
                     out:fade={{ duration: 200, easing: cubicInOut }}
                 >
-                    <h2 class="text-3xl font-bold mb-4">
-                        Testing Order
-                    </h2>
+                    <h2 class="text-3xl font-bold mb-4">Testing Order</h2>
                     <p>
                         View your testing orders.
                         <TestingOrder />

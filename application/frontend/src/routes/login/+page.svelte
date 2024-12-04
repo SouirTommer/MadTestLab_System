@@ -79,6 +79,7 @@
                         goto("/secretary");
                         break;
                     case "LabStaff":
+                        document.cookie = `labStaffType=${result.labStaffType}; path=/`;
                         goto("/labstaff");
                         break;
                     default:
