@@ -11,6 +11,8 @@
     let filteredResults = [];
     let filter = "in progress";
 
+    let showModal = false;
+    let selectedResult = {};
     //testing data
     // results = [
     //         {
@@ -111,8 +113,8 @@
         }
     }
 
-    function handleButtonClick(order) {
-        selectedOrder = order;
+    function handleButtonClick(result) {
+        selectedResult = result;
         showModal = true;
     }
 
@@ -126,14 +128,16 @@
 
         try {
             const response = await fetch(
-                "http://localhost:8080/database/Pathologist/pathologist_create_result_action.php",
+                "http://localhost:8080/database/Pathologist/pathologist_update_result_action.php",
                 {
                     method: "POST",
                     credentials: "include", // Include credentials (cookies) with the request
                     body: formData,
                 },
             );
-
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
             const result = await response.json();
             console.log("Create appointment response:", result); // Debugging statement
             if (result.status === "success") {
@@ -262,7 +266,9 @@
                                 {#if result.ResultStatus === "In Progress"}
                                     <button
                                         class="px-4 py-2 text-indigo-400 text-3xl"
-                                        aria-label="Create Order"
+                                        aria-label="update result"
+                                        on:click={() =>
+                                            handleButtonClick(result)}
                                     >
                                         <i
                                             class="fa-solid fa-pen-to-square hover:text-indigo-600"
@@ -271,7 +277,7 @@
                                 {:else}
                                     <button
                                         class="px-4 py-2 text-slate-600 text-3xl"
-                                        aria-label="Cannot Create Order"
+                                        aria-label="Cannot update result"
                                     >
                                         <i class="fa-regular fa-square-minus"
                                         ></i>
@@ -309,16 +315,17 @@
                 <form on:submit={handleSubmit} class="space-y-4">
                     <div>
                         <label
-                            for="orderID"
+                            for="resultID"
                             class="block text-sm font-medium text-gray-700"
-                            ><strong>Order ID:</strong></label
+                            ><strong>Result ID:</strong></label
                         >
                         <input
                             type="text"
-                            name="orderID"
-                            id="orderID"
-                            value={selectedOrder.OrderID}
+                            name="resultID"
+                            id="resultID"
+                            value={selectedResult.ResultID}
                             readonly
+                            required
                             class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
@@ -331,7 +338,7 @@
                         <input
                             type="text"
                             id="patientName"
-                            value={`${selectedOrder.PatientFirstName} ${selectedOrder.PatientLastName}`}
+                            value={`${selectedResult.PatientFirstName} ${selectedResult.PatientLastName}`}
                             readonly
                             class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
@@ -345,7 +352,7 @@
                         <input
                             type="text"
                             id="physicianName"
-                            value={`${selectedOrder.LabStaffFirstName} ${selectedOrder.LabStaffLastName}`}
+                            value={`${selectedResult.LabStaffFirstName} ${selectedResult.LabStaffLastName}`}
                             readonly
                             class="py-2 px-4 mt-1 block w-full bg-slate-100 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
@@ -359,14 +366,15 @@
                         >
                         <select
                             name="resultStatus"
+                            required
                             id="resultStatus"
                             class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
                             <option value="" disabled selected
                                 >-- Select a Status --</option
                             >
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
+                            <option value="In Progress"disabled>In Progress</option>
+                            <option value="Completed" >Completed</option>
                         </select>
                     </div>
                     <div>
@@ -378,6 +386,7 @@
                         <input
                             type="text"
                             name="reportURL"
+                            
                             id="reportURL"
                             placeholder="Enter the URL of the report"
                             class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

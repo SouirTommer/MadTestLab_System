@@ -22,14 +22,14 @@ if (!isset($_COOKIE['accountId'])) {
     echo json_encode(['status' => 'error', 'message' => 'Not authenticated']);
     exit();
 }
-$accountId = $_COOKIE['accountId'];
+
 
 $response = ['status' => 'error', 'message' => 'An error occurred.'];
 
 // Check if form data is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $orderID = $_POST['orderID'];
-    $accountId = $_SESSION['accountId']; // Get the AccountID from the session
+    $accountId = $_COOKIE['accountId'];
     $reportURL = $_POST['reportURL'];
     $interpretation = $_POST['interpretation'];
     $resultStatus = $_POST['resultStatus'];
@@ -83,4 +83,3 @@ $conn->close();
 // Return JSON response
 header('Content-Type: application/json');
 echo json_encode($response);
-?>

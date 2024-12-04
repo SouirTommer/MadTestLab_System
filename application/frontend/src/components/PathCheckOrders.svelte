@@ -142,7 +142,6 @@
     async function handleSubmit(event) {
         event.preventDefault(); // Prevent page reload
         const formData = new FormData(event.target);
-
         try {
             const response = await fetch(
                 "http://localhost:8080/database/Pathologist/pathologist_create_result_action.php",
@@ -152,7 +151,9 @@
                     body: formData,
                 },
             );
-
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
             const result = await response.json();
             console.log("Create appointment response:", result); // Debugging statement
             if (result.status === "success") {
@@ -160,10 +161,10 @@
                 closeModal(); // Call the onClose function to close the modal
                 location.reload();
             } else {
-                alert("Failed to create appointment: " + result.message);
+                alert("Failed to create result: " + result.message);
             }
         } catch (error) {
-            console.error("Error creating appointment:", error);
+            console.error("Error creating result :", error);
             alert("Error creating appointment. Please try again.");
         }
         console.log("Form submitted");
