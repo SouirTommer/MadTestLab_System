@@ -96,23 +96,32 @@
             (order) => order.OrderStatus.toLowerCase() === "in progress",
         );
     }
-
+    function sortOrdersByDate() {
+        filteredOrders.sort(
+            (a, b) => new Date(b.OrderDateTime) - new Date(a.OrderDateTime),
+        );
+    }
     function filterOrders() {
         switch (filter) {
             case "all":
                 filteredOrders = allOrders;
+                sortOrdersByDate();
                 break;
             case "pending":
                 filteredOrders = pendingOrders;
+                sortOrdersByDate();
                 break;
             case "in progress":
                 filteredOrders = inProgressOrders;
+                sortOrdersByDate();
                 break;
             case "completed":
                 filteredOrders = completedOrders;
+                sortOrdersByDate();
                 break;
             default:
                 filteredOrders = allOrders;
+                sortOrdersByDate();
         }
     }
 
@@ -275,8 +284,7 @@
                             <td class="py-2 px-4 border"
                                 >{order.OrderDateTime}</td
                             >
-                            
-                        
+
                             <td class="py-2 px-4 border">
                                 <span
                                     class="status-tag {getStatusClass(
@@ -441,13 +449,15 @@
                                 <option value="" disabled selected
                                     >-- Select an Insurance --</option
                                 >
-                                
+
                                 {#each insurances as insurances}
                                     <option value={insurances.InsuranceID}
                                         >{insurances.InsuranceName}</option
                                     >
                                 {/each}
-                                <option value=""> * No need for insurance</option>
+                                <option value="">
+                                    * No need for insurance</option
+                                >
                             </select>
                         </div>
                     </div>

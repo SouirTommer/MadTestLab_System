@@ -84,19 +84,29 @@
             (result) => result.ResultStatus.toLowerCase() === "completed",
         );
     }
+    function sortResultsByDate() {
+        filteredResults.sort(
+            (a, b) => new Date(b.ResultDateTime) - new Date(a.ResultDateTime),
+        );
+    }
+
     function filterResults() {
         switch (filter) {
             case "all":
                 filteredResults = allResults;
+                sortResultsByDate();
                 break;
             case "inprogress":
                 filteredResults = pendingResults;
+                sortResultsByDate();
                 break;
             case "completed":
                 filteredResults = completedResults;
+                sortResultsByDate();
                 break;
             default:
                 filteredResults = allResults;
+                sortResultsByDate();
         }
     }
 
@@ -126,7 +136,6 @@
         >
             All
         </button>
-
     </div>
 
     {#if filteredResults.length === 0}
@@ -135,7 +144,8 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-        <i class="fa-solid fa-magnifying-glass text-4xl pr-4 "></i>  No Results found
+            <i class="fa-solid fa-magnifying-glass text-4xl pr-4"></i> No Results
+            found
         </h1>
     {:else}
         <div
@@ -158,8 +168,7 @@
                 <tbody>
                     {#each filteredResults as result}
                         <tr>
-                            <td class="py-2 px-4 border">{result.ResultID}</td
-                            >
+                            <td class="py-2 px-4 border">{result.ResultID}</td>
                             <td class="py-2 px-4 border">{result.OrderID}</td>
                             <td class="py-2 px-4 border"
                                 ><a href={result.ReportURL} target="_blank"

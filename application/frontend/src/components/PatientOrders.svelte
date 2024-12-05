@@ -89,22 +89,34 @@
         );
     }
 
+    function sortOrdersByDate() {
+        filteredOrders.sort(
+            (a, b) => new Date(b.OrderDateTime) - new Date(a.OrderDateTime),
+        );
+    }
     function filterOrders() {
         switch (filter) {
             case "all":
                 filteredOrders = allOrders;
+                sortOrdersByDate();
                 break;
             case "pending":
                 filteredOrders = pendingOrders;
+                sortOrdersByDate();
+
                 break;
             case "inprogress":
                 filteredOrders = inProgressOrders;
+                sortOrdersByDate();
                 break;
             case "completed":
                 filteredOrders = completedOrders;
+                sortOrdersByDate();
+
                 break;
             default:
                 filteredOrders = allOrders;
+                sortOrdersByDate();
         }
     }
     function getStatusClass(status) {
@@ -206,10 +218,12 @@
                             <td class="py-2 px-4 border-b">{order.OrderID}</td>
 
                             <td class="py-2 px-4 border-b"
-                                >{order.LabStaffFirstName} {order.LabStaffLastName}</td
+                                >{order.LabStaffFirstName}
+                                {order.LabStaffLastName}</td
                             >
                             <td class="py-2 px-4 border-b"
-                                >{order.SecretaryFirstName} {order.SecretaryLastName}</td
+                                >{order.SecretaryFirstName}
+                                {order.SecretaryLastName}</td
                             >
                             <td class="py-2 px-4 border-b">{order.TestName}</td>
                             <td class="py-2 px-4 border-b"

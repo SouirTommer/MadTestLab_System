@@ -9,10 +9,11 @@
     let patients = [];
     let physicians = [];
     let allAppointments = []; // All appointments
+    let todayAppointment = [];
     let scheduledAppointments = []; // Scheduled appointments
     let completedAppointments = []; // Completed appointments
     let filteredAppointments = []; // Reactive variable to store filtered appointments
-    let filter = "all";
+    let filter = "today";
 
     let showModal = false; // State variable to control modal visibility
 
@@ -46,22 +47,47 @@
             (appointment) =>
                 appointment.AppointmentsStatus.toLowerCase() === "completed",
         );
+        filterTodayAppointments();
+    }
+
+    function sortAppointmentsByDate() {
+        filteredAppointments.sort(
+            (a, b) =>
+                new Date(b.AppointmentDateTime) -
+                new Date(a.AppointmentDateTime),
+        );
+    }
+
+    function filterTodayAppointments() {
+        const today = new Date().toISOString().split("T")[0];
+        todayAppointment = appointments.filter(
+            (appointment) =>
+                appointment.AppointmentDateTime.split(" ")[0] === today,
+        );
     }
 
     function filterAppointments() {
         switch (filter) {
             case "all":
                 filteredAppointments = allAppointments;
+
                 break;
             case "scheduled":
                 filteredAppointments = scheduledAppointments;
+
                 break;
             case "completed":
                 filteredAppointments = completedAppointments;
+
+                break;
+            case "today":
+                filteredAppointments = todayAppointment;
+
                 break;
             default:
                 filteredAppointments = allAppointments;
         }
+        sortAppointmentsByDate();
     }
 
     function getStatusClass(status) {
@@ -113,6 +139,18 @@
         </div>
     </div>
     <div class="flex gap-4 pb-4 mt-10">
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'today'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => {
+                filter = "today";
+                filterAppointments();
+            }}
+        >
+            Today
+        </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
             'all'

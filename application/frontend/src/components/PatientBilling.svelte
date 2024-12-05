@@ -29,6 +29,7 @@
                 paymentHistory = data.data.filter(
                     (payment) => payment.PaymentStatus !== "Outstanding",
                 );
+                paymentHistory.sort((a, b) => new Date(b.BillDateTime) - new Date(a.BillDateTime));
             }
         } catch (error) {
             console.error("Error fetching billing info:", error);

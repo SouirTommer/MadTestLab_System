@@ -48,19 +48,30 @@
         );
     }
 
+
+    function sortAppointmentsByDate() {
+        filteredAppointments.sort(
+            (a, b) => new Date(b.AppointmentDateTime) - new Date(a.AppointmentDateTime),
+        );
+    }
+
     function filterAppointments() {
         switch (filter) {
             case "all":
                 filteredAppointments = allAppointments;
+                sortAppointmentsByDate();
                 break;
             case "scheduled":
                 filteredAppointments = scheduledAppointments;
+                sortAppointmentsByDate();
                 break;
             case "completed":
                 filteredAppointments = completedAppointments;
+                sortAppointmentsByDate();
                 break;
             default:
                 filteredAppointments = allAppointments;
+                sortAppointmentsByDate();
         }
     }
 

@@ -2,113 +2,72 @@
     import { cubicInOut } from "svelte/easing";
     import { fade } from "svelte/transition";
     import { tick } from "svelte";
+    import { onMount } from "svelte";
     import StaffCreateAppointment from "./StaffCreateAppointment.svelte";
+    import { get } from "svelte/store";
 
-    let todayAppointments = [
-        {
-            id: 1,
-            patient: "John Doe",
-            time: "10:00 AM",
-            age: 30,
-            typeOfTest: "Blood Test",
-            phone: "123-456-7890",
-        },
-        {
-            id: 2,
-            patient: "Jane Smith",
-            time: "11:00 AM",
-            age: 25,
-            typeOfTest: "Urine Test",
-            phone: "234-567-8901",
-        },
-        {
-            id: 3,
-            patient: "Michael Johnson",
-            time: "12:00 PM",
-            age: 45,
-            typeOfTest: "X-Ray",
-            phone: "345-678-9012",
-        },
-        {
-            id: 4,
-            patient: "Emily Davis",
-            time: "1:00 PM",
-            age: 35,
-            typeOfTest: "MRI",
-            phone: "456-789-0123",
-        },
-        {
-            id: 5,
-            patient: "David Wilson",
-            time: "2:00 PM",
-            age: 50,
-            typeOfTest: "CT Scan",
-            phone: "567-890-1234",
-        },
-        {
-            id: 6,
-            patient: "Sarah Brown",
-            time: "3:00 PM",
-            age: 28,
-            typeOfTest: "Blood Test",
-            phone: "678-901-2345",
-        },
-    ];
-
-    let tomorrowAppointments = [
-        {
-            id: 1,
-            patient: "Alice Johnson",
-            time: "9:00 AM",
-            age: 40,
-            condition: "Diabetes",
-            phone: "123-456-7890",
-        },
-        {
-            id: 2,
-            patient: "Bob Brown",
-            time: "10:30 AM",
-            age: 50,
-            condition: "Hypertension",
-            phone: "234-567-8901",
-        },
-        {
-            id: 3,
-            patient: "Michael Johnson",
-            time: "12:00 PM",
-            age: 45,
-            condition: "Flu",
-            phone: "345-678-9012",
-        },
-        {
-            id: 4,
-            patient: "Emily Davis",
-            time: "1:00 PM",
-            age: 35,
-            condition: "Checkup",
-            phone: "456-789-0123",
-        },
-        {
-            id: 5,
-            patient: "David Wilson",
-            time: "2:00 PM",
-            age: 50,
-            condition: "Diabetes",
-            phone: "567-890-1234",
-        },
-        {
-            id: 6,
-            patient: "Sarah Brown",
-            time: "3:00 PM",
-            age: 28,
-            condition: "Hypertension",
-            phone: "678-901-2345",
-        },
-    ];
-
+    let appointments = [];
+    let todayAppointments = [];
+    let tomorrowAppointments = [];
+    let patients = [];
+    let physicians = [];
     let selectedPatientAppointment = "";
     let showPatientInfo = false;
     let showModal = false; // State variable to control modal visibility
+
+    onMount(async () => {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/database/Secretary/secretary_read_appointment_action.php",
+                {
+                    credentials: "include", // Include credentials (cookies) with the request
+                },
+            );
+            const data = await response.json();
+            patients = data.patients;
+            physicians = data.physicians;
+            appointments = data.appointments;
+            console.log("Fetched data:", data);
+            categorizeAppointments();
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    });
+
+    function categorizeAppointments() {
+        todayAppointments = appointments
+            .filter(
+                (appointment) =>
+                    new Date(appointment.AppointmentDateTime).toDateString() ===
+                    new Date().toDateString(),
+            )
+            .sort(
+                (a, b) =>
+                    new Date(a.AppointmentDateTime) -
+                    new Date(b.AppointmentDateTime),
+            );
+        tomorrowAppointments = appointments
+            .filter(
+                (appointment) =>
+                    new Date(appointment.AppointmentDateTime).toDateString() ===
+                    new Date(
+                        new Date().getTime() + 24 * 60 * 60 * 1000,
+                    ).toDateString(),
+            )
+            .sort(
+                (a, b) =>
+                    new Date(a.AppointmentDateTime) -
+                    new Date(b.AppointmentDateTime),
+            );
+    }
+
+    function formatTime(dateTime) {
+        const date = new Date(dateTime);
+        return date.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    }
 
     function viewPatientInfo(appointment) {
         if (appointment === selectedPatientAppointment) {
@@ -119,9 +78,17 @@
             showPatientInfo = true;
         }
     }
-
+    function getStatusClass(status) {
+        switch (status.toLowerCase()) {
+            case "scheduled":
+                return "bg-yellow-200 text-yellow-800";
+            case "completed":
+                return "bg-green-200 text-green-800";
+            default:
+                return "bg-gray-200 text-gray-800";
+        }
+    }
     function newAppointment() {
-        
         showModal = true; // Show the modal when the button is clicked
     }
 
@@ -175,9 +142,12 @@
                         ? 'bg-slate-200'
                         : ''} rounded-lg"
                 >
-                    <span class="pl-4">{appointment.patient}</span>
+                    <span class="pl-4"
+                        >{appointment.PatientFirstName}
+                        {appointment.PatientLastName}</span
+                    >
                     <span class="flex-1"></span>
-                    <span>{appointment.time}</span>
+                    <span>{formatTime(appointment.AppointmentDateTime)}</span>
                     <!-- svelte-ignore a11y_consider_explicit_label -->
                     <button
                         class="text-indigo-400 bg-transparent"
@@ -202,9 +172,12 @@
                         ? 'bg-slate-200'
                         : ''} rounded-lg"
                 >
-                    <span class="pl-4">{appointment.patient}</span>
+                    <span class="pl-4"
+                        >{appointment.PatientFirstName}
+                        {appointment.PatientLastName}</span
+                    >
                     <span class="flex-1"></span>
-                    <span>{appointment.time}</span>
+                    <span>{formatTime(appointment.AppointmentDateTime)}</span>
                     <!-- svelte-ignore a11y_consider_explicit_label -->
                     <button
                         class="text-indigo-400 bg-transparent"
@@ -230,58 +203,58 @@
                 </button>
 
                 <h2 class="text-xl font-semibold text-slate-700">
-                    Patient Info
+                    Appointment Info
                 </h2>
                 <p class="text-slate-600 flex items-center gap-1 text-lg">
-                    <i class="fa-solid fa-clock"></i>
+                    <i class="fa-solid fa-user"></i>
                     <span class="pl-2">Patient Name:</span>
                     <span class="flex-1"></span>
                     <span class="ml-2"
-                        >{selectedPatientAppointment.patient}</span
+                        >{selectedPatientAppointment.PatientFirstName}
+                        {selectedPatientAppointment.PatientLastName}</span
                     >
                 </p>
                 <hr class="border-slate-200" />
 
                 <p class="text-slate-600 flex items-center gap-1 text-lg">
                     <i class="fa-solid fa-clock"></i>
-                    <span class="pl-2">Appointment Time:</span>
-                    <span class="flex-1"></span>
-                    <span class="ml-2">{selectedPatientAppointment.time}</span>
-                </p>
-                <hr class="border-slate-200" />
-                <p class="text-slate-600 flex items-center gap-1 text-lg">
-                    <i class="fa-solid fa-user"></i>
-                    <span class="pl-2">Age:</span>
-                    <span class="flex-1"></span>
-                    <span class="ml-2">{selectedPatientAppointment.age}</span>
-                </p>
-                <hr class="border-slate-200" />
-                <p class="text-slate-600 flex items-center gap-1 text-lg">
-                    <i class="fa-solid fa-vial"></i>
-                    <span class="pl-2">Type of Test:</span>
+                    <span class="pl-2">Time:</span>
                     <span class="flex-1"></span>
                     <span class="ml-2"
-                        >{selectedPatientAppointment.typeOfTest ||
-                            selectedPatientAppointment.condition}</span
+                        >{selectedPatientAppointment.AppointmentDateTime}</span
                     >
                 </p>
                 <hr class="border-slate-200" />
                 <p class="text-slate-600 flex items-center gap-1 text-lg">
-                    <i class="fa-solid fa-phone"></i>
-                    <span class="pl-2">Phone:</span>
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span class="pl-2"> Status:</span>
                     <span class="flex-1"></span>
-                    <span class="ml-2">{selectedPatientAppointment.phone}</span>
+                    <span class="status-tag ml-40 {getStatusClass(selectedPatientAppointment.AppointmentsStatus)}"
+                        >{selectedPatientAppointment.AppointmentsStatus}</span
+                    >
                 </p>
+                <hr class="border-slate-200" />
+                <p class="text-slate-600 flex items-center gap-1 text-lg">
+                    <i class="fa-solid fa-user-md"></i>
+                    <span class="pl-2">Physician Name:</span>
+                    <span class="flex-1"></span>
+                    <span class="ml-2"
+                        >{selectedPatientAppointment.PhysicianFirstName}
+                        {selectedPatientAppointment.PhysicianLastName}</span
+                    >
+                </p>
+
                 <hr class="border-slate-200" />
             </div>
         {/if}
     </div>
- 
 </div>
-   <!-- Modal for creating an appointment -->
-   {#if showModal}
-   <div in:fade={{ duration: 300, easing: cubicInOut }}
-   out:fade={{ duration: 300, easing: cubicInOut }} >
-   <StaffCreateAppointment  onClose={closeModal} />
-</div>
+<!-- Modal for creating an appointment -->
+{#if showModal}
+    <div
+        in:fade={{ duration: 300, easing: cubicInOut }}
+        out:fade={{ duration: 300, easing: cubicInOut }}
+    >
+        <StaffCreateAppointment onClose={closeModal} />
+    </div>
 {/if}

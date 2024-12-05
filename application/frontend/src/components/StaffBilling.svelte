@@ -102,22 +102,33 @@
         );
     }
 
+    function sortResultsByDate() {
+        bills.sort(
+            (a, b) => new Date(b.BillDateTime) - new Date(a.BillDateTime),
+        );
+    }
+
     function filterBills() {
         switch (filter) {
             case "all":
                 filteredBills = allBills;
+                sortResultsByDate();
                 break;
             case "cash":
                 filteredBills = cashBills;
+                sortResultsByDate();
                 break;
             case "credit card":
                 filteredBills = creditCardBills;
+                sortResultsByDate();
                 break;
             case "alipay":
                 filteredBills = alipayBills;
+                sortResultsByDate();
                 break;
             case "wechat pay":
                 filteredBills = wechatPayBills;
+                sortResultsByDate();
                 break;
         }
     }
@@ -231,7 +242,9 @@
             in:fade={{ delay: 200, duration: 200 }}
             out:fade={{ duration: 200, easing: cubicInOut }}
         >
-            <table class="text-center min-w-full bg-white border border-slate-200">
+            <table
+                class="text-center min-w-full bg-white border border-slate-200"
+            >
                 <thead>
                     <tr>
                         <th class="border px-4 py-2">Bill ID</th>
@@ -267,7 +280,8 @@
                             <td class="py-2 px-4 border"
                                 >{bill.InsuranceName}</td
                             >
-                            <td class="py-2 px-4 border">{bill.BillDateTime}</td>
+                            <td class="py-2 px-4 border">{bill.BillDateTime}</td
+                            >
                             <td class="py-2 px-4 border">{bill.Amount}</td>
                             <td class="py-2 px-4 border">
                                 <span

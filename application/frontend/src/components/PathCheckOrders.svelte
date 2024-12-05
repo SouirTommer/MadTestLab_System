@@ -98,22 +98,36 @@
         );
     }
 
+    function sortOrdersByDate() {
+        filteredOrders.sort(
+            (a, b) => new Date(b.OrderDateTime) - new Date(a.OrderDateTime),
+        );
+    }
+
     function filterOrders() {
         switch (filter) {
             case "all":
                 filteredOrders = allOrders;
+                sortOrdersByDate();
                 break;
             case "pending":
                 filteredOrders = pendingOrders;
+                sortOrdersByDate();
+
                 break;
             case "in progress":
                 filteredOrders = inProgressOrders;
+                sortOrdersByDate();
+
                 break;
             case "completed":
                 filteredOrders = completedOrders;
+                sortOrdersByDate();
+
                 break;
             default:
                 filteredOrders = allOrders;
+                sortOrdersByDate();
         }
     }
 
@@ -416,13 +430,14 @@
                             placeholder="Enter the interpretation of the result"
                             class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         ></textarea>
-                    <div class="pt-8 mt-4 w-full flex justify-center">
-                        <button
-                            type="submit"
-                            name="submit"
-                            class="px-10 py-2 bg-indigo-500 text-white rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >Submit Result</button
-                        >
+                        <div class="pt-8 mt-4 w-full flex justify-center">
+                            <button
+                                type="submit"
+                                name="submit"
+                                class="px-10 py-2 bg-indigo-500 text-white rounded-md shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >Submit Result</button
+                            >
+                        </div>
                     </div>
                 </form>
             </div>

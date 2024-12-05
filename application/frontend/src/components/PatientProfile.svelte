@@ -64,14 +64,14 @@
                         for="role"
                         class="text-md font-medium text-slate-600"
                     >
-                        User ID
+                        Patient ID
                     </label>
                     <input
                         readonly
                         id="role"
                         type="text"
                         placeholder="Enter your Date of Birth"
-                        value={user.id}
+                        value={user.pid}
                         class="border border-slate-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     />
                 </div>

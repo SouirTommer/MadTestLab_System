@@ -71,6 +71,7 @@
             } else {
                 categorizeResults();
                 filterResults();
+                sortResultsByDate()
             }
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -86,6 +87,12 @@
             (result) => result.ResultStatus.toLowerCase() === "completed",
         );
     }
+    function sortResultsByDate() {
+        filteredResults.sort(
+            (a, b) => new Date(b.ResultDateTime) - new Date(a.ResultDateTime),
+        );
+    }
+
     function filterResults() {
         switch (filter) {
             case "all":

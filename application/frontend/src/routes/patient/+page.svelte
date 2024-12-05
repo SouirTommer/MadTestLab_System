@@ -48,7 +48,7 @@
             const data = await response.json();
             console.log("Fetched data:", data);
             if (data.status === "success") {
-                user.pid = data;
+                user.pid = data.patientId;
             }
         } catch (error) {
             console.error("Error fetching patient info:", error);

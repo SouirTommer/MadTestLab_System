@@ -11,8 +11,9 @@
     let allAppointments = []; // All appointments
     let scheduledAppointments = []; // Scheduled appointments
     let completedAppointments = []; // Completed appointments
-    let filteredAppointments = []; // Reactive variable to store filtered appointments
-    let filter = "scheduled";
+    let filteredAppointments = [];
+    let todayAppointment = []; // Reactive variable to store filtered appointments
+    let filter = "today";
     let showModal = false;
     let selectedAppointment = {};
 
@@ -57,6 +58,23 @@
             (appointment) =>
                 appointment.AppointmentsStatus.toLowerCase() === "completed",
         );
+        filterTodayAppointments();
+    }
+
+    function sortResultsByDate() {
+        appointments.sort(
+            (a, b) =>
+                new Date(b.AppointmentDateTime) -
+                new Date(a.AppointmentDateTime),
+        );
+    }
+
+    function filterTodayAppointments() {
+        const today = new Date().toISOString().split("T")[0];
+        todayAppointment = appointments.filter(
+            (appointment) =>
+                appointment.AppointmentDateTime.split(" ")[0] === today,
+        );
     }
 
     function filterAppointments() {
@@ -70,9 +88,13 @@
             case "completed":
                 filteredAppointments = completedAppointments;
                 break;
+            case "today":
+                filteredAppointments = todayAppointment;
+                break;
             default:
                 filteredAppointments = allAppointments;
         }
+        sortResultsByDate();
     }
 
     function getStatusClass(status) {
@@ -132,6 +154,18 @@
 
 <div class="flex flex-col mt-8">
     <div class="flex gap-4 pb-4">
+        <button
+            class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
+            'today'
+                ? 'bg-slate-200 text-slate-600'
+                : 'bg-transapraent text-slate-600'}"
+            on:click={() => {
+                filter = "today";
+                filterAppointments();
+            }}
+        >
+            Today
+        </button>
         <button
             class="px-4 py-2 rounded-lg font-semibold hover:bg-slate-100 transition {filter ===
             'scheduled'
@@ -242,12 +276,10 @@
                                         class="px-4 py-2 text-slate-600 text-3xl"
                                         aria-label="Cannot Create Order"
                                     >
-                                        <i
-                                            class="fa-regular fa-square-minus "
+                                        <i class="fa-regular fa-square-minus"
                                         ></i>
                                     </button>
                                 {/if}
-                         
                             </td>
                         </tr>
                     {/each}
@@ -340,7 +372,7 @@
                     <div>
                         <label
                             for="orderDateTime"
-                            class="block text-sm font-medium  text-gray-700"
+                            class="block text-sm font-medium text-gray-700"
                             ><strong>Test Order Date Time:</strong></label
                         >
                         <input
@@ -348,7 +380,7 @@
                             name="orderDateTime"
                             id="orderDateTime"
                             value=""
-                            class="py-2 px-4 mt-1 block w-full  border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         />
                     </div>
                     <div>
@@ -360,9 +392,11 @@
                         <select
                             name="orderStatus"
                             id="orderStatus"
-                            class="py-2 px-4  mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
-                            <option value="" disabled selected>-- Select a Status --</option>
+                            <option value="" disabled selected
+                                >-- Select a Status --</option
+                            >
                             <option value="Pending">Pending</option>
                             <option value="Completed">Completed</option>
                             <option value="Cancelled">Cancelled</option>
@@ -382,9 +416,11 @@
                             <select
                                 id="testCode"
                                 name="testCode"
-                                class="py-2 px-4  mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                class="py-2 px-4 mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             >
-                                <option value="" disabled selected>-- Select a Test --</option>
+                                <option value="" disabled selected
+                                    >-- Select a Test --</option
+                                >
                                 {#each tests as test}
                                     <option value={test.code}
                                         >{test.name}</option

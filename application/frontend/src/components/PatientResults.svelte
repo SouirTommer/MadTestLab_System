@@ -85,19 +85,30 @@
             (result) => result.ResultStatus.toLowerCase() === "in progress",
         );
     }
+
+    function sortResultsByDate() {
+        filteredResults.sort(
+            (a, b) => new Date(b.ResultDateTime) - new Date(a.ResultDateTime),
+        );
+    }
+    
     function filterResults() {
         switch (filter) {
             case "all":
                 filteredResults = allResults;
+                sortResultsByDate()
                 break;
             case "completed":
                 filteredResults = completedResults;
+                sortResultsByDate()
                 break;
             case "in progress":
                 filteredResults = inprogressResults;
+                sortResultsByDate()
                 break;
             default:
                 filteredResults = allResults;
+                sortResultsByDate()
         }
     }
 
