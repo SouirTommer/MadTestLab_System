@@ -135,6 +135,19 @@
             <h2 class="text-xl font-semibold text-slate-700">
                 Today's Appointments
             </h2>
+            {#if todayAppointments.length === 0}
+            <div class="text-center pb-4">
+                <i
+                    class="pt-2 text-5xl text-green-600  fa-regular fa-circle-check"
+                ></i>
+
+                <p class="pt-8 text-slate">
+                    No appointments scheduled for Today
+                </p>
+            </div>
+
+        
+        {/if}
             {#each todayAppointments as appointment}
                 <div
                     class="flex justify-between w-full items-center {selectedPatientAppointment ===
@@ -165,6 +178,18 @@
             <h2 class="text-xl font-semibold text-slate-700">
                 Tomorrow's Appointments
             </h2>
+            {#if tomorrowAppointments.length === 0}
+                <div class="text-center pb-4">
+                    <i
+                        class="pt-2 text-5xl text-green-600 fa-regular fa-circle-check"
+                    ></i>
+
+                    <p class="pt-8 text-slate">
+                        No appointments scheduled for Tomorrow
+                    </p>
+                </div>
+            {/if}
+
             {#each tomorrowAppointments as appointment}
                 <div
                     class="flex justify-between w-full items-center {selectedPatientAppointment ===
@@ -229,7 +254,10 @@
                     <i class="fa-solid fa-info-circle"></i>
                     <span class="pl-2"> Status:</span>
                     <span class="flex-1"></span>
-                    <span class="status-tag ml-40 {getStatusClass(selectedPatientAppointment.AppointmentsStatus)}"
+                    <span
+                        class="status-tag ml-40 {getStatusClass(
+                            selectedPatientAppointment.AppointmentsStatus,
+                        )}"
                         >{selectedPatientAppointment.AppointmentsStatus}</span
                     >
                 </p>
